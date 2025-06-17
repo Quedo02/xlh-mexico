@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "next/core-web-vitals",          // reglas de Next.js
+    "plugin:@typescript-eslint/recommended"  // reglas TS recomendadas
+  ],
+  "rules": {
+    // Aquí puedes poner excepciones o ajustes propios.
+    // Ejemplo: permitir console.log en desarrollo:
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
+  }
+}
