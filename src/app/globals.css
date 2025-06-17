@@ -75,3 +75,19 @@ a:hover {
 .btn-primary:hover {
   opacity: 0.9;
 }
+
+.bg-navbar {
+  background-color: var(--color-azul-marino) !important;
+}
+
+.bg-footer {
+  background-color: var(--color-cyan) !important;
+}
+
+.navbar .nav-link {
+  color: white;
+}
+
+.navbar .nav-link:hover {
+  color: var(--color-rosa-mexicano);
+}
