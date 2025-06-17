@@ -1,0 +1,21 @@
+name: CI Básico
+
+# 1. Cuándo se dispara
+on:
+  push:
+    branches:
+      - dev    # o master si quieres probar ahí
+  pull_request:
+    branches:
+      - dev
+
+# 2. Qué jobs corre
+jobs:
+  build-test:
+    runs-on: ubuntu-latest   # ejecución en nube de GitHub
+    steps:
+      - name: Chequear el repo
+        uses: actions/checkout@v4
+
+      - name: Mensaje de prueba
+        run: echo "✅ El pipeline funciona"
