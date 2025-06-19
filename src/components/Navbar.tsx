@@ -1,37 +1,48 @@
 "use client";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Navbar() {
+    useEffect(() => {
+  // @ts-ignore
+    import('bootstrap/dist/js/bootstrap.bundle.min.js')
+    .then(() => {})
+    .catch((err) => console.error('Bootstrap JS load error', err));
+}, []);
 return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-navbar">
-    <div className="container-fluid">
-        <Link className="navbar-brand" href="#">XLH México</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-navbar shadow-sm">
+    <div className="container">
+        <Link href="/" className="navbar-brand d-flex align-items-center gap-2">
+        <img src="/Img/thumbnail_logo%20hd.png" alt="XLH México Logo" className="logo-img me-2"/>
+        <span className="fw-bold">XLH México</span>
+        </Link>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-            <li className="nav-item">
-            <Link className="nav-link " href="/inicio">Inicio</Link>
+        <ul className="navbar-nav ms-auto gap-2 align-items-lg-center">
+        {[
+            { href: "/inicio", label: "Inicio" },
+            { href: "/eventos", label: "Eventos" },
+            { href: "/directorio", label: "Directorio" },
+            { href: "/material", label: "Material" },
+            { href: "/nosotros", label: "Nosotros" },
+            { href: "/registro", label: "Registro" },
+            { href: "/servicios", label: "Servicios" },
+        ].map((item) => (
+            <li key={item.href} className="nav-item">
+            <Link className="nav-link text-center" href={item.href}>
+                {item.label}
+            </Link>
             </li>
-            <li className="nav-item">
-            <Link className="nav-link" href="/eventos">Eventos</Link>
-            </li>
-            <li className="nav-item">
-            <Link className="nav-link" href="/directorio">Directorio</Link>
-            </li>
-            <li className="nav-item">
-            <Link className="nav-link" href="/material">Material</Link>
-            </li>
-            <li className="nav-item">
-            <Link className="nav-link" href="/nosotros">Nosotros</Link>
-            </li>
-            <li className="nav-item">
-            <Link className="nav-link" href="/registro">Registro</Link>
-            </li>
-            <li className="nav-item">
-            <Link className="nav-link" href="/servicios">Servicios</Link>
-            </li>
+        ))}
+
+        {/* BOTÓN DONACIONES */}
+        <li className="nav-item text-center">
+            <Link href="/donaciones" className="btn btn-donaciones ms-lg-3 mt-2 mt-lg-0">
+            Donaciones
+            </Link>
+        </li>
         </ul>
         </div>
     </div>
