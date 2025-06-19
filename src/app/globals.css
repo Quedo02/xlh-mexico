@@ -75,19 +75,91 @@ a:hover {
 .btn-primary:hover {
   opacity: 0.9;
 }
-
+/*Color de fondo de la navbar*/
 .bg-navbar {
-  background-color: var(--color-azul-marino) !important;
-}
-
-.bg-footer {
   background-color: var(--color-cyan) !important;
 }
-
+/* Color de fondo del footer */
+.bg-footer {
+  background-color: var(--color-azul-cielo) !important;
+}
+/* Color del texto de la nav bar */
 .navbar .nav-link {
   color: white;
+  /* Color del texto seleccionado de la navbar */
 }
-
 .navbar .nav-link:hover {
   color: var(--color-rosa-mexicano);
+}
+/* Fijar la altura y estructura de la navbar */
+.navbar {
+  /* height: 64px; */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+/* Fijar el logo de la imagen */
+.logo-img {
+  max-height: 40px;      /* Máximo 50px */
+  width: auto;           /* Mantiene proporción */
+  object-fit: contain;   /* No se deforma */
+  margin-bottom: 4px;
+}
+
+.navbar-brand span {
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+
+/* Boton de donaciones */
+.btn-donaciones {
+  background-color: var(--color-morado) !important;
+  color: white !important;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-donaciones:hover {
+  background-color: var(--color-azul-marino) !important; /* tono más oscuro */
+  color: white;
+}
+/* Ajustes al contenedor colapsado */
+.navbar-collapse {
+  background-color: var(--color-cyan); /* mismo color de navbar */
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 0 12px 12px;
+  max-width: 95%;
+  margin: 0 auto;
+  margin-top: 0.5rem;
+}
+
+.navbar-nav .nav-link {
+  padding: 0.4rem 0;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Mejor en pantallas pequeñas */
+@media (min-width: 992px) {
+  .btn-donaciones {
+    width: auto;
+    margin: 0;
+  }
+}
+
+/* Centrado en versión móvil */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0;
+    text-align: center;
+    gap: 0.2rem;
+  }
+
+  .btn-donaciones {
+    width: 100%;
+    max-width: 250px;
+    margin: 0.5rem auto;
+    display: block;
+  }
 }
