@@ -504,7 +504,7 @@ a:hover {
 
 /* Para que la navbar se quela navbar oculte contenido al bajar */
 body {
-  padding-top: 70px; /* Ajusta según la altura de tu navbar (ej. 64px o 70px) */
+  padding-top: 50px; /* Ajusta según la altura de tu navbar (ej. 64px o 70px) */
 }
 
 .navbar-nav .nav-link {

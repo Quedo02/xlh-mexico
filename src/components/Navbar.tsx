@@ -13,7 +13,7 @@ return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-navbar shadow-sm">
     <div className="container">
         <Link href="/" className="navbar-brand d-flex align-items-center gap-2">
-        <img src="/Img/thumbnail_logo%20hd.png" alt="XLH México Logo" className="logo-img me-2"/>
+        <img src="/Img/logo_sin_fondo.png" alt="XLH México Logo" className="logo-img me-2"/>
         <span className="fw-bold">XLH México</span>
         </Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
