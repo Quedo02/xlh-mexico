@@ -10,7 +10,7 @@ import Head from 'next/head';
 export default function RootLayout({ children }:{ children: React.ReactNode}) {
   const pathname = usePathname();
 
-  const hideNavbarFooter = ["/inicio", "/materia", "/nosotros", "registro", "servicios", "/"].includes(pathname);
+  const hideNavbarFooter = ["/inicio", "/material", "/nosotros", "/registro", "/servicios", "/informacion", "/eventos", "/directorio", "contacto" ,"/"].includes(pathname);
 
   return (
     <html>

@@ -46,6 +46,7 @@ html, body {
   font-family: var(--font-primary);
   background-color: var(--color-bg);
   color: var(--color-text);
+  
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -133,6 +134,11 @@ a:hover {
   margin: 0 auto;
   margin-top: 0.5rem;
 }
+/* Para que la navbar se quela navbar oculte contenido al bajar */
+body {
+  padding-top: 70px; /* Ajusta según la altura de tu navbar (ej. 64px o 70px) */
+}
+
 
 .navbar-nav .nav-link {
   padding: 0.4rem 0;

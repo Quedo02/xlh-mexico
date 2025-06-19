@@ -1,9 +1,16 @@
 "use client";
 import Link from "next/link";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { useEffect } from "react";
+
 export default function Navbar() {
+    useEffect(() => {
+  // @ts-ignore
+    import('bootstrap/dist/js/bootstrap.bundle.min.js')
+    .then(() => {})
+    .catch((err) => console.error('Bootstrap JS load error', err));
+}, []);
 return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-navbar shadow-sm">
+    <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-navbar shadow-sm">
     <div className="container">
         <Link href="/" className="navbar-brand d-flex align-items-center gap-2">
         <img src="/Img/thumbnail_logo%20hd.png" alt="XLH México Logo" className="logo-img me-2"/>
