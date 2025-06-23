@@ -38,11 +38,11 @@ return (
         ))}
 
         {/* BOTÓN DONACIONES */}
-        <li className="nav-item text-center">
+        {/* <li className="nav-item text-center">
             <Link href="/donaciones" className="btn btn-donaciones ms-lg-3 mt-2 mt-lg-0">
             Donaciones
             </Link>
-        </li>
+        </li> */}
         </ul>
         </div>
     </div>
