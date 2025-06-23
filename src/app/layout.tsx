@@ -6,6 +6,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BootstrapClient from '@/components/BootstrapClient';
+import { usePathname } from 'next/navigation';
 
 
 export default function RootLayout({ children }:{ children: React.ReactNode}) {

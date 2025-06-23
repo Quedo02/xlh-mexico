@@ -207,12 +207,14 @@ a:hover {
 
 /* === Navbar === */
 .bg-navbar {
-  background-color: var(--color-azul-marino);
+  background-size: cover; /* Ajusta al ancho y alto del contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que se repita */
+  background-color: rgba(60, 153, 186, 0.75); 
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(8px);
 }
-/* Color de fondo del footer */
-.bg-footer {
-  background-color: var(--color-azul-cielo) !important;
-}
+
 /* Color del texto de la nav bar */
 .navbar .nav-link {
   color: white;
@@ -227,6 +229,10 @@ a:hover {
   background-color: var(--color-cyan);
 }
 
+.footer a:hover {
+  color: var(--color-rosa-mexicano);
+  text-decoration: underline;
+}
 /* === Carrusel === */
 .carousel-item img {
   max-height: 400px;
@@ -387,9 +393,9 @@ a:hover {
   border-radius: 12px;
 }
 
-.logo-xlh {
-  max-width: 350px;
-  width: 100%;
+.logo-img {
+  max-width: 60px;
+  width: auto;
   height: auto;
   display: block;
   margin: 0 auto;
