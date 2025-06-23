@@ -10,8 +10,7 @@
     "plugin:@typescript-eslint/recommended"  // reglas TS recomendadas
   ],
   "rules": {
-    // Aquí puedes poner excepciones o ajustes propios.
-    // Ejemplo: permitir console.log en desarrollo:
+    "@typescript-eslint/no-explicit-any": "warn",
     "no-console": ["warn", { "allow": ["warn", "error"] }]
   }
 }
