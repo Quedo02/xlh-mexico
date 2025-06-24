@@ -4,11 +4,27 @@ import { useEffect } from "react";
 
 export default function Navbar() {
     useEffect(() => {
-  // @ts-ignore
-    import('bootstrap/dist/js/bootstrap.bundle.min.js')
-    .then(() => {})
-    .catch((err) => console.error('Bootstrap JS load error', err));
-}, []);
+        const loadBootstrap = async () => {
+    // @ts-expect-error: No hay declaración de tipos para este módulo
+        const bootstrapModule = await import("bootstrap/dist/js/bootstrap.bundle.min.js");
+        const navLinks = document.querySelectorAll(".nav-link");
+        const navbarCollapse = document.getElementById("navbarNav");
+
+        navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            if (navbarCollapse?.classList.contains("show")) {
+            const bsCollapse = new bootstrapModule.Collapse(navbarCollapse, {
+                toggle: false,
+            });
+            bsCollapse.hide();
+            }
+        });
+        });
+    };
+
+    loadBootstrap();
+    }, []);
+
 return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-navbar shadow-sm">
     <div className="container">

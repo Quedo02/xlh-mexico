@@ -50,7 +50,7 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* === Botones personalizados === */
@@ -221,7 +221,7 @@ a:hover {
 
 /* Color del texto cuando pasa el mouse sobre los links */
 .navbar .nav-link:hover {
-  color: var(--color-rosa-mexicano);
+  color: var(--color-azul-marino);
 }
 
 /* === Footer === */
@@ -231,8 +231,8 @@ a:hover {
 
 .footer a:hover {
   color: var(--color-rosa-mexicano);
-  text-decoration: underline;
 }
+
 /* === Carrusel === */
 .carousel-item img {
   max-height: 400px;
@@ -469,7 +469,7 @@ a:hover {
 
 /* Fijar el logo de la imagen */
 .logo-img {
-  max-height: 40px;      /* Máximo 50px */
+  max-height: 50px;      /* Máximo 50px */
   width: auto;           /* Mantiene proporción */
   object-fit: contain;   /* No se deforma */
   margin-bottom: 4px;
@@ -497,7 +497,6 @@ a:hover {
 
 /* Ajustes al contenedor colapsado */
 .navbar-collapse {
-  background-color: var(--color-cyan); /* mismo color de navbar */
   padding: 0.5rem 0.75rem;
   border-radius: 0 0 12px 12px;
   max-width: 95%;
@@ -537,5 +536,85 @@ body {
     max-width: 250px;
     margin: 0.5rem auto;
     display: block;
+  }
+}
+
+/* Responsibilidad de la navbar */
+/* Para computadoras */
+@media (min-width: 992px) {
+  .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .navbar-nav .nav-link {
+    display: block;
+    text-align: center;
+    font-size: 1rem;
+  }
+}
+/* Para tabletas */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .navbar-collapse {
+    text-align: center;
+  }
+
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .navbar-nav .nav-item {
+    width: 100%;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0;
+    font-size: 1.05rem;
+  }
+}
+
+/* Para celulares */
+@media (max-width: 767.98px) {
+  .navbar-collapse {
+    background-color: rgba(60, 153, 186, 0.75); 
+    backdrop-filter: blur(5px);
+    border-radius: 0 0 12px 12px;
+    padding: 1rem;
+    margin-top: 0.3rem;
+
+    /* 👇 Nuevo comportamiento tipo tarjeta flotante */
+    position: absolute;
+    right: 1rem;
+    top: 100%; /* justo debajo de la navbar */
+    width: auto;
+    max-width: 280px;
+    min-width: 200px;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .navbar-nav .nav-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: 0.4rem 0;
+    text-align: center;
+  }
+
+  .navbar-toggler {
+    border: none;
+    box-shadow: none;
   }
 }
