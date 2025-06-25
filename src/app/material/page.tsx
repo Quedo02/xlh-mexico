@@ -14,7 +14,7 @@ export default function Material() {
       title="Material Educativo"
       subtitle="Sumergete en Nuestro Material Educativo"
       backgroundImage="/img/receta.jpg" // Imagen de fondo
-      overlayColor="rgba(238, 49 , 107 , 0.5)" //Color de fondo
+      overlayColor="rgba(0, 38, 102, 0.6)" //Color de fondo
     />
 
     <section className="container my-5">

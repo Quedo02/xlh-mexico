@@ -50,7 +50,7 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* === Botones personalizados === */
@@ -401,6 +401,14 @@ a:hover {
   margin: 0 auto;
 }
 
+.logo-xlh {
+  max-width: 400px; /* o el tamaño que te parezca adecuado */
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* === Hero banner === */
 .hero-section {
   position: relative;
@@ -450,15 +458,33 @@ a:hover {
 /* === Carta de red social === */
 .card-red-social {
   background-color: #fff;
-  padding: 1rem;
-  min-height: 460px;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  border: 1px solid #ddd;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  overflow: hidden;
 }
+
+.card-red-social iframe,
+.card-red-social blockquote,
+.card-red-social .fb-post,
+.card-red-social .instagram-media {
+  max-height: 300px;
+  overflow: auto;
+  width: 100%;
+  object-fit: contain;
+}
+
+
+@media (min-width: 768px) {
+  .card-red-social {
+    min-height: 420px;
+  }
+}
+
 
 /* Fijar la altura y estructura de la navbar */
 .navbar {
@@ -478,31 +504,6 @@ a:hover {
 .navbar-brand span {
   font-size: 1.15rem;
   line-height: 1.1;
-}
-
-/* Boton de donaciones */
-.btn-donaciones {
-  background-color: var(--color-morado) !important;
-  color: white !important;
-  font-weight: 500;
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-donaciones:hover {
-  background-color: var(--color-azul-marino) !important; /* tono más oscuro */
-  color: white;
-}
-
-/* Ajustes al contenedor colapsado */
-.navbar-collapse {
-  background-color: var(--color-cyan); /* mismo color de navbar */
-  padding: 0.5rem 0.75rem;
-  border-radius: 0 0 12px 12px;
-  max-width: 95%;
-  margin: 0 auto;
-  margin-top: 0.5rem;
 }
 
 /* Para que la navbar se quela navbar oculte contenido al bajar */
@@ -538,4 +539,86 @@ body {
     margin: 0.5rem auto;
     display: block;
   }
+}
+/* === Tarjetas de Valores Expandibles === */
+
+/* Contenedor general con interactividad */
+.valor-expandible {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Texto oculto que se muestra al pasar el cursor o enfocar */
+.valor-expandible .detalle-valor {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+  transition: all 0.4s ease;
+}
+
+/* Al pasar el mouse o al enfocar (útil en móviles o accesibilidad),
+   se expande el texto con animación */
+.valor-expandible:hover .detalle-valor,
+.valor-expandible:focus-within .detalle-valor {
+  max-height: 200px;
+  opacity: 1;
+}
+
+/* Formulario */
+
+.formulario-registro {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.formulario-registro h2 {
+  color: var(--color-morado);
+  font-weight: 700;
+  padding-left: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--color-azul-marino);
+  font-size: 1rem;
+}
+
+.form-control, .form-select {
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-size: 0.9rem; /* Reducir tamaño de texto */
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 0.25rem rgba(60, 153, 186, 0.25);
+}
+
+fieldset {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px dashed var(--color-rosa);
+}
+
+legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-morado);
+  margin-bottom: 1rem;
+}
+
+.bg-formulario {
+  padding: 2rem 0;
 }

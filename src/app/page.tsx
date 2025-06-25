@@ -199,9 +199,9 @@ export default function Home() {
               className="img-fluid sombra-logo logo-xlh"
             />
           </div>
-          <a href="#donaciones" className="btn btn-donar btn-outline-morado btn-lg">
+          {/* <a href="#donaciones" className="btn btn-donar btn-outline-morado btn-lg">
             DONAR
-          </a>
+          </a> */}
         </div>
       </section>
     </main>
