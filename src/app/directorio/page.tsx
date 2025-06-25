@@ -1,10 +1,12 @@
-"use client";
-
 import React from "react";
 import HeroSection from "@/components/HeroSection";
 import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+import { Especialista } from "@prisma/client";
 
-export default function Directorio() {
+export default async function Directorio() {
+  const especialistas: Especialista[] = await prisma.especialista.findMany();
+
   return (
     <>
       <HeroSection
@@ -15,76 +17,72 @@ export default function Directorio() {
       />
 
       <section className="container my-5">
-        <h2 className="titulo-seccion text-center mb-4">Doctores Especialistas en XLH y Raquitismos</h2>
-        
+        <h2 className="titulo-seccion text-center mb-4">
+          Doctores Especialistas en XLH y Raquitismos
+        </h2>
+
         <div className="row g-4">
-          {/* Doctor 1 */}
-          <div className="col-md-6 col-lg-4">
-            <div className="card h-100 tile-card">
-              <div className="card-body text-center">
-                <Image
-                  src="/img/doctor.jpg"
-                  alt="Dra. Ana Martínez"
-                  width={100}
-                  height={100}
-                  className="rounded-circle mb-3 sombra-logo"
-                />
-                <h5 className="card-title">Dra. Ana Martínez</h5>
-                <p className="card-subtitle text-muted mb-2">Endocrinóloga Pediatra</p>
-                <p className="mb-2">Oaxaca</p>
-                <p className="text-muted">951753648</p>
-                <a href="mailto:ana.martinez@hospital.com" className="btn btn-outline-verde btn-sm mt-2">
-                  Contactar
-                </a>
+          {especialistas.map((doctor) => (
+            <div className="col-md-6 col-lg-4" key={doctor.id}>
+              <div className="card h-100 tile-card">
+                <div className="card-body text-center">
+                  <Image
+                    src={doctor.foto}
+                    alt={doctor.nombre}
+                    width={100}
+                    height={100}
+                    className="rounded-circle mb-3 sombra-logo"
+                  />
+                  <h5 className="card-title">{doctor.nombre}</h5>
+                  <p className="card-subtitle text-muted mb-2">{doctor.especialidad}</p>
+                  <p className="mb-2">
+                    <i className="bi bi-geo-alt-fill me-1"></i>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(doctor.ubicacion)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-decoration-none text-muted"
+                    >
+                      {doctor.ubicacion}
+                    </a>
+                  </p>
+
+                  {doctor.telefono && (
+                    <p className="mb-1">
+                      <i className="bi bi-telephone-fill me-1"></i>
+                      <a
+                        href={`tel:${doctor.telefono}`}
+                        className="text-decoration-none text-muted"
+                      >
+                        {doctor.telefono}
+                      </a>
+                    </p>
+                  )}
+
+                  {doctor.correo && (
+                    <p className="mb-2">
+                      <i className="bi bi-envelope-fill me-1"></i>
+                      <a
+                        href={`mailto:${doctor.correo}`}
+                        className="text-decoration-none text-muted"
+                      >
+                        {doctor.correo}
+                      </a>
+                    </p>
+                  )}
+
+                  {doctor.perfilUrl && (
+                    <a
+                      href={doctor.perfilUrl}
+                      className="btn btn-outline-cyan btn-sm mt-2"
+                    >
+                      Ver Perfil
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Doctor 2 */}
-          <div className="col-md-6 col-lg-4">
-            <div className="card h-100 tile-card">
-              <div className="card-body text-center">
-                <Image
-                  src="/img/doctor.jpg"
-                  alt="Dr. Luis Pérez"
-                  width={100}
-                  height={100}
-                  className="rounded-circle mb-3 sombra-logo"
-                />
-                <h5 className="card-title">Dr. Luis Pérez</h5>
-                <p className="card-subtitle text-muted mb-2">Genetista Clínico</p>
-                <p className="mb-2">IMSS, UMAE Monterrey</p>
-                <p className="text-muted">222586471</p>
-                <a href="mailto:luis.perez@umae.mx" className="btn btn-outline-cyan btn-sm mt-2">
-                  Contactar
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Doctor 3 */}
-          <div className="col-md-6 col-lg-4">
-            <div className="card h-100 tile-card">
-              <div className="card-body text-center">
-                <Image
-                  src="/img/doctor.jpg"
-                  alt="Dra. Karla López"
-                  width={100}
-                  height={100}
-                  className="rounded-circle mb-3 sombra-logo"
-                />
-                <h5 className="card-title">Dra. Karla López</h5>
-                <p className="card-subtitle text-muted mb-2">Nefróloga Pediatra</p>
-                <p className="mb-2">Hospital de Pediatría, CMN</p>
-                <p className="text-muted">Jalisco</p>
-                <a href="#" className="btn btn-outline-rosa btn-sm mt-2">
-                  Ver Perfil
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Puedes seguir agregando más tarjetas aquí */}
+          ))}
         </div>
       </section>
     </>

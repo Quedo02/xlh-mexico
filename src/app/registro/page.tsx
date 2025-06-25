@@ -1,10 +1,161 @@
 "use client";
 
+import React, { useState } from "react";
 import HeroSection from "@/components/HeroSection";
-import { useRegistroForm } from "@/hooks/useRegistroForm";
+import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+const especialidadesList = [
+  "Medicina interna",
+  "Pediatría",
+  "Nefrología",
+  "Endocrinología",
+  "Ortopedia",
+  "Odontología",
+  "Genética",
+  "Nutrición",
+  "Fisioterapia",
+  "Psicología",
+  "Manejo del dolor",
+  "Terapia ocupacional",
+];
+
+type FormData = {
+  nombre: string;
+  sexo: string;
+  fechaNacimiento: string;
+  edad: string;
+  residencia: string;
+  telefono: string;
+  email: string;
+  origenDiagnostico: string;
+  familiarDiagnostico: string;
+  seguridadSocial: string;
+  institucion: string;
+  medico: string;
+  especialidadMedico: string;
+  telefonoMedico: string;
+  diagnosticoConfirmado: string;
+  tratamiento: string;
+  especialidades: string[];
+};
 
 export default function Registro() {
-  const { formData, handleChange, handleSubmit } = useRegistroForm();
+  const [formData, setFormData] = useState<FormData>({
+    nombre: "", sexo: "", fechaNacimiento: "", edad: "", residencia: "", telefono: "",
+    email: "", origenDiagnostico: "", familiarDiagnostico: "", seguridadSocial: "",
+    institucion: "", medico: "", especialidadMedico: "", telefonoMedico: "", diagnosticoConfirmado: "",
+    tratamiento: "", especialidades: []
+  });
+
+  const [step, setStep] = useState(1);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type, checked } = target;
+
+    if (name === "especialidades" && type === "checkbox") {
+      let newEspecialidades = [...formData.especialidades];
+      if (checked) {
+        newEspecialidades.push(value);
+      } else {
+        newEspecialidades = newEspecialidades.filter((esp) => esp !== value);
+      }
+      setFormData({ ...formData, especialidades: newEspecialidades });
+    } else if (name === "edad") {
+      if (value === "" || /^\d{0,2}$/.test(value)) {
+        setFormData({ ...formData, [name]: value });
+      }
+    } else if (name === "telefono" || name === "telefonoMedico") {
+      if (value === "" || /^\d{0,10}$/.test(value)) {
+        setFormData({ ...formData, [name]: value });
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const validateStep = () => {
+    if (step === 1) {
+      return (
+        formData.nombre.trim() !== "" &&
+        formData.sexo !== "" &&
+        formData.fechaNacimiento !== "" &&
+        formData.edad !== "" &&
+        Number(formData.edad) > 0 &&
+        formData.residencia.trim() !== ""
+      );
+    }
+    if (step === 2) {
+      return (
+        formData.telefono.length === 10 &&
+        formData.email.trim() !== "" &&
+        formData.seguridadSocial.trim() !== "" &&
+        formData.medico.trim() !== "" &&
+        formData.especialidadMedico.trim() !== "" &&
+        formData.telefonoMedico.length === 10 &&
+        formData.diagnosticoConfirmado !== ""
+      );
+    }
+    return true;
+  };
+
+  const handleNext = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateStep()) {
+      setStep(step + 1);
+    } else {
+      toast.error("Completa los campos obligatorios antes de continuar.");
+    }
+  };
+
+  const handleBack = () => {
+    setStep(step - 1);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateStep()) {
+      toast.error("Completa los campos obligatorios antes de enviar.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/pacientes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          edad: Number(formData.edad),
+          fechaNacimiento: formData.fechaNacimiento,
+          diagnosticoConfirmado: formData.diagnosticoConfirmado === "Sí",
+          especialidades: formData.especialidades,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Error al enviar datos");
+
+      toast.success("Registro enviado correctamente");
+      setFormData({
+        nombre: "", sexo: "", fechaNacimiento: "", edad: "", residencia: "", telefono: "",
+        email: "", origenDiagnostico: "", familiarDiagnostico: "", seguridadSocial: "",
+        institucion: "", medico: "", especialidadMedico: "", telefonoMedico: "", diagnosticoConfirmado: "",
+        tratamiento: "", especialidades: []
+      });
+      setStep(1);
+    } catch (error) {
+      toast.error("Error al enviar el formulario");
+      console.error(error);
+    }
+  };
+
+    // Limitar fechas entre hace 120 años y hoy
+  const maxDate = new Date().toISOString().split("T")[0];
+
+  const minDate = new Date();
+  minDate.setFullYear(minDate.getFullYear() - 100);
+  const minDateStr = minDate.toISOString().split("T")[0];
 
   return (
     <>
@@ -12,143 +163,381 @@ export default function Registro() {
         title="Registro de Pacientes XLH"
         subtitle="Formulario oficial de XLH y Otros Raquitismos México"
         backgroundImage="/img/receta.jpg"
-        overlayColor="rgba(112, 8, 114, 0.6)"
+        overlayColor="rgba(0, 38, 102, 0.6)"
       />
-      <main className="container py-5">
-        <h2 className="text-center mb-4">Formulario de Registro</h2>
-        <form onSubmit={handleSubmit} className="row g-3">
-          <div className="col-md-6">
-            <label className="form-label">Nombre completo del paciente *</label>
-            <input name="nombre" className="form-control" required onChange={handleChange} />
-          </div>
+      <main className="bg-formulario">
+        <p className="text-danger mb-3 text-center fw-bold">
+          * Los campos marcados con asterisco son obligatorios
+        </p>
 
-          <div className="col-md-6">
-            <label className="form-label">Sexo *</label>
-            <select name="sexo" className="form-select" required onChange={handleChange}>
-              <option value="">Seleccionar</option>
-              <option>Femenino</option>
-              <option>Masculino</option>
-              <option>Prefiero no responder</option>
-            </select>
-          </div>
+        <div className="container">
+                    <form
+            onSubmit={step === 3 ? handleSubmit : handleNext}
+            className="formulario-registro"
+          >
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.5 }}
+              >
+                <h2 className="mb-4 text-center">Datos personales</h2>
 
-          <div className="col-md-4">
-            <label className="form-label">Fecha de nacimiento *</label>
-            <input name="fechaNacimiento" type="date" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label">Edad actual *</label>
-            <input name="edad" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label">Lugar de residencia *</label>
-            <input name="residencia" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Número de teléfono *</label>
-            <input name="telefono" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Correo electrónico *</label>
-            <input name="email" type="email" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Origen del diagnóstico</label>
-            <select name="origenDiagnostico" className="form-select" onChange={handleChange}>
-              <option value="">Seleccionar</option>
-              <option>Antecedentes familiares</option>
-              <option>Espontáneo</option>
-            </select>
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Familiar con antecedente (si aplica)</label>
-            <input name="familiarDiagnostico" className="form-control" onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Seguridad social *</label>
-            <input name="seguridadSocial" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Institución tratante</label>
-            <input name="institucion" className="form-control" onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Nombre del médico *</label>
-            <input name="medico" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Especialidad del médico *</label>
-            <input name="especialidadMedico" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">Teléfono del médico *</label>
-            <input name="telefonoMedico" className="form-control" required onChange={handleChange} />
-          </div>
-
-          <div className="col-md-6">
-            <label className="form-label">¿Diagnóstico confirmado? *</label>
-            <select name="diagnosticoConfirmado" className="form-select" required onChange={handleChange}>
-              <option value="">Seleccionar</option>
-              <option>Sí</option>
-              <option>No</option>
-            </select>
-          </div>
-
-          <div className="col-12">
-            <label className="form-label">¿Qué tratamiento recibe?</label>
-            <input name="tratamiento" className="form-control" onChange={handleChange} />
-          </div>
-
-          <div className="col-12">
-            <label className="form-label">Especialidades que consulta:</label>
-            <div className="row">
-              {[
-                "Medicina interna",
-                "Pediatría",
-                "Nefrología",
-                "Endocrinología",
-                "Ortopedia",
-                "Odontología",
-                "Genética",
-                "Nutrición",
-                "Fisioterapia",
-                "Psicología",
-                "Manejo del dolor",
-                "Terapia ocupacional",
-              ].map((especialidad) => (
-                <div key={especialidad} className="col-md-4">
-                  <div className="form-check">
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="nombre">
+                    Nombre completo del paciente <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="bi bi-person-fill"></i>
+                    </span>
                     <input
-                      className="form-check-input"
-                      type="checkbox"
-                      name="especialidades"
-                      value={especialidad}
+                      id="nombre"
+                      name="nombre"
+                      className="form-control"
+                      required
+                      value={formData.nombre}
                       onChange={handleChange}
                     />
-                    <label className="form-check-label">{especialidad}</label>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="col-12 text-center">
-            <button type="submit" className="btn btn-outline-morado">
-              Enviar registro
-            </button>
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="sexo">
+                    Sexo <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    id="sexo"
+                    name="sexo"
+                    className="form-select"
+                    required
+                    value={formData.sexo}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option>Femenino</option>
+                    <option>Masculino</option>
+                    <option>Prefiero no responder</option>
+                  </select>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="fechaNacimiento">
+                    Fecha de nacimiento <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="fechaNacimiento"
+                    name="fechaNacimiento"
+                    type="date"
+                    className="form-control"
+                    required
+                    value={formData.fechaNacimiento}
+                    onChange={handleChange}
+                    max={maxDate}
+                    min={minDateStr}
+                    onKeyDown={(e) => e.preventDefault()}
+                    onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="edad">
+                    Edad actual <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="edad"
+                    name="edad"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
+                    maxLength={2}
+                    className="form-control"
+                    required
+                    value={formData.edad}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="residencia">
+                    Lugar de residencia <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="residencia"
+                    name="residencia"
+                    className="form-control"
+                    required
+                    value={formData.residencia}
+                    onChange={handleChange}
+                  />
+                </div>
+              </motion.div>
+            )}
+
+            {step === 2 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.5 }}
+                >
+                
+                <h2 className="mb-4 text-center">Datos médicos y diagnóstico</h2>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="telefono">
+                    Número de teléfono <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="bi bi-telephone-fill"></i>
+                    </span>
+                    <input
+                      id="telefono"
+                      name="telefono"
+                      type="tel"
+                      pattern="\d{10}"
+                      inputMode="numeric"
+                      maxLength={10}
+                      className="form-control"
+                      required
+                      value={formData.telefono}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="email">
+                    Correo electrónico <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="bi bi-envelope-fill"></i>
+                    </span>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      className="form-control"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="origenDiagnostico">
+                    Origen del diagnóstico
+                  </label>
+                  <select
+                    id="origenDiagnostico"
+                    name="origenDiagnostico"
+                    className="form-select"
+                    value={formData.origenDiagnostico}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option>Antecedentes familiares</option>
+                    <option>Espontáneo</option>
+                  </select>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="familiarDiagnostico">
+                    Familiar con antecedente (si aplica)
+                  </label>
+                  <input
+                    id="familiarDiagnostico"
+                    name="familiarDiagnostico"
+                    className="form-control"
+                    value={formData.familiarDiagnostico}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="seguridadSocial">
+                    Seguridad social <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="seguridadSocial"
+                    name="seguridadSocial"
+                    className="form-control"
+                    required
+                    value={formData.seguridadSocial}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="institucion">
+                    Institución tratante
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="bi bi-building"></i>
+                    </span>
+                    <input
+                      id="institucion"
+                      name="institucion"
+                      className="form-control"
+                      value={formData.institucion}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="medico">
+                    Nombre del médico <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="bi bi-person-badge-fill"></i>
+                    </span>
+                    <input
+                      id="medico"
+                      name="medico"
+                      className="form-control"
+                      required
+                      value={formData.medico}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="especialidadMedico">
+                    Especialidad del médico <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="especialidadMedico"
+                    name="especialidadMedico"
+                    className="form-control"
+                    required
+                    value={formData.especialidadMedico}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="telefonoMedico">
+                    Teléfono del médico <span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <span className="input-group-text">
+                      <i className="bi bi-telephone-fill"></i>
+                    </span>
+                    <input
+                      id="telefonoMedico"
+                      name="telefonoMedico"
+                      type="tel"
+                      pattern="\d{10}"
+                      inputMode="numeric"
+                      maxLength={10}
+                      className="form-control"
+                      required
+                      value={formData.telefonoMedico}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="diagnosticoConfirmado">
+                    ¿Diagnóstico confirmado? <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    id="diagnosticoConfirmado"
+                    name="diagnosticoConfirmado"
+                    className="form-select"
+                    required
+                    value={formData.diagnosticoConfirmado}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option>Sí</option>
+                    <option>No</option>
+                  </select>
+                </div>
+              </motion.div>
+            )}
+
+            {step === 3 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.5 }}
+              >
+
+                <h2 className="mb-4 text-center">Tratamiento y especialidades</h2>
+
+                <div className="mb-3">
+                  <label className="form-label" htmlFor="tratamiento">
+                    ¿Qué tratamiento recibe?
+                  </label>
+                  <input
+                    id="tratamiento"
+                    name="tratamiento"
+                    className="form-control"
+                    value={formData.tratamiento}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <fieldset>
+                  <legend>Especialidades que consulta:</legend>
+                  <div className="row">
+                    {especialidadesList.map((esp) => (
+                      <div className="col-md-4" key={esp}>
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            name="especialidades"
+                            id={esp}
+                            value={esp}
+                            checked={formData.especialidades.includes(esp)}
+                            onChange={handleChange}
+                          />
+                          <label className="form-check-label" htmlFor={esp}>
+                            {esp}
+                          </label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </fieldset>
+              </motion.div>
+            )}
+
+            <div className="d-flex justify-content-between mt-4">
+              {step > 1 && (
+                <button type="button" className="btn btn-outline-cyan" onClick={handleBack}>
+                  Atrás
+                </button>
+              )}
+              {step < 3 && (
+                <button type="submit" className="btn btn-outline-rosa-mexicano">
+                  Siguiente
+                </button>
+              )}
+              {step === 3 && (
+                <button type="submit" className="btn btn-outline-azul-marino">
+                  Enviar registro
+                </button>
+              )}
+            </div>
+          </form>
           </div>
-        </form>
+          <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       </main>
     </>
   );
