@@ -40,3 +40,13 @@ model Paciente {
   especialidades        String?
   creadoEn              DateTime @default(now())
 }
+
+model Evento {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  fecha       DateTime
+  lugar       String
+  descripcion String
+  link        String
+  imagen      String
+}
