@@ -12,7 +12,7 @@ export default function Informacion() {
       title="Conoce el Raquitismo Hipofosfatémico Ligado al Cromosoma (XLH)"
       subtitle="Acompañanos"
       backgroundImage="/img/receta.jpg" // Imagen de fondo
-      overlayColor="rgba(238, 49 , 107 , 0.5)" //Color de fondo
+      overlayColor="rgba(0, 38, 102, 0.6)" //Color de fondo
     />
 
     <section className="seccion-info bg-light">
@@ -89,7 +89,8 @@ export default function Informacion() {
             <p className="parrafo-seccion mx-auto" style={{ maxWidth: "700px" }}>
               Informarse sobre los tipos de raquitismo y su impacto en el desarrollo infantil ayuda a una detección oportuna, tratamiento adecuado y mejor calidad de vida para quienes lo padecen.
             </p>
-            <a href="/contacto" className="btn btn-outline-rosa-mexicano mt-3">¿Tienes dudas? Contáctanos</a>
+            <h3 className="titulo-seccion morado">¿Tinenes dudas?</h3>
+            <a href="/contacto" className="btn btn-outline-morado mt-3">Contáctanos</a>
           </div>
         </div>
       </div>

@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Especialista {
+  id           Int     @id @default(autoincrement())
+  nombre       String
+  especialidad String
+  ubicacion    String
+  telefono     String?
+  correo       String?
+  foto         String
+  perfilUrl    String?
+
+}
+
+model Paciente {
+  id                    Int      @id @default(autoincrement())
+  nombre                String
+  sexo                  String
+  fechaNacimiento       DateTime
+  edad                  Int        // Cambiado a Int
+  residencia            String
+  telefono              String     // Cambiado a String para poder usar números con ceros a la izquierda si se desea
+  email                 String @unique
+  origenDiagnostico     String?
+  familiarDiagnostico   String?
+  seguridadSocial       String
+  institucion           String?
+  medico                String
+  especialidadMedico    String
+  telefonoMedico        String     // Cambiado a String por lo mismo
+  diagnosticoConfirmado Boolean
+  tratamiento           String?
+  especialidades        String?
+  creadoEn              DateTime @default(now())
+}
+
+model Evento {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  fecha       DateTime
+  lugar       String
+  descripcion String
+  link        String
+  imagen      String
+}
