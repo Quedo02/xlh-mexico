@@ -166,378 +166,390 @@ export default function Registro() {
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
       <main className="bg-formulario">
-        <p className="text-danger mb-3 text-center fw-bold">
-          * Los campos marcados con asterisco son obligatorios
-        </p>
 
         <div className="container">
-                    <form
-            onSubmit={step === 3 ? handleSubmit : handleNext}
-            className="formulario-registro"
-          >
-            {step === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 50 }}
-                transition={{ duration: 0.5 }}
+          <div className="container py-5">
+            <div className="card-formulario">
+              <form
+                onSubmit={step === 3 ? handleSubmit : handleNext}
+                className="formulario-registro"
               >
-                <h2 className="mb-4 text-center">Datos personales</h2>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="nombre">
-                    Nombre completo del paciente <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="bi bi-person-fill"></i>
-                    </span>
-                    <input
-                      id="nombre"
-                      name="nombre"
-                      className="form-control"
-                      required
-                      value={formData.nombre}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="sexo">
-                    Sexo <span className="text-danger">*</span>
-                  </label>
-                  <select
-                    id="sexo"
-                    name="sexo"
-                    className="form-select"
-                    required
-                    value={formData.sexo}
-                    onChange={handleChange}
+                {step === 1 && (
+                  <motion.div
+                    key="step1"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    <option value="">Seleccionar</option>
-                    <option>Femenino</option>
-                    <option>Masculino</option>
-                    <option>Prefiero no responder</option>
-                  </select>
-                </div>
+                    <h2 className="mb-4 text-center">Datos personales</h2>
 
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="fechaNacimiento">
-                    Fecha de nacimiento <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    id="fechaNacimiento"
-                    name="fechaNacimiento"
-                    type="date"
-                    className="form-control"
-                    required
-                    value={formData.fechaNacimiento}
-                    onChange={handleChange}
-                    max={maxDate}
-                    min={minDateStr}
-                    onKeyDown={(e) => e.preventDefault()}
-                    onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="edad">
-                    Edad actual <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    id="edad"
-                    name="edad"
-                    type="text"
-                    inputMode="numeric"
-                    pattern="\d*"
-                    maxLength={2}
-                    className="form-control"
-                    required
-                    value={formData.edad}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="residencia">
-                    Lugar de residencia <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    id="residencia"
-                    name="residencia"
-                    className="form-control"
-                    required
-                    value={formData.residencia}
-                    onChange={handleChange}
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {step === 2 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 50 }}
-                transition={{ duration: 0.5 }}
-                >
-                
-                <h2 className="mb-4 text-center">Datos médicos y diagnóstico</h2>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="telefono">
-                    Número de teléfono <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="bi bi-telephone-fill"></i>
-                    </span>
-                    <input
-                      id="telefono"
-                      name="telefono"
-                      type="tel"
-                      pattern="\d{10}"
-                      inputMode="numeric"
-                      maxLength={10}
-                      className="form-control"
-                      required
-                      value={formData.telefono}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="email">
-                    Correo electrónico <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="bi bi-envelope-fill"></i>
-                    </span>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      className="form-control"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="origenDiagnostico">
-                    Origen del diagnóstico
-                  </label>
-                  <select
-                    id="origenDiagnostico"
-                    name="origenDiagnostico"
-                    className="form-select"
-                    value={formData.origenDiagnostico}
-                    onChange={handleChange}
-                  >
-                    <option value="">Seleccionar</option>
-                    <option>Antecedentes familiares</option>
-                    <option>Espontáneo</option>
-                  </select>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="familiarDiagnostico">
-                    Familiar con antecedente (si aplica)
-                  </label>
-                  <input
-                    id="familiarDiagnostico"
-                    name="familiarDiagnostico"
-                    className="form-control"
-                    value={formData.familiarDiagnostico}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="seguridadSocial">
-                    Seguridad social <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    id="seguridadSocial"
-                    name="seguridadSocial"
-                    className="form-control"
-                    required
-                    value={formData.seguridadSocial}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="institucion">
-                    Institución tratante
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="bi bi-building"></i>
-                    </span>
-                    <input
-                      id="institucion"
-                      name="institucion"
-                      className="form-control"
-                      value={formData.institucion}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="medico">
-                    Nombre del médico <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="bi bi-person-badge-fill"></i>
-                    </span>
-                    <input
-                      id="medico"
-                      name="medico"
-                      className="form-control"
-                      required
-                      value={formData.medico}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="especialidadMedico">
-                    Especialidad del médico <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    id="especialidadMedico"
-                    name="especialidadMedico"
-                    className="form-control"
-                    required
-                    value={formData.especialidadMedico}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="telefonoMedico">
-                    Teléfono del médico <span className="text-danger">*</span>
-                  </label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="bi bi-telephone-fill"></i>
-                    </span>
-                    <input
-                      id="telefonoMedico"
-                      name="telefonoMedico"
-                      type="tel"
-                      pattern="\d{10}"
-                      inputMode="numeric"
-                      maxLength={10}
-                      className="form-control"
-                      required
-                      value={formData.telefonoMedico}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="diagnosticoConfirmado">
-                    ¿Diagnóstico confirmado? <span className="text-danger">*</span>
-                  </label>
-                  <select
-                    id="diagnosticoConfirmado"
-                    name="diagnosticoConfirmado"
-                    className="form-select"
-                    required
-                    value={formData.diagnosticoConfirmado}
-                    onChange={handleChange}
-                  >
-                    <option value="">Seleccionar</option>
-                    <option>Sí</option>
-                    <option>No</option>
-                  </select>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 50 }}
-                transition={{ duration: 0.5 }}
-              >
-
-                <h2 className="mb-4 text-center">Tratamiento y especialidades</h2>
-
-                <div className="mb-3">
-                  <label className="form-label" htmlFor="tratamiento">
-                    ¿Qué tratamiento recibe?
-                  </label>
-                  <input
-                    id="tratamiento"
-                    name="tratamiento"
-                    className="form-control"
-                    value={formData.tratamiento}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <fieldset>
-                  <legend>Especialidades que consulta:</legend>
-                  <div className="row">
-                    {especialidadesList.map((esp) => (
-                      <div className="col-md-4" key={esp}>
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="especialidades"
-                            id={esp}
-                            value={esp}
-                            checked={formData.especialidades.includes(esp)}
-                            onChange={handleChange}
-                          />
-                          <label className="form-check-label" htmlFor={esp}>
-                            {esp}
-                          </label>
-                        </div>
+                    <div className="mb-3">
+                      <p className="text-danger mb-3 text-left fw-bold">
+                        * Los campos marcados con asterisco son obligatorios
+                      </p>
+                      <label className="form-label" htmlFor="nombre">
+                        Nombre completo del paciente <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <i className="bi bi-person-fill"></i>
+                        </span>
+                        <input
+                          id="nombre"
+                          name="nombre"
+                          className="form-control"
+                          required
+                          value={formData.nombre}
+                          onChange={handleChange}
+                        />
                       </div>
-                    ))}
-                  </div>
-                </fieldset>
-              </motion.div>
-            )}
+                    </div>
 
-            <div className="d-flex justify-content-between mt-4">
-              {step > 1 && (
-                <button type="button" className="btn btn-outline-cyan" onClick={handleBack}>
-                  Atrás
-                </button>
-              )}
-              {step < 3 && (
-                <button type="submit" className="btn btn-outline-rosa-mexicano">
-                  Siguiente
-                </button>
-              )}
-              {step === 3 && (
-                <button type="submit" className="btn btn-outline-azul-marino">
-                  Enviar registro
-                </button>
-              )}
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="sexo">
+                        Sexo <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        id="sexo"
+                        name="sexo"
+                        className="form-select"
+                        required
+                        value={formData.sexo}
+                        onChange={handleChange}
+                      >
+                        <option value="">Seleccionar</option>
+                        <option>Femenino</option>
+                        <option>Masculino</option>
+                        <option>Prefiero no responder</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="fechaNacimiento">
+                        Fecha de nacimiento <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        id="fechaNacimiento"
+                        name="fechaNacimiento"
+                        type="date"
+                        className="form-control"
+                        required
+                        value={formData.fechaNacimiento}
+                        onChange={handleChange}
+                        max={maxDate}
+                        min={minDateStr}
+                        onKeyDown={(e) => e.preventDefault()}
+                        onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="edad">
+                        Edad actual <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        id="edad"
+                        name="edad"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
+                        maxLength={2}
+                        className="form-control"
+                        required
+                        value={formData.edad}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="residencia">
+                        Lugar de residencia <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        id="residencia"
+                        name="residencia"
+                        className="form-control"
+                        required
+                        value={formData.residencia}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === 2 && (
+                  <motion.div
+                    key="step1"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.5 }}
+                    >
+                    
+                    <h2 className="mb-4 text-center">Datos médicos y diagnóstico</h2>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="telefono">
+                        Número de teléfono <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <i className="bi bi-telephone-fill"></i>
+                        </span>
+                        <input
+                          id="telefono"
+                          name="telefono"
+                          type="tel"
+                          pattern="\d{10}"
+                          inputMode="numeric"
+                          maxLength={10}
+                          className="form-control"
+                          required
+                          value={formData.telefono}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="email">
+                        Correo electrónico <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <i className="bi bi-envelope-fill"></i>
+                        </span>
+                        <input
+                          id="email"
+                          name="email"
+                          type="email"
+                          className="form-control"
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="origenDiagnostico">
+                        Origen del diagnóstico
+                      </label>
+                      <select
+                        id="origenDiagnostico"
+                        name="origenDiagnostico"
+                        className="form-select"
+                        value={formData.origenDiagnostico}
+                        onChange={handleChange}
+                      >
+                        <option value="">Seleccionar</option>
+                        <option>Antecedentes familiares</option>
+                        <option>Espontáneo</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="familiarDiagnostico">
+                        Familiar con antecedente (si aplica)
+                      </label>
+                      <input
+                        id="familiarDiagnostico"
+                        name="familiarDiagnostico"
+                        className="form-control"
+                        value={formData.familiarDiagnostico}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="seguridadSocial">
+                        Seguridad social <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        id="seguridadSocial"
+                        name="seguridadSocial"
+                        className="form-select"
+                        required
+                        value={formData.seguridadSocial}
+                        onChange={handleChange}
+                      >
+                        <option value="">Seleccionar</option>
+                        <option value="IMSS">IMSS</option>
+                        <option value="ISSSTE">ISSSTE</option>
+                        <option value="Particular">Particular</option>
+                        <option value="IMSS Bienestar">IMSS Bienestar</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="institucion">
+                        Institución tratante
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <i className="bi bi-building"></i>
+                        </span>
+                        <input
+                          id="institucion"
+                          name="institucion"
+                          className="form-control"
+                          value={formData.institucion}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="medico">
+                        Nombre del médico <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <i className="bi bi-person-badge-fill"></i>
+                        </span>
+                        <input
+                          id="medico"
+                          name="medico"
+                          className="form-control"
+                          required
+                          value={formData.medico}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="especialidadMedico">
+                        Especialidad del médico <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        id="especialidadMedico"
+                        name="especialidadMedico"
+                        className="form-control"
+                        required
+                        value={formData.especialidadMedico}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="telefonoMedico">
+                        Teléfono del médico <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">
+                          <i className="bi bi-telephone-fill"></i>
+                        </span>
+                        <input
+                          id="telefonoMedico"
+                          name="telefonoMedico"
+                          type="tel"
+                          pattern="\d{10}"
+                          inputMode="numeric"
+                          maxLength={10}
+                          className="form-control"
+                          required
+                          value={formData.telefonoMedico}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="diagnosticoConfirmado">
+                        ¿Diagnóstico confirmado? <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        id="diagnosticoConfirmado"
+                        name="diagnosticoConfirmado"
+                        className="form-select"
+                        required
+                        value={formData.diagnosticoConfirmado}
+                        onChange={handleChange}
+                      >
+                        <option value="">Seleccionar</option>
+                        <option>Sí</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+                  </motion.div>
+                )}
+
+                {step === 3 && (
+                  <motion.div
+                    key="step1"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.5 }}
+                  >
+
+                    <h2 className="mb-4 text-center">Tratamiento y especialidades</h2>
+
+                    <div className="mb-3">
+                      <label className="form-label" htmlFor="tratamiento">
+                        ¿Qué tratamiento recibe?
+                      </label>
+                      <input
+                        id="tratamiento"
+                        name="tratamiento"
+                        className="form-control"
+                        value={formData.tratamiento}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <fieldset>
+                      <legend>Especialidades que consulta:</legend>
+                      <div className="row">
+                        {especialidadesList.map((esp) => (
+                          <div className="col-md-4" key={esp}>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="especialidades"
+                                id={esp}
+                                value={esp}
+                                checked={formData.especialidades.includes(esp)}
+                                onChange={handleChange}
+                              />
+                              <label className="form-check-label" htmlFor={esp}>
+                                {esp}
+                              </label>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </fieldset>
+                  </motion.div>
+                )}
+
+                <div className="d-flex justify-content-between mt-4">
+                  {step > 1 && (
+                    <button type="button" className="btn btn-outline-cyan" onClick={handleBack}>
+                      Atrás
+                    </button>
+                  )}
+                  {step < 3 && (
+                    <button type="submit" className="btn btn-outline-rosa-mexicano">
+                      Siguiente
+                    </button>
+                  )}
+                  {step === 3 && (
+                    <button type="submit" className="btn btn-outline-azul-marino">
+                      Enviar registro
+                    </button>
+                  )}
+                </div>
+              </form>
             </div>
-          </form>
           </div>
-          <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
+        </div>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       </main>
     </>
   );

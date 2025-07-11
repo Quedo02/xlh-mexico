@@ -321,6 +321,7 @@ a:hover {
 }
 
 /* === Círculo de porcentaje (gráfico SVG) === */
+/*
 .circulo-porcentaje {
   position: relative;
   width: 100px;
@@ -331,7 +332,7 @@ a:hover {
 .circular-chart {
   width: 100px;
   height: 100px;
-  transform: rotate(-90deg); /* solo gira el SVG, no el texto */
+  transform: rotate(-90deg); /* solo gira el SVG, no el texto 
 }
 
 .circular-chart .circle-bg {
@@ -361,7 +362,7 @@ a:hover {
   font-weight: 600;
 }
 
-/* Colores para los círculos porcentuales */
+/* Colores para los círculos porcentuales 
 .circular-chart.naranja .circle { stroke: var(--color-naranja); }
 .circular-chart.azul-marino .circle { stroke: var(--color-azul-marino); }
 .circular-chart.morado .circle { stroke: var(--color-morado); }
@@ -381,6 +382,7 @@ a:hover {
   color: #333;
   text-align: center;
 }
+*/
 
 /* === Fondos personalizados para secciones === */
 .bg-light {
@@ -618,3 +620,14 @@ body {
     box-shadow: none;
   }
 }
+/*formulario*/
+.card-formulario {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Efecto parallax */
