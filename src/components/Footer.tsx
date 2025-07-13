@@ -6,10 +6,9 @@ export default function Footer() {
             <div className="row text-center text-md-start">
                 {/* Columna Empresa */}
                 <div className="col-12 col-md-3 mb-4">
-                    <h5 className="fw-bold">Empresa</h5>
+                    <h5 className="fw-bold">XlHMexico</h5>
                     <ul className="list-unstyled">
-                        <li><a href="#" className="text-white text-decoration-none">Quiénes somos</a></li>
-                        <li><a href="#" className="text-white text-decoration-none">Empleos</a></li>
+                        <li><a href="/nosotros" className="text-white text-decoration-none">Quiénes somos</a></li>
                         <li><a href="#" className="text-white text-decoration-none">Contacto</a></li>
                     </ul>
                 </div>
@@ -18,7 +17,6 @@ export default function Footer() {
                     <h5 className="fw-bold">Recursos</h5>
                     <ul className="list-unstyled">
                         <li><a href="#" className="text-white text-decoration-none">Aviso de privacidad</a></li>
-                        <li><a href="#" className="text-white text-decoration-none">Comparativa de servicios</a></li>
                         <li><a href="#" className="text-white text-decoration-none">Marcas y licencias</a></li>
                     </ul>
                 </div>
@@ -34,10 +32,11 @@ export default function Footer() {
                 <div className="col-12 col-md-3 mb-4">
                     <h5 className="fw-bold">Síguenos</h5>
                     <div className="d-flex justify-content-center justify-content-md-start gap-3">
-                        <a href="#" className="text-white fs-5"><i className="bi bi-facebook"></i></a>
-                        <a href="#" className="text-white fs-5"><i className="bi bi-instagram"></i></a>
-                        <a href="#" className="text-white fs-5"><i className="bi bi-youtube"></i></a>
-                        <a href="#" className="text-white fs-5"><i className="bi bi-whatsapp"></i></a>
+                        <a href="https://www.facebook.com/XLHMexico" className="text-white fs-5"><i className="bi bi-facebook"></i></a>
+                        <a href="https://instagram.com/xlhmexico" className="text-white fs-5"><i className="bi bi-instagram"></i></a>
+                        <a href="https://www.youtube.com/channel/UCptD44u67BRvNuU-q8dtslg" className="text-white fs-5"><i className="bi bi-youtube"></i></a>
+                        <a href="https://twitter.com/xlhmexico" target="_blank" rel="noopener noreferrer" className="text-white fs-5"><i className="bi bi-twitter-x"></i></a>
+                        <a href="https://www.linkedin.com/in/xlh-mexico" target="_blank" rel="noopener noreferrer" className="text-white fs-5"><i className="bi bi-linkedin"></i></a>
                     </div>
                 </div>
             </div>
