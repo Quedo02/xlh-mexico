@@ -42,13 +42,13 @@ export default function SignosSintomas() {
   const [categoria, setCategoria] = useState<"huesos" | "musculos" | "dientes" | null>(null);
 
   const etiquetasGrupos = [
-    { key: "ninxs", label: "Niñxs" },
-    { key: "adultxs", label: "Adultxs" },
+    { key: "ninxs", label: "Niñxs", clase: "btn-outline-azul-marino" },
+    { key: "adultxs", label: "Adultxs", clase: "btn-outline-azul-marino" },
   ];
   const etiquetasCat = [
-    { key: "huesos", label: "Huesos y articulaciones" },
-    { key: "musculos", label: "Músculos" },
-    { key: "dientes", label: "Dientes" },
+    { key: "huesos", label: "Huesos y articulaciones", clase: "btn-outline-azul-marino" },
+    { key: "musculos", label: "Músculos", clase: "btn-outline-azul-marino" },
+    { key: "dientes", label: "Dientes", clase: "btn-outline-azul-marino" },
   ];
 
   const limpiar = () => {
@@ -65,7 +65,7 @@ export default function SignosSintomas() {
         {etiquetasGrupos.map((g) => (
           <button
             key={g.key}
-            className={`btn-filtro ${grupo === g.key ? "activo" : ""}`}
+            className={`btn ${g.clase} ${grupo === g.key ? "active" : ""}`}
             onClick={() => {
               setGrupo(g.key as any);
               setCategoria(null); // reinicia categoría al cambiar grupo
@@ -86,7 +86,7 @@ export default function SignosSintomas() {
           {etiquetasCat.map((c) => (
             <button
               key={c.key}
-              className={`btn-filtro ${categoria === c.key ? "activo" : ""}`}
+              className={`btn ${c.clase} ${categoria === c.key ? "active" : ""}`}
               onClick={() => setCategoria(c.key as any)}
             >
               + {c.label}
