@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+/*import React, { useState, useEffect, useRef } from "react";
 
 
 interface PorcentajeCircularProps {
@@ -76,4 +76,4 @@ export default function PorcentajeCircular({ porcentaje, color, size = 200 }: Po
       </span>
     </div>
   );
-}
+}*/
