@@ -38,10 +38,10 @@ return (
         <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ms-auto gap-2 align-items-lg-center">
         {[
-            { href: "/inicio", label: "Sobre el XLH" },
+            { href: "/sobre-el-xlh", label: "Sobre el XLH" },
             { href: "/eventos", label: "Eventos" },
             { href: "/directorio", label: "Directorio" },
-            { href: "/material", label: "Información" },
+            { href: "/informacion", label: "Información" },
             { href: "/nosotros", label: "Nosotros" },
             { href: "/registro", label: "Registro" },
             // { href: "/servicios", label: "Servicios" },

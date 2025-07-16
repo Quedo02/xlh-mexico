@@ -9,23 +9,23 @@ export default function Footer() {
                     <h5 className="fw-bold">XlHMexico</h5>
                     <ul className="list-unstyled">
                         <li><a href="/nosotros" className="text-white text-decoration-none">Quiénes somos</a></li>
-                        <li><a href="#" className="text-white text-decoration-none">Contacto</a></li>
+                        <li><a href="/contacto" className="text-white text-decoration-none">Contacto</a></li>
                     </ul>
                 </div>
                 {/* Columna Recursos */}
                 <div className="col-12 col-md-3 mb-4">
                     <h5 className="fw-bold">Recursos</h5>
                     <ul className="list-unstyled">
-                        <li><a href="#" className="text-white text-decoration-none">Aviso de privacidad</a></li>
-                        <li><a href="#" className="text-white text-decoration-none">Marcas y licencias</a></li>
+                        <li><a href="/aviso_de_privacidad" className="text-white text-decoration-none">Aviso de privacidad</a></li>
+                        <li><a href="/marcas_y_licencias" className="text-white text-decoration-none">Marcas y licencias</a></li>
                     </ul>
                 </div>
                 {/* Columna Ayuda */}
                 <div className="col-12 col-md-3 mb-4">
                     <h5 className="fw-bold">Ayuda</h5>
                     <ul className="list-unstyled">
-                        <li><a href="#" className="text-white text-decoration-none">Centro de soporte</a></li>
-                        <li><a href="#" className="text-white text-decoration-none">Reportar un problema</a></li>
+                        <li><a href="/mantenimiento" className="text-white text-decoration-none">Centro de soporte</a></li>
+                        <li><a href="/mantenimiento" className="text-white text-decoration-none">Reportar un problema</a></li>
                     </ul>
                 </div>
                 {/* Columna Redes */}
