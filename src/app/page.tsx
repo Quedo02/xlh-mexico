@@ -17,7 +17,7 @@ export default function Home() {
         backgroundImage="/img/banner.jpg"
         overlayColor="rgba(0, 0, 0, 0.5)"
         primaryButtonText="Donar"
-        primaryButtonLink="/donar"
+        //primaryButtonLink="/donar"
         secondaryButtonText="Conocer más"
         secondaryButtonLink="/nosotros"
       />

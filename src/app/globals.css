@@ -507,7 +507,7 @@ a:hover {
 }
 
 /* Para que la navbar se quela navbar oculte contenido al bajar */
-body {
+body.with-navbar  {
   padding-top: 50px; /* Ajusta según la altura de tu navbar (ej. 64px o 70px) */
 }
 
@@ -628,4 +628,45 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   max-width: 700px;
   margin: 0 auto;
+}
+
+/* Estilo de la sidebar */
+.sidebar-admin {
+  background-color: var(--color-azul-marino);
+  color: white;
+  padding: 1rem;
+  width: 240px;
+  min-height: 100vh;
+}
+
+.sidebar-admin h4 {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-admin .nav-link {
+  color: white;
+  padding: 0.5rem 0;
+  transition: background 0.2s ease-in-out;
+}
+
+.sidebar-admin .nav-link:hover {
+  background-color: var(--color-cyan);
+  border-radius: 5px;
+}
+
+.sidebar-admin .btn-logout {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.sidebar-admin .btn-logout:hover {
+  background-color: var(--color-rosa-mexicano);
+  border-color: var(--color-rosa-mexicano);
 }
