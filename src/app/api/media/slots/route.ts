@@ -1,31 +1,43 @@
-// src/app/api/media/slots/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
-import { verifyJWTServer } from "../../../../lib/auth";
+import { verifyJWTServer } from "@/lib/auth";
 export const runtime = "nodejs";
 
+// Obtener todos los slots con sus imágenes
 export async function GET() {
   const slots = await prisma.mediaSlot.findMany({
-    include: { media: true },
+    include: { slotMedias: { include: { media: true } } },
     orderBy: { slot: "asc" },
   });
   return NextResponse.json({ data: slots });
 }
 
+// Crear un nuevo slot
 export async function POST(req: Request) {
-  const token = cookies().get("token")?.value;
-  const ok = token && await verifyJWTServer(token);
+  const token = (await cookies()).get("token")?.value;
+  const ok = token && (await verifyJWTServer(token));
   if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  const { slot, mediaId, alt, caption } = await req.json();
+  const { slot, alt, caption } = await req.json();
   if (!slot) return NextResponse.json({ error: "slot requerido" }, { status: 400 });
 
-  const upserted = await prisma.mediaSlot.upsert({
-    where: { slot },
-    update: { mediaId, alt, caption },
-    create: { slot, mediaId, alt, caption },
-    include: { media: true },
+  const created = await prisma.mediaSlot.create({
+    data: { slot, alt, caption },
   });
-  return NextResponse.json({ data: upserted });
+
+  return NextResponse.json({ data: created });
+}
+
+// Eliminar un slot
+export async function DELETE(req: Request) {
+  const token = (await cookies()).get("token")?.value;
+  const ok = token && (await verifyJWTServer(token));
+  if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
+  const { slotId } = await req.json();
+  if (!slotId) return NextResponse.json({ error: "slotId requerido" }, { status: 400 });
+
+  await prisma.mediaSlot.delete({ where: { id: slotId } });
+  return NextResponse.json({ success: true });
 }
