@@ -7,7 +7,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'placehold.co',
       },
-      // Si tienes otros dominios de imágenes, agrégalos aquí:
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
+      // Otros dominios de imágenes externos:
       // { protocol: 'https', hostname: 'misimagenes.com' },
     ],
   },
