@@ -12,7 +12,7 @@ export default function SobreElXLH() {
       <HeroSection
         title="Conoce el Raquitismo Hipofosfatémico Ligado al Cromosoma X (XLH)"
         subtitle="Infórmate y acompáñanos en la difusión"
-        backgroundImage="/img/receta.jpg"
+        backgroundImage="/img/banner.jpg"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 
@@ -43,8 +43,8 @@ export default function SobreElXLH() {
           <div className="row align-items-center mb-5">
             <div className="col-md-6">
               <Image
-                src="/img/objetivo.jpg"
-                alt="FGF23 proteína XLH"
+                src="/img/provoca_xlh.png"
+                alt="¿Qué provoca el XLH?"
                 width={600}
                 height={400}
                 className="img-ajustada sombra-logo"
@@ -66,13 +66,25 @@ export default function SobreElXLH() {
 
           {/* Síntomas */}
           <SignosSintomas />
+          <div className="row justify-content-center">
+            <div className="col-12 col-md-6 text-center">
+              <Image
+                src="/img/sintomas.png"
+                alt="Síntomas de XLH"
+                width={600}
+                height={400}
+                className="img-fluid sombra-logo"
+                style={{ height: "auto", maxWidth: "100%" }}
+              />
+            </div>
+          </div>
 
           {/* Genética */}
           <div className="row align-items-center my-5">
             <div className="col-md-6">
               <Image
-                src="/img/objetivo.jpg"
-                alt="Herencia genética"
+                src="/img/presentar_XLH.png"
+                alt="¿Quién puede presentar XLH?"
                 width={600}
                 height={400}
                 className="img-ajustada sombra-logo"
@@ -95,8 +107,8 @@ export default function SobreElXLH() {
           <div className="row align-items-center my-5 flex-md-row-reverse">
             <div className="col-md-6">
               <Image
-                src="/img/objetivo.jpg"
-                alt="Diagnóstico XLH"
+                src="/img/diagnostico_xlh.png"
+                alt="¿Cómo se diagnostica el XLH?"
                 width={600}
                 height={400}
                 className="img-ajustada sombra-logo"
@@ -129,7 +141,7 @@ export default function SobreElXLH() {
 
         {/* === ParallaxSection fuera del container para ancho completo === */}
         <ParallaxSection
-          backgroundImage="/img/receta.jpg"
+          backgroundImage="/img/banner.jpg"
           overlayColor="rgba(0, 0, 0, 0.5)"
           speed={0.3}
           height="70vh"

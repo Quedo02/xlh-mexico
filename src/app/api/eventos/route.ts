@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { writeFile } from "fs/promises";
+import path from "path";
 
 export async function GET() {
   try {
@@ -15,25 +17,37 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
+    const formData = await req.formData();
 
-    const { titulo, descripcion, fecha, lugar, link, imagen } = data;
+    const titulo = formData.get("titulo")?.toString();
+    const descripcion = formData.get("descripcion")?.toString();
+    const fecha = formData.get("fecha")?.toString();
+    const lugar = formData.get("lugar")?.toString();
+    const link = formData.get("link")?.toString();
+    const file = formData.get("imagen") as File | null;
 
-    if (!titulo || !descripcion || !fecha || !lugar || !link || !imagen) {
+    if (!titulo || !descripcion || !fecha || !lugar || !link || !file) {
       return NextResponse.json(
-        { error: "Faltan campos obligatorios: titulo, descripcion, fecha, lugar, link, imagen" },
+        { error: "Todos los campos son obligatorios" },
         { status: 400 }
       );
     }
 
+    // Guardar archivo en /public/uploads
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const filename = `${Date.now()}-${file.name}`;
+    const filepath = path.join(process.cwd(), "public", "uploads", filename);
+    await writeFile(filepath, buffer);
+
     const nuevoEvento = await prisma.evento.create({
       data: {
-        titulo: String(titulo),
-        descripcion: String(descripcion),
+        titulo,
+        descripcion,
         fecha: new Date(fecha),
-        lugar: String(lugar),
-        link: String(link),
-        imagen: String(imagen),
+        lugar,
+        link,
+        imagen: `/uploads/${filename}`, // ruta relativa para mostrar en frontend
       },
     });
 

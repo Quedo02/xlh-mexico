@@ -3,16 +3,6 @@ import Image from "next/image";
 import ScriptSocialEmbeds from "@/components/ScriptSocialEmbeds";
 import EventosCard, { type Evento } from "@/components/EventosCard";
 
-type Evento = {
-  id: number;
-  titulo: string;
-  fecha: string;
-  lugar: string;
-  descripcion: string;
-  link: string;
-  imagen: string;
-};
-
 const eventosPorPagina = 6;
 
 export default async function EventosPage() {
@@ -76,9 +66,9 @@ export default async function EventosPage() {
       <section className="container my-5">
         <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
           <h2 className="titulo-seccion text-center text-md-start">Historial de Eventos</h2>
-          <button className="btn btn-outline-verde mt-3 mt-md-0">
+          {/* <button className="btn btn-outline-verde mt-3 mt-md-0">
             <i className="bi bi-calendar-plus me-2"></i>Agregar Evento
-          </button>
+          </button> */}
         </div>
 
         <div className="row">

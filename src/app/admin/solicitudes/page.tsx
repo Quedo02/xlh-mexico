@@ -21,6 +21,7 @@ export default function SolicitudesPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchSolicitudes = async () => {
+    setLoading(true);
     const res = await fetch("/api/admin/solicitudes", { credentials: "include" });
     const data = await res.json();
     if (res.ok) setSolicitudes(data.data);
@@ -31,6 +32,34 @@ export default function SolicitudesPage() {
   useEffect(() => {
     fetchSolicitudes();
   }, []);
+
+  const aceptarSolicitud = async (sol: Solicitud) => {
+    try {
+      const res = await fetch("/api/admin/solicitudes/aceptar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sol),
+      });
+      if (!res.ok) throw new Error("Error al aceptar solicitud");
+      toast.success("Solicitud aceptada");
+      fetchSolicitudes();
+    } catch (error) {
+      console.error(error);
+      toast.error("No se pudo aceptar la solicitud");
+    }
+  };
+
+  const rechazarSolicitud = async (id: number) => {
+    try {
+      const res = await fetch(`/api/admin/solicitudes/rechazar/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Error al rechazar solicitud");
+      toast.success("Solicitud rechazada");
+      fetchSolicitudes();
+    } catch (error) {
+      console.error(error);
+      toast.error("No se pudo rechazar la solicitud");
+    }
+  };
 
   return (
     <div className="container py-4">
@@ -46,7 +75,7 @@ export default function SolicitudesPage() {
               <div className="card h-100 shadow-sm">
                 {sol.foto && (
                   <img
-                    src={`/uploads/${sol.foto}`}
+                    src={sol.foto.startsWith("/uploads") ? sol.foto : `/uploads/${sol.foto}`}
                     alt={sol.nombre}
                     className="card-img-top"
                     style={{ maxHeight: "250px", objectFit: "cover" }}
@@ -67,6 +96,16 @@ export default function SolicitudesPage() {
                       </a>
                     </p>
                   )}
+                </div>
+                <div className="card-footer d-flex justify-content-between">
+                  <div>
+                    <button className="btn btn-success me-2" onClick={() => aceptarSolicitud(sol)}>Aceptar</button>
+                    <button className="btn btn-danger" onClick={() => rechazarSolicitud(sol.id)}>Rechazar</button>
+                  </div>
+                  <div>
+                    {sol.telefono && <a className="btn btn-outline-primary me-2" href={`tel:${sol.telefono}`}>Llamar</a>}
+                    {sol.correo && <a className="btn btn-outline-secondary" href={`mailto:${sol.correo}`}>Correo</a>}
+                  </div>
                 </div>
               </div>
             </div>
