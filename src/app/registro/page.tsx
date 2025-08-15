@@ -21,6 +21,16 @@ const especialidadesList = [
   "Terapia ocupacional",
 ];
 
+const estadosMexico = [
+  "Aguascalientes", "Baja California", "Baja California Sur", "Campeche",
+  "Chiapas", "Chihuahua", "Ciudad de México", "Coahuila", "Colima",
+  "Durango", "Estado de México", "Guanajuato", "Guerrero", "Hidalgo",
+  "Jalisco", "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca",
+  "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa",
+  "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán",
+  "Zacatecas"
+];
+
 type FormData = {
   nombre: string;
   sexo: string;
@@ -264,16 +274,23 @@ export default function Registro() {
 
                     <div className="mb-3">
                       <label className="form-label" htmlFor="residencia">
-                        Lugar de residencia <span className="text-danger">*</span>
+                        Estado de residencia <span className="text-danger">*</span>
                       </label>
-                      <input
+                      <select
                         id="residencia"
                         name="residencia"
-                        className="form-control"
+                        className="form-select"
                         required
                         value={formData.residencia}
                         onChange={handleChange}
-                      />
+                      >
+                        <option value="">Seleccionar</option>
+                        {estadosMexico.map((estado) => (
+                          <option key={estado} value={estado}>
+                            {estado}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </motion.div>
                 )}
@@ -529,7 +546,7 @@ export default function Registro() {
 
                 <div className="d-flex justify-content-between mt-4">
                   {step > 1 && (
-                    <button type="button" className="btn btn-outline-cyan" onClick={handleBack}>
+                    <button type="button" className="btn btn-outline-cyan" onClick={() => setStep(step - 1)}>
                       Atrás
                     </button>
                   )}

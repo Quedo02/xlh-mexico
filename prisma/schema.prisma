@@ -8,23 +8,39 @@ datasource db {
 }
 
 model Especialista {
-  id           Int     @id @default(autoincrement())
-  nombre       String
-  especialidad String
-  ubicacion    String
-  telefono     String?
-  correo       String?
-  foto         String
-  perfilUrl    String?
-
+  id              Int     @id @default(autoincrement())
+  nombre          String
+  especialidad    String
+  ubicacion       String
+  telefono        String
+  correo          String
+  hospital        String
+  comoConocieron  String
+  foto            String?
+  perfilUrl       String?
 }
+
+model SolicitudEspecialista {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  especialidad   String
+  ubicacion      String
+  telefono       String
+  correo         String
+  hospital       String
+  comoConocieron String
+  foto           String?
+  perfilUrl      String?
+  createdAt      DateTime @default(now())
+}
+
 
 model Paciente {
   id                    Int      @id @default(autoincrement())
   nombre                String
   sexo                  String
   fechaNacimiento       DateTime
-  edad                  Int        // Cambiado a Int
+  edad                  Int
   residencia            String
   telefono              String     // Cambiado a String para poder usar números con ceros a la izquierda si se desea
   email                 String @unique
@@ -34,7 +50,7 @@ model Paciente {
   institucion           String?
   medico                String
   especialidadMedico    String
-  telefonoMedico        String     // Cambiado a String por lo mismo
+  telefonoMedico        String
   diagnosticoConfirmado Boolean
   tratamiento           String?
   especialidades        String?
@@ -49,4 +65,18 @@ model Evento {
   descripcion String
   link        String
   imagen      String
+}
+
+model Admin {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Galeria {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  imagenUrl String
+  descripcion String?
 }
