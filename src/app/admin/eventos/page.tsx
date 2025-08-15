@@ -5,13 +5,13 @@ import EventosCard, { type Evento } from "@/components/EventosCard";
 
 export default function AdminEventos() {
   const [eventos, setEventos] = useState<Evento[]>([]);
-  const [mostrarFormulario, setMostrarFormulario] = useState(false); // 👈 nuevo estado
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [fecha, setFecha] = useState("");
   const [lugar, setLugar] = useState("");
   const [link, setLink] = useState("");
-  const [imagen, setImagen] = useState("");
+  const [imagen, setImagen] = useState<File | null>(null);
   const [cargando, setCargando] = useState(false);
   const [loadingEventos, setLoadingEventos] = useState(true);
 
@@ -39,25 +39,35 @@ export default function AdminEventos() {
       toast.error("Por favor llena todos los campos");
       return;
     }
+
     setCargando(true);
     try {
+      const formData = new FormData();
+      formData.append("titulo", titulo);
+      formData.append("descripcion", descripcion);
+      formData.append("fecha", fecha);
+      formData.append("lugar", lugar);
+      formData.append("link", link);
+      formData.append("imagen", imagen);
+
       const res = await fetch("/api/eventos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ titulo, descripcion, fecha, lugar, link, imagen }),
+        body: formData,
       });
+
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Error al crear evento");
       }
+
       toast.success("Evento creado");
       setTitulo("");
       setDescripcion("");
       setFecha("");
       setLugar("");
       setLink("");
-      setImagen("");
-      setMostrarFormulario(false); // 👈 cerrar formulario
+      setImagen(null);
+      setMostrarFormulario(false);
       fetchEventos();
     } catch (error: any) {
       toast.error(error.message || "Error al crear evento");
@@ -78,9 +88,12 @@ export default function AdminEventos() {
         </button>
       </div>
 
-      {/* Formulario condicional */}
       {mostrarFormulario && (
-        <form onSubmit={handleCrearEvento} className="mb-5 border rounded p-3 bg-light">
+        <form
+          onSubmit={handleCrearEvento}
+          className="mb-5 border rounded p-3 bg-light"
+          encType="multipart/form-data"
+        >
           <div className="mb-3">
             <label htmlFor="titulo" className="form-label">Título</label>
             <input
@@ -141,13 +154,16 @@ export default function AdminEventos() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="imagen" className="form-label">URL de la imagen</label>
+            <label htmlFor="imagen" className="form-label">Imagen del evento</label>
             <input
-              type="url"
+              type="file"
               id="imagen"
               className="form-control"
-              value={imagen}
-              onChange={(e) => setImagen(e.target.value)}
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) setImagen(file);
+              }}
               required
             />
           </div>
