@@ -1,25 +1,45 @@
-// src/app/api/media/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
-import { verifyJWTServer } from "../../../lib/auth";
-export const runtime = "nodejs";
+import path from "path";
+import fs from "fs";
 
 export async function GET() {
-  const data = await prisma.media.findMany({ orderBy: { createdAt: "desc" } });
-  return NextResponse.json({ data });
+  const media = await prisma.media.findMany({ orderBy: { createdAt: "desc" } });
+  return NextResponse.json({ data: media });
 }
 
 export async function POST(req: Request) {
-  // (opcional) auth
-  const token = cookies().get("token")?.value;
-  const ok = token && await verifyJWTServer(token);
-  if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  try {
+    // Leer FormData
+    const formData = await req.formData();
+    const file = formData.get("file") as File;
+    const alt = formData.get("alt")?.toString();
+    const caption = formData.get("caption")?.toString();
 
-  const body = await req.json();
-  const { url, alt, caption, width, height, mime } = body;
-  if (!url) return NextResponse.json({ error: "url requerida" }, { status: 400 });
+    if (!file) return NextResponse.json({ error: "Archivo requerido" }, { status: 400 });
 
-  const media = await prisma.media.create({ data: { url, alt, caption, width, height, mime } });
-  return NextResponse.json({ data: media });
+    // Guardar archivo en /public/uploads
+    const uploadsDir = path.join(process.cwd(), "public", "uploads");
+    if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+    const fileName = `${Date.now()}-${file.name}`;
+    const filePath = path.join(uploadsDir, fileName);
+
+    const arrayBuffer = await file.arrayBuffer();
+    fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
+
+    // Guardar en la base de datos
+    const saved = await prisma.media.create({
+      data: {
+        url: `/uploads/${fileName}`,
+        alt,
+        caption,
+      },
+    });
+
+    return NextResponse.json({ data: saved });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Error al subir archivo" }, { status: 500 });
+  }
 }
