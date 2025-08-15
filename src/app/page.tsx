@@ -118,7 +118,7 @@ export default function Home() {
               )}
             </div>
             <div className="col-md-6 text-center">
-              <img src="/img/objetivo.jpg" className="img-fluid rounded shadow-sm" alt="Objetivos" />
+              <img src="/img/objetivos.png" className="img-fluid rounded shadow-sm" alt="Objetivos" />
             </div>
           </div>
         </section>
@@ -149,12 +149,35 @@ export default function Home() {
               )}
             </div>
             <div className="col-md-6 text-center">
-              <img src="/img/objetivo.jpg" className="img-fluid rounded shadow-sm" alt="Motivación" />
+              <img src="/img/motivacion.png" className="img-fluid rounded shadow-sm" alt="Motivación" />
             </div>
           </div>
         </section>
 
       {/* Presencia del XLH México */}
+
+        <section className="container my-5" id="presencia">
+          <div className="row align-items-center shadow rounded p-4 bg-white">
+            <div className="col-12 col-md-6">
+              <h2 className="fw-bold mb-4">Presencia del XLH en México</h2>
+              <p>
+                Nuestra asociación está presente en diferentes estados de la República Mexicana, trabajando en red con pacientes, familias y profesionales de la salud para visibilizar y mejorar la atención del XLH.
+              </p>
+              <p>
+                Este mapa refleja nuestra cobertura y el compromiso de cada comunidad involucrada.
+              </p>
+            </div>
+            <div className="col-12 col-md-6 text-center">
+              <img
+                src="/img/presencia_XLH_mexico.png"
+                className="img-fluid rounded shadow-sm"
+                alt="Mapa de presencia de XLH en México"
+                style={{ maxHeight: "400px", objectFit: "contain" }}
+              />
+            </div>
+          </div>
+        </section>
+
 
       {/* Galería */}
       <section className="container my-5">

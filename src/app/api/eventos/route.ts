@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     // Guardar archivo en /public/uploads
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const filename = `${Date.now()}-${file.name}`; // CORRECCIÓN
+    const filename = `${Date.now()}-${file.name}`;
     const filepath = path.join(process.cwd(), "public", "uploads", filename);
     await writeFile(filepath, buffer);
 
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
         fecha: new Date(fecha),
         lugar,
         link,
-        imagen: `/uploads/${filename}`, // CORRECCIÓN
+        imagen: `/uploads/${filename}`, // ruta relativa para mostrar en frontend
       },
     });
 
