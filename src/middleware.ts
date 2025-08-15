@@ -1,27 +1,19 @@
+// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
-export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+  if (!token) return NextResponse.redirect(new URL("/login", req.url));
 
-  // Solo proteger rutas bajo /admin-panel
-  if (pathname.startsWith("/admin-panel")) {
-    const token = req.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    try {
-      jwt.verify(token, process.env.JWT_SECRET!);
-    } catch {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    await jwtVerify(token, secret);
+    return NextResponse.next();
+  } catch {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
-
-  return NextResponse.next();
 }
 
-export const config = {
-  matcher: ["/admin-panel/:path*"]
-};
+export const config = { matcher: ["/admin/:path*"] };

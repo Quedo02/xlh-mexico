@@ -9,26 +9,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="sidebar-admin">
         <h4>XLH México</h4>
         <ul className="nav flex-column">
-          <li className="nav-item">
-            <Link href="/admin/dashboard" className="nav-link">Dashboard</Link>
-          </li>
-          <li className="nav-item">
-            <Link href="/admin/eventos" className="nav-link">Eventos</Link>
-          </li>
-          <li className="nav-item">
-            <Link href="/admin/directorio" className="nav-link">Directorio</Link>
-          </li>
-          <li className="nav-item">
-            <Link href="/admin/informacion" className="nav-link">Información</Link>
-          </li>
-          <li className="nav-item">
-            <Link href="/admin/solicitudes" className="nav-link">Solicitudes</Link>
-          </li>
+          <li className="nav-item"><Link href="/admin/dashboard" className="nav-link">Dashboard</Link></li>
+          <li className="nav-item"><Link href="/admin/eventos" className="nav-link">Eventos</Link></li>
+          <li className="nav-item"><Link href="/admin/directorio" className="nav-link">Directorio</Link></li>
+          <li className="nav-item"><Link href="/admin/galeria" className="nav-link">Galeria</Link></li>
+          <li className="nav-item"><Link href="/admin/solicitudes" className="nav-link">Solicitudes</Link></li>
           <li className="nav-item">
             <button
               className="btn-logout"
-              onClick={() => {
-                document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+              onClick={async () => {
+                await fetch("/api/logout", { method: "POST" });
                 window.location.href = "/login";
               }}
             >
@@ -37,11 +27,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </li>
         </ul>
       </aside>
-
       <main className="flex-grow-1 p-4 bg-light">
         {children}
         <ToastContainer />
       </main>
-    </div>
-  );
+    </div>
+  );
 }

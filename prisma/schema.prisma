@@ -80,3 +80,29 @@ model Galeria {
   imagenUrl String
   descripcion String?
 }
+
+model Media {
+  id        Int        @id @default(autoincrement())
+  url       String
+  alt       String?
+  caption   String?
+  width     Int?
+  height    Int?
+  mime      String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  slots     MediaSlot[]
+}
+
+model MediaSlot {
+  id        Int       @id @default(autoincrement())
+  slot      String    @unique        // ej: "nosotros.hero"
+  mediaId   Int?
+  alt       String?
+  caption   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  media     Media?    @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+}

@@ -19,6 +19,7 @@
     "cookies": "^0.9.1",
     "formidable": "^3.5.4",
     "framer-motion": "^12.19.1",
+    "jose": "^6.0.12",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.3",
     "react": "^19.0.0",

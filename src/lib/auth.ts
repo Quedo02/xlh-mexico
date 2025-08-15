@@ -1,9 +1,12 @@
-import jwt from "jsonwebtoken";
+// lib/server/verifyJWT.ts (no "use client")
+import { jwtVerify } from "jose";
 
-export function verifyJWT(token: string) {
+export async function verifyJWTServer(token: string) {
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
   try {
-    return jwt.verify(token, process.env.JWT_SECRET as string);
-  } catch (err) {
+    const { payload } = await jwtVerify(token, secret);
+    return payload; // claims
+  } catch {
     return null;
   }
 }

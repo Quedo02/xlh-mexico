@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { verifyJWT } from "@/lib/auth";
+import { verifyJWTServer } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 export async function GET() {
@@ -11,7 +11,7 @@ export async function GET() {
     const token = tokenCookie?.value;
 
     // Verificar token JWT
-    if (!token || !verifyJWT(token)) {
+    if (!token || !verifyJWTServer(token)) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 

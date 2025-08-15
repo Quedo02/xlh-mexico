@@ -1,6 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import Image from "next/image";
 import ScriptSocialEmbeds from "@/components/ScriptSocialEmbeds";
+import EventosCard, { type Evento } from "@/components/EventosCard";
 
 type Evento = {
   id: number;
@@ -74,9 +75,7 @@ export default async function EventosPage() {
 
       <section className="container my-5">
         <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
-          <h2 className="titulo-seccion text-center text-md-start">
-            Historial de Eventos
-          </h2>
+          <h2 className="titulo-seccion text-center text-md-start">Historial de Eventos</h2>
           <button className="btn btn-outline-verde mt-3 mt-md-0">
             <i className="bi bi-calendar-plus me-2"></i>Agregar Evento
           </button>
@@ -85,32 +84,7 @@ export default async function EventosPage() {
         <div className="row">
           {eventos.slice(0, eventosPorPagina).map((evento) => (
             <div className="col-md-6 col-lg-4 mb-4" key={evento.id}>
-              <div className="card h-100 tile-card">
-                <Image
-                  src={evento.imagen}
-                  alt={evento.titulo}
-                  width={500}
-                  height={250}
-                  className="card-img-top object-fit-cover"
-                />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{evento.titulo}</h5>
-                  <p className="card-subtitle mb-2 text-muted">
-                    📅{" "}
-                    {new Date(evento.fecha).toLocaleDateString("es-MX", {
-                      weekday: "short",
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}{" "}
-                    - {evento.lugar}
-                  </p>
-                  <p className="card-text flex-grow-1">{evento.descripcion}</p>
-                  <a href={evento.link} className="btn btn-outline-cyan mt-auto">
-                    Ver Detalles
-                  </a>
-                </div>
-              </div>
+              <EventosCard evento={evento} />
             </div>
           ))}
         </div>
