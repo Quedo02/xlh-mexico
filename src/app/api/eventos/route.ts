@@ -47,7 +47,7 @@ export async function POST(req: Request) {
         fecha: new Date(fecha),
         lugar,
         link,
-        imagen: `/uploads/${filename}`, // ruta relativa para mostrar en frontend
+        imagen: `/uploads/${filename}`,
       },
     });
 
