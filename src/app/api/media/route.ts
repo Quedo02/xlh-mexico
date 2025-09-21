@@ -2,6 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import path from "path";
 import fs from "fs";
+import crypto from "crypto";
+import { cookies } from "next/headers";
+import { verifyJWTServer } from "@/lib/auth";
+
+function ensureUploadsDir() {
+  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  return uploadsDir;
+}
 
 export async function GET() {
   const media = await prisma.media.findMany({ orderBy: { createdAt: "desc" } });
@@ -9,8 +20,11 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const token = (await cookies()).get("token")?.value;
+  const ok = token && (await verifyJWTServer(token));
+  if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
-    // Leer FormData
     const formData = await req.formData();
     const file = formData.get("file") as File;
     const alt = formData.get("alt")?.toString();
@@ -18,17 +32,13 @@ export async function POST(req: Request) {
 
     if (!file) return NextResponse.json({ error: "Archivo requerido" }, { status: 400 });
 
-    // Guardar archivo en /public/uploads
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-
-    const fileName = `${Date.now()}-${file.name}`;
+    const uploadsDir = ensureUploadsDir();
+    const fileName = `${Date.now()}-${crypto.randomUUID()}-${file.name}`;
     const filePath = path.join(uploadsDir, fileName);
 
     const arrayBuffer = await file.arrayBuffer();
     fs.writeFileSync(filePath, Buffer.from(arrayBuffer));
 
-    // Guardar en la base de datos
     const saved = await prisma.media.create({
       data: {
         url: `/uploads/${fileName}`,
