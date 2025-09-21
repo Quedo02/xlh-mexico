@@ -127,10 +127,10 @@ export default function AdminGaleria() {
             <input className="form-control" placeholder="Nombre del slot" value={slotName} onChange={e => setSlotName(e.target.value)} required />
           </div>
           <div className="col-md-2">
-            <input className="form-control" placeholder="Alt" value={slotAlt} onChange={e => setSlotAlt(e.target.value)} />
+            <input className="form-control" placeholder="Nombre alternativo" value={slotAlt} onChange={e => setSlotAlt(e.target.value)} />
           </div>
           <div className="col-md-3">
-            <input className="form-control" placeholder="Caption" value={slotCaption} onChange={e => setSlotCaption(e.target.value)} />
+            <input className="form-control" placeholder="Descripción" value={slotCaption} onChange={e => setSlotCaption(e.target.value)} />
           </div>
           <div className="col-md-1">
             <button type="submit" className="btn btn-primary w-100">Crear</button>
@@ -146,10 +146,10 @@ export default function AdminGaleria() {
             <input type="file" name="file" required className="form-control" />
           </div>
           <div className="col-md-3">
-            <input type="text" name="alt" placeholder="Alt" className="form-control" />
+            <input type="text" name="alt" placeholder="Nombre" className="form-control" />
           </div>
           <div className="col-md-3">
-            <input type="text" name="caption" placeholder="Caption" className="form-control" />
+            <input type="text" name="caption" placeholder="Descripción" className="form-control" />
           </div>
           <div className="col-md-2">
             <button type="submit" className="btn btn-success w-100">Subir</button>
@@ -197,7 +197,7 @@ export default function AdminGaleria() {
           <div className="col-md-4">
             <select className="form-select" value={selectedMediaId} onChange={e => setSelectedMediaId(Number(e.target.value))}>
               <option value="">Selecciona una imagen</option>
-              {medios.map(m => <option key={m.id} value={m.id}>{m.id} - {m.alt || "Sin alt"}</option>)}
+              {medios.map(m => <option key={m.id} value={m.id}>{m.alt || "Sin alt"}</option>)}
             </select>
           </div>
           <div className="col-md-2">
@@ -213,13 +213,26 @@ export default function AdminGaleria() {
           {slots.map(s => (
             <div key={s.id} className="mb-3">
               <div className="d-flex justify-content-between align-items-center">
-                <div className="fw-bold">{s.slot}</div>
+                <div>
+                  <div className="fw-bold">{s.slot}</div>
+                  {s.alt && <div className="text-muted small">Nombre Alternativo: {s.alt}</div>}
+                  {s.caption && <div className="text-muted small">Descripción: {s.caption}</div>}
+                </div>
                 <button className="btn btn-sm btn-danger" onClick={() => deleteSlot(s.id)}>Eliminar slot</button>
               </div>
               <div className="d-flex flex-wrap gap-2 mt-2">
                 {s.slotMedias.map(sm => (
-                  <div key={sm.id} className="border rounded p-1 position-relative">
-                    <img src={sm.media.url} alt={sm.media.alt || ""} style={{ width: 100, height: 80, objectFit: "cover" }} />
+                  <div key={sm.id} className="border rounded p-1 position-relative text-center" style={{ width: 110 }}>
+                    <img 
+                      src={sm.media.url} 
+                      alt={sm.media.alt || ""} 
+                      style={{ width: 100, height: 80, objectFit: "cover" }} 
+                    />
+                    {sm.media.alt && (
+                      <div className="small text-muted mt-1" style={{ maxWidth: 100, whiteSpace: "normal" }}>
+                        {sm.media.alt}
+                      </div>
+                    )}
                     <button
                       type="button"
                       onClick={() => deleteMediaFromSlot(sm.id)}
@@ -236,6 +249,8 @@ export default function AdminGaleria() {
         </div>
       </div>
 
+
+
       {/* Biblioteca de medios */}
       <div className="mt-4">
         <h6 className="mb-2">Todas las imágenes</h6>
@@ -243,8 +258,22 @@ export default function AdminGaleria() {
           {medios.map(m => {
             const inUse = slots.some(s => s.slotMedias.some(sm => sm.mediaId === m.id));
             return (
-              <div key={m.id} className="border rounded p-1 position-relative">
-                <img src={m.url} alt={m.alt || ""} style={{ width: 100, height: 80, objectFit: "cover" }} />
+              <div key={m.id} className="border rounded p-1 position-relative text-center" style={{ width: 110 }}>
+                <img 
+                  src={m.url} 
+                  alt={m.alt || ""} 
+                  style={{ width: 100, height: 80, objectFit: "cover" }} 
+                />
+                {m.alt && (
+                  <div className="small text-muted mt-1" style={{ maxWidth: 100, whiteSpace: "normal" }}>
+                    {m.alt}
+                  </div>
+                )}
+                {m.caption && (
+                  <div className="small text-muted mt-1" style={{ maxWidth: 100, whiteSpace: "normal" }}>
+                    {m.caption}
+                  </div>
+                )}
                 {!inUse && (
                   <button
                     type="button"
@@ -270,6 +299,7 @@ export default function AdminGaleria() {
           })}
         </div>
       </div>
+
 
     </div>
   );
