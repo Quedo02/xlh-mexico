@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { getFotoUrl } from "@/lib/utils"; // <- importar helper
 
 interface Solicitud {
   id: number;
@@ -75,7 +76,7 @@ export default function SolicitudesPage() {
               <div className="card h-100 shadow-sm">
                 {sol.foto && (
                   <img
-                    src={sol.foto.startsWith("/img/especialistas/") ? sol.foto : `/img/especialistas/${sol.foto}`}
+                    src={getFotoUrl(sol.foto)} // <- cambio aquí
                     alt={sol.nombre}
                     className="card-img-top"
                     style={{ maxHeight: "250px", objectFit: "cover" }}

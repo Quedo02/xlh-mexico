@@ -1,15 +1,22 @@
-// NO "use client"
 import { prisma } from "@/lib/prisma";
 
 export async function getMediaBySlot(slot: string) {
   const s = await prisma.mediaSlot.findUnique({
     where: { slot },
-    include: { media: true },
+    include: { 
+      slotMedias: {
+        include: { media: true },
+        orderBy: { orden: "asc" }, // opcional, si quieres el primero por orden
+      },
+    },
   });
-  if (!s?.media) return null;
+
+  if (!s?.slotMedias?.length) return null;
+
+  const media = s.slotMedias[0].media; // toma el primer media
   return {
-    url: s.media.url,
-    alt: s.alt || s.media.alt || "",
-    caption: s.caption || s.media.caption || "",
+    url: media.url,
+    alt: s.alt || media.alt || "",
+    caption: s.caption || media.caption || "",
   };
 }
