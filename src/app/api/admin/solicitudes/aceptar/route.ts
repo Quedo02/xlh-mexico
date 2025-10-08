@@ -6,9 +6,32 @@ export async function POST(req: Request) {
     const data = await req.json();
     const { id, nombre, especialidad, ubicacion, telefono, correo, hospital, comoConocieron, foto, perfilUrl } = data;
 
+    // Normalizar ruta de foto
+    let fotoPath: string | null = null;
+
+    if (foto) {
+      if (foto.startsWith("/img/") || foto.startsWith("http") || foto.startsWith("/uploads/")) {
+        // fotos prediseñadas, externas o ya en uploads → se mantiene
+        fotoPath = foto;
+      } else {
+        // fotos subidas por usuarios → se guardan en /uploads/
+        fotoPath = `/uploads/${foto}`;
+      }
+    }
+
     // Crear en tabla Especialista
     await prisma.especialista.create({
-      data: { nombre, especialidad, ubicacion, telefono, correo, hospital, comoConocieron, foto, perfilUrl },
+      data: { 
+        nombre,
+        especialidad,
+        ubicacion,
+        telefono,
+        correo,
+        hospital,
+        comoConocieron,
+        foto: fotoPath,
+        perfilUrl,
+      },
     });
 
     // Borrar de SolicitudEspecialista

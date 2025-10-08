@@ -13,19 +13,33 @@ const especialidadesList = [
 export default function EspecialistasForm() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    nombre: "", especialidad: "", ubicacion: "", telefono: "",
-    correo: "", hospital: "", comoConocieron: "",
-    foto: "", perfilUrl: ""
+    nombre: "",
+    especialidad: "",
+    ubicacion: "",
+    telefono: "",
+    correo: "",
+    hospital: "",
+    comoConocieron: "",
+    foto: "", // Será base64 o URL
+    perfilUrl: ""
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setFormData({ ...formData, foto: file.name });
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({ ...formData, foto: reader.result as string });
+    };
+    reader.readAsDataURL(file); // Convierte el archivo a base64
   };
 
   const handleNext = (e: React.FormEvent) => {
@@ -42,19 +56,23 @@ export default function EspecialistasForm() {
     try {
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error("Error al enviar solicitud");
 
       toast.success("Solicitud enviada correctamente");
       setFormData({
-        nombre: "", especialidad: "", ubicacion: "", telefono: "",
-        correo: "", hospital: "", comoConocieron: "",
-        foto: "", perfilUrl: ""
+        nombre: "",
+        especialidad: "",
+        ubicacion: "",
+        telefono: "",
+        correo: "",
+        hospital: "",
+        comoConocieron: "",
+        foto: "",
+        perfilUrl: ""
       });
       setStep(1);
     } catch (error) {
