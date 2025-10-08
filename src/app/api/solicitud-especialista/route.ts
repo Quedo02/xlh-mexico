@@ -62,6 +62,30 @@ export async function POST(req: Request) {
       }
     }
 
+    if (!foto || !(foto instanceof File) || foto.size === 0) {
+      return NextResponse.json({ success: false, error: "Falta la foto" }, { status: 400 });
+    }
+
+    if (!isValidImageType(foto)) {
+      return NextResponse.json({ success: false, error: "Tipo de imagen no permitido" }, { status: 400 });
+    }
+
+    // Asegura carpeta
+    await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
+
+    // Nombre único seguro
+    const original = foto.name.replace(/\s+/g, "_");
+    const safeName = `${Date.now()}-${original}`;
+    const absPath = path.join(SPECIALISTS_DIR, safeName);
+
+    // Guarda binario
+    const buffer = Buffer.from(await foto.arrayBuffer());
+    await fs.writeFile(absPath, buffer);
+
+    // Ruta pública que servirás en <img src="...">
+    const publicUrl = `/img/especialistas/${safeName}`;
+
+    // Guarda solicitud en BD con la ruta pública
     const nuevaSolicitud = await prisma.solicitudEspecialista.create({
       data: {
         nombre,
@@ -76,7 +100,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ success: true, data: nuevaSolicitud });
+    return NextResponse.json({ success: true, data: nuevaSolicitud }, { status: 201 });
   } catch (error) {
     console.error("Error creando solicitud:", error);
     return NextResponse.json(
