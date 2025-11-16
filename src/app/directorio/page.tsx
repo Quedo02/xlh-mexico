@@ -6,13 +6,13 @@ import { Especialista } from "@prisma/client";
 
 export default async function Directorio() {
   const especialistas: Especialista[] = await prisma.especialista.findMany();
-
+  
   return (
     <>
       <HeroSection
         title="Directorio Médico"
         subtitle="Conoce a nuestros especialistas aliados"
-        backgroundImage="/img/receta.jpg"
+        sectionName="directorio"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 

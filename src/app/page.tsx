@@ -1,20 +1,58 @@
 "use client";
 
-/*import PorcentajeCircular from "@/components/ui/PorcentajeCircular";*/
 import HeroSection from "@/components/HeroSection";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+//Para obtener las imagenes de los slots
+type Media = { id: number; url: string; alt?: string; caption?: string };
+type SlotMedia = { id: number; mediaId: number; orden: number; media: Media };
+type MediaSlot = { id: number; slot: string; alt?: string; caption?: string; slotMedias: SlotMedia[] };
 
 
 export default function Home() {
+  const [slots, setSlots] = useState<MediaSlot[]>([]);
+  const [homeSlotId, setHomeSlotId] = useState<number | null>(null);
+  const [bannerSlotId, setBannerSlotId] = useState<number | null>(null);
+
   const [showObjetivos, setShowObjetivos] = useState(false);
   const [showMotivacion, setShowMotivacion] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Traer todos los slots con imágenes
+      const slotsRes = await fetch("/api/media/slots").then(r => r.json());
+      setSlots(slotsRes.data || []);
+
+      // Traer configuración de slots
+      const configRes = await fetch("/api/config/slots").then(r => r.json());
+      const config = configRes.config || {};
+
+      // Buscar los slots por nombre
+      const homeSlotObj = (slotsRes.data || []).find((s: MediaSlot) => s.slot === config.homeCarrusel);
+      const bannerSlotObj = (slotsRes.data || []).find((s: MediaSlot) => s.slot === config.homeBanner);
+
+      setHomeSlotId(homeSlotObj?.id || null);
+      setBannerSlotId(bannerSlotObj?.id || null);
+    };
+
+    fetchData();
+  }, []);
+
+
+  const homeImages = slots.find(s => s.id === homeSlotId)?.slotMedias || [];
+  const bannerSlotObj = slots.find(s => s.id === bannerSlotId);
+  const bannerImage =
+    bannerSlotObj && bannerSlotObj.slotMedias.length > 0
+      ? bannerSlotObj.slotMedias[0].media.url
+      : "/img/banner.jpg";
+
 
   return (
     <>
       <HeroSection
         title="XLH México"
         subtitle="Acompañando personas con raquitismo hipofosfatémico."
-        backgroundImage="/img/banner.jpg"
+        sectionName="homeBanner"
         overlayColor="rgba(0, 0, 0, 0.5)"
         primaryButtonText="Donar"
         //primaryButtonLink="/donar"
@@ -179,83 +217,47 @@ export default function Home() {
         </section>
 
 
-      {/* Galería */}
+      {/* Galería dinámica */}
       <section className="container my-5">
         <h2 className="titulo-album text-center mb-2">Galería</h2>
         <p className="subtitulo-album text-center mb-4">Acompáñanos con nuestros mejores momentos</p>
-        <div className="d-flex justify-content-center">
-          <div id="carouselXLH" className="carousel slide w-100" data-bs-ride="carousel" style={{ maxWidth: 600 }}>
-            <div className="carousel-inner rounded shadow-lg">
-              <div className="carousel-item active">
-                <img src="/img/ImgAlbumUs.jpg" className="d-block w-100 img-carrus" alt="Cuidados" />
-              </div>
-              <div className="carousel-item">
-                <img src="/img/ImgAlbumUs2.jpg" className="d-block w-100 img-carrus" alt="Apoyo" />
-              </div>
-              <div className="carousel-item">
-                <img src="/img/ImgAlbumUs3.jpg" className="d-block w-100 img-carrus" alt="Donaciones" />
-              </div>
-            </div>
-            <button
-              className="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselXLH"
-              data-bs-slide="prev"
+
+        {homeImages.length > 0 ? (
+          <div className="d-flex justify-content-center">
+            <div
+              id="carouselXLH"
+              className="carousel slide w-100"
+              data-bs-ride="carousel"
+              style={{ maxWidth: 600 }}
             >
-              <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span className="visually-hidden">Anterior</span>
-            </button>
-            <button
-              className="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselXLH"
-              data-bs-slide="next"
-            >
-              <span className="carousel-control-next-icon" aria-hidden="true"></span>
-              <span className="visually-hidden">Siguiente</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-
-      {/* Estadísticas Comunidad
-      
-            <section id="comunidad" className="seccion-comunidad py-5 bg-light">
-        <div className="container">
-          <div className="row justify-content-center g-4">
-            {/* Integrantes 
-            <div className="col-md-6">
-              <div className="tile-comunidad text-center p-4 shadow-sm h-100">
-                <PorcentajeCircular porcentaje={75} color="naranja" size={105} />
-                <h3 className="titulo-comunidad mt-3">Integrantes</h3>
-                <p className="texto-comunidad">
-                  Conoce a las personas que conforman el comité de la asociación, su historia, compromiso y labor por mejorar la vida de quienes viven con XLH.
-                </p>
-                <a href="#integrantes" className="btn btn-outline-naranja mt-2">
-                  Ver más
-                </a>
+              <div className="carousel-inner rounded shadow-lg">
+                {homeImages.map((sm, idx) => (
+                  <div
+                    key={sm.id}
+                    className={`carousel-item ${idx === 0 ? "active" : ""}`}
+                  >
+                    <img
+                      src={sm.media.url}
+                      alt={sm.media.alt || ""}
+                      className="d-block w-100 img-carrus"
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
-            
-
-            <div className="col-md-6">
-              <div className="tile-comunidad text-center p-4 shadow-sm h-100">
-                <PorcentajeCircular porcentaje={90} color="morado" size={105} />
-                <h3 className="titulo-comunidad mt-3">Pacientes</h3>
-                <p className="texto-comunidad">
-                  Historias y testimonios de pacientes que enfrentan día a día los retos del raquitismo hipofosfatémico. Una comunidad unida e inspiradora.
-                </p>
-                <a href="#pacientes" className="btn btn-outline-morado mt-2">
-                  Conocer
-                </a>
-              </div>
+              <button className="carousel-control-prev" type="button" data-bs-target="#carouselXLH" data-bs-slide="prev">
+                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Anterior</span>
+              </button>
+              <button className="carousel-control-next" type="button" data-bs-target="#carouselXLH" data-bs-slide="next">
+                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Siguiente</span>
+              </button>
             </div>
           </div>
-        </div>
+        ) : (
+          <p className="text-center text-muted">No hay imágenes en este slot todavía.</p>
+        )}
       </section>
-      */}
-
     </main>
     </>
   );

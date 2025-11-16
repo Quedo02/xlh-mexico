@@ -17,18 +17,34 @@ function ensureUploadDir() {
   }
 }
 
-// Obtener todos los slots con sus imágenes
-export async function GET() {
+// 🔹 Obtener todos los slots o filtrar por ?slot=nombre
+export async function GET(req: Request) {
   ensureUploadDir();
 
+  const { searchParams } = new URL(req.url);
+  const slotName = searchParams.get("slot");
+
+  // Si se pide un slot específico
+  if (slotName) {
+    const slot = await prisma.mediaSlot.findMany({
+      where: { slot: slotName },
+      include: { slotMedias: { include: { media: true } } },
+      orderBy: { slot: "asc" },
+    });
+
+    return NextResponse.json({ data: slot });
+  }
+
+  // Si no hay filtro, devolvemos todos
   const slots = await prisma.mediaSlot.findMany({
     include: { slotMedias: { include: { media: true } } },
     orderBy: { slot: "asc" },
   });
+
   return NextResponse.json({ data: slots });
 }
 
-// Crear un nuevo slot
+// 🔹 Crear un nuevo slot
 export async function POST(req: Request) {
   const token = (await cookies()).get("token")?.value;
   const ok = token && (await verifyJWTServer(token));
@@ -46,7 +62,7 @@ export async function POST(req: Request) {
   return NextResponse.json({ data: created });
 }
 
-// Eliminar un slot
+// 🔹 Eliminar un slot
 export async function DELETE(req: Request) {
   const token = (await cookies()).get("token")?.value;
   const ok = token && (await verifyJWTServer(token));

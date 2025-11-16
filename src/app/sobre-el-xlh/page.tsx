@@ -12,7 +12,7 @@ export default function SobreElXLH() {
       <HeroSection
         title="Conoce el Raquitismo Hipofosfatémico Ligado al Cromosoma X (XLH)"
         subtitle="Infórmate y acompáñanos en la difusión"
-        backgroundImage="/img/banner.jpg"
+        sectionName="sobreXLH"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 

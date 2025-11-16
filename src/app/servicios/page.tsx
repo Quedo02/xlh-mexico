@@ -10,7 +10,7 @@ export default function Servicios() {
       <HeroSection
         title="Servicios"
         subtitle="Nuestros servicios"
-        backgroundImage="/img/receta.jpg"
+        sectionName="servicios"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 
