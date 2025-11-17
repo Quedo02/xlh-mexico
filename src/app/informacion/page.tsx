@@ -10,13 +10,13 @@ import HeroSection from "@/components/HeroSection";
 export default function Informacion() {
   return (
     <>
-    <HeroSection
-      title="Información"
-      subtitle="Sumergete en Nuestro Material Educativo"
-      backgroundImage="/img/receta.jpg" // Imagen de fondo
-      overlayColor="rgba(0, 38, 102, 0.6)" //Color de fondo
-    />
-
+      <HeroSection
+        title="Información"
+        subtitle="Sumérgete en Nuestro Material Educativo"
+        sectionName="informacion"
+        overlayColor="rgba(0, 38, 102, 0.6)"
+      />
+      
     <section className="container my-5">
       <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
         <h2 className="titulo-seccion text-center text-md-start">Recursos Descargables</h2>
