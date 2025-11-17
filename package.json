@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "fix-fotos": "ts-node scripts/fixFotos.ts"
+    "fix-fotos": "ts-node scripts/fixFotos.ts",
+    "create-admin": "node scripts/createAdmin.cjs"
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",
@@ -22,6 +23,7 @@
     "framer-motion": "^12.19.1",
     "jose": "^6.0.12",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.553.0",
     "multer": "^2.0.2",
     "next": "15.3.3",
     "react": "^19.0.0",
