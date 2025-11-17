@@ -25,7 +25,7 @@ export default async function Directorio() {
       <HeroSection
         title="Directorio Médico"
         subtitle="Conoce a nuestros especialistas aliados"
-        backgroundImage="/img/receta.jpg"
+        sectionName="directorio"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 

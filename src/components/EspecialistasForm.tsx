@@ -10,6 +10,17 @@ const especialidadesList = [
   "Psicología", "Manejo del dolor", "Terapia ocupacional",
 ];
 
+type FormState = {
+  nombre: string;
+  especialidad: string;
+  ubicacion: string;
+  telefono: string;
+  correo: string;
+  hospital: string;
+  comoConocieron: string;
+  perfilUrl: string;
+};
+
 export default function EspecialistasForm() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -28,7 +39,7 @@ export default function EspecialistasForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,16 +55,26 @@ export default function EspecialistasForm() {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    setStep(step + 1);
+    setStep((s) => s + 1);
   };
 
-  const handleBack = () => {
-    setStep(step - 1);
-  };
+  const handleBack = () => setStep((s) => s - 1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!fotoFile) {
+      toast.error("Falta la foto");
+      return;
+    }
+
     try {
+      const fd = new FormData();
+      // Campos de texto
+      Object.entries(formData).forEach(([key, value]) => fd.append(key, value));
+      // Archivo
+      fd.append("foto", fotoFile);
+
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,10 +95,11 @@ export default function EspecialistasForm() {
         foto: "",
         perfilUrl: ""
       });
+      setFotoFile(null);
       setStep(1);
     } catch (error) {
-      toast.error("Error al enviar la solicitud");
       console.error(error);
+      toast.error("Error al enviar la solicitud");
     }
   };
 
@@ -111,7 +133,15 @@ export default function EspecialistasForm() {
           <h3>Contacto y hospital</h3>
           <div className="mb-3">
             <label>Teléfono *</label>
-            <input type="tel" className="form-control" name="telefono" maxLength={10} value={formData.telefono} onChange={handleChange} required />
+            <input
+              type="tel"
+              className="form-control"
+              name="telefono"
+              maxLength={10}
+              value={formData.telefono}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="mb-3">
             <label>Correo electrónico *</label>
@@ -134,6 +164,8 @@ export default function EspecialistasForm() {
           <div className="mb-3">
             <label>Foto *</label>
             <input type="file" className="form-control" name="foto" accept="image/*" onChange={handleFileChange} required />
+            {/* Si quieres ver el nombre seleccionado:
+            {fotoFile && <small className="text-muted">Archivo: {fotoFile.name}</small>} */}
           </div>
           <div className="mb-3">
             <label>Perfil (URL opcional)</label>

@@ -17,7 +17,7 @@ export default function NosotrosClient({
       <HeroSection
         title="¿Quiénes somos?"
         subtitle="Conoce a la asociación detrás del apoyo a personas con XLH en México."
-        backgroundImage={hero?.url || "/img/receta.jpg"}
+        sectionName="nosotros"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 

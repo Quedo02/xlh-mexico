@@ -16,7 +16,7 @@ export default function Contacto() {
       <HeroSection
         title="Contáctanos"
         subtitle="Elige la opción que mejor se adapte a ti"
-        backgroundImage="/img/receta.jpg"
+        sectionName="contacto"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 

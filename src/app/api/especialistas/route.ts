@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       const filename = `${Date.now()}-${file.name}`;
       const filepath = path.join(process.cwd(), "public", "uploads", filename);
       await writeFile(filepath, buffer);
-      fotoPath = `/uploads/${filename}`;
+      fotoPath = `/img/especialistas/${filename}`;
     }
 
     const nuevoDoctor = await prisma.especialista.create({
