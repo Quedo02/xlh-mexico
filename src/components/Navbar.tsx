@@ -43,7 +43,7 @@ return (
             { href: "/directorio", label: "Directorio" },
             { href: "/informacion", label: "Información" },
             { href: "/nosotros", label: "Nosotros" },
-            { href: "/registro", label: "Registro" },
+            { href: "/contacto", label: "Contacto" },
             // { href: "/servicios", label: "Servicios" },
         ].map((item) => (
             <li key={item.href} className="nav-item">

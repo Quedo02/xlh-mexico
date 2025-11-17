@@ -14,6 +14,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <li className="nav-item"><Link href="/admin/directorio" className="nav-link">Directorio</Link></li>
           <li className="nav-item"><Link href="/admin/galeria" className="nav-link">Galeria</Link></li>
           <li className="nav-item"><Link href="/admin/solicitudes" className="nav-link">Solicitudes</Link></li>
+          <li className="nav-item"><Link href="/admin/documentos" className="nav-link">Documentos</Link></li>
           <li className="nav-item">
             <button
               className="btn-logout"

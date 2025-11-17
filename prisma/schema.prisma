@@ -114,3 +114,15 @@ model SlotMedia {
   slot  MediaSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
   media Media     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 }
+
+model Documento {
+  id          Int       @id @default(autoincrement())
+  titulo      String
+  descripcion String?
+  categoria   String
+  archivoUrl  String
+  thumbnail   String?
+  tipo        String    // pdf | imagen | otro
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
