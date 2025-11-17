@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Especialista {
+  id             Int     @id @default(autoincrement())
+  nombre         String
+  especialidad   String
+  ubicacion      String
+  telefono       String
+  correo         String
+  hospital       String
+  comoConocieron String
+  foto           String?
+  perfilUrl      String?
+}
+
+model SolicitudEspecialista {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  especialidad   String
+  ubicacion      String
+  telefono       String
+  correo         String
+  hospital       String
+  comoConocieron String
+  foto           String?
+  perfilUrl      String?
+  createdAt      DateTime @default(now())
+}
+
+model Paciente {
+  id                    Int      @id @default(autoincrement())
+  nombre                String
+  sexo                  String
+  fechaNacimiento       DateTime
+  edad                  Int
+  residencia            String
+  telefono              String // Cambiado a String para poder usar números con ceros a la izquierda si se desea
+  email                 String   @unique
+  origenDiagnostico     String?
+  familiarDiagnostico   String?
+  seguridadSocial       String
+  institucion           String?
+  medico                String
+  especialidadMedico    String
+  telefonoMedico        String
+  diagnosticoConfirmado Boolean
+  tratamiento           String?
+  especialidades        String?
+  creadoEn              DateTime @default(now())
+}
+
+model Evento {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  fecha       DateTime
+  lugar       String
+  descripcion String
+  link        String
+  imagen      String
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Galeria {
+  id          Int     @id @default(autoincrement())
+  titulo      String
+  imagenUrl   String
+  descripcion String?
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  url       String
+  alt       String?
+  caption   String?
+  width     Int?
+  height    Int?
+  mime      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  slotMedias SlotMedia[] // relación inversa correcta
+}
+
+model MediaSlot {
+  id        Int      @id @default(autoincrement())
+  slot      String   @unique
+  alt       String?
+  caption   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  slotMedias SlotMedia[] // relación inversa correcta
+}
+
+model SlotMedia {
+  id      Int @id @default(autoincrement())
+  slotId  Int
+  mediaId Int
+  orden   Int @default(0)
+
+  slot  MediaSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  media Media     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+}
+
+model Documento {
+  id          Int       @id @default(autoincrement())
+  titulo      String
+  descripcion String?
+  categoria   String
+  archivoUrl  String
+  thumbnail   String?
+  tipo        String    // pdf | imagen | otro
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

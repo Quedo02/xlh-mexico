@@ -1,42 +1,672 @@
+/* === Fuentes y Variables CSS === */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-primary: 'Roboto', sans-serif;
+  --font-heading: 'Roboto', sans-serif;
+
+  --color-azul-marino: #002666;
+  --color-morado: #700872;
+  --color-cyan: #3c99ba;
+  --color-rosa-mexicano: #ee316b;
+  --color-rosa: #f0a0bf;
+  --color-naranja: #ff9743;
+  --color-azul-cielo: #bee4f6;
+  --color-verde: #79BD44;
+
+  /* Falta definir --color-bg y --color-text */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* === Clases de colores para texto === */
+.azul-marino { color: var(--color-azul-marino); }
+.morado { color: var(--color-morado); }
+.cyan { color: var(--color-cyan); }
+.rosa-mexicano { color: var(--color-rosa-mexicano); }
+.rosa { color: var(--color-rosa); }
+.naranja { color: var(--color-naranja); }
+.azul-cielo { color: var(--color-azul-cielo); }
+.verde { color: var(--color-verde); }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
+/* === Estilos base para HTML y BODY === */
+html, body {
   padding: 0;
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* === Tipografía para encabezados === */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
   margin: 0;
 }
 
+/* === Estilos para enlaces === */
 a {
-  color: inherit;
+  color: var(--color-primary);
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+a:hover {
+  text-decoration: none;
+}
+
+/* === Botones personalizados === */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-accent);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Botones outline por color */
+.btn-outline-azul-marino {
+  --bs-btn-color: var(--color-azul-marino);
+  --bs-btn-border-color: var(--color-azul-marino) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-azul-marino);
+  --bs-btn-hover-border-color: var(--color-azul-marino);
+  --bs-btn-focus-shadow-rgb: 112, 8, 114;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-azul-marino);
+  --bs-btn-active-border-color: var(--color-azul-marino);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-azul-marino);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-azul-marino);
+  --bs-gradient: none;
+}
+
+.btn-outline-morado {
+  --bs-btn-color: var(--color-morado);
+  --bs-btn-border-color: var(--color-morado) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-morado);
+  --bs-btn-hover-border-color: var(--color-morado);
+  --bs-btn-focus-shadow-rgb: 112, 8, 114;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-morado);
+  --bs-btn-active-border-color: var(--color-morado);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-morado);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-morado);
+  --bs-gradient: none;
+}
+
+.btn-outline-cyan {
+  --bs-btn-color: var(--color-cyan);
+  --bs-btn-border-color: var(--color-cyan) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-cyan);
+  --bs-btn-hover-border-color: var(--color-cyan);
+  --bs-btn-focus-shadow-rgb: 13,110,253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-cyan);
+  --bs-btn-active-border-color: var(--color-cyan);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-cyan);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-cyan);
+  --bs-gradient: none;
+}
+
+.btn-outline-rosa-mexicano {
+  --bs-btn-color: var(--color-rosa-mexicano);
+  --bs-btn-border-color: var(--color-rosa-mexicano) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-rosa-mexicano);
+  --bs-btn-hover-border-color: var(--color-rosa-mexicano);
+  --bs-btn-focus-shadow-rgb: 112, 8, 114;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-rosa-mexicano);
+  --bs-btn-active-border-color: var(--color-rosa-mexicano);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-rosa-mexicano);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-rosa-mexicano);
+  --bs-gradient: none;
+}
+
+.btn-outline-rosa {
+  --bs-btn-color: var(--color-rosa);
+  --bs-btn-border-color: var(--color-rosa) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-rosa);
+  --bs-btn-hover-border-color: var(--color-rosa);
+  --bs-btn-focus-shadow-rgb: 112, 8, 114;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-rosa);
+  --bs-btn-active-border-color: var(--color-rosa);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-rosa);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-rosa);
+  --bs-gradient: none;
+}
+
+.btn-outline-naranja {
+  --bs-btn-color: var(--color-naranja);
+  --bs-btn-border-color: var(--color-naranja) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-naranja);
+  --bs-btn-hover-border-color: var(--color-naranja);
+  --bs-btn-focus-shadow-rgb: 255, 151, 67;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-naranja);
+  --bs-btn-active-border-color: var(--color-naranja);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-naranja);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-naranja);
+  --bs-gradient: none;
+}
+
+.btn-outline-azul-cielo {
+  --bs-btn-color: var(--color-azul-cielo);
+  --bs-btn-border-color: var(--color-azul-cielo) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-azul-cielo);
+  --bs-btn-hover-border-color: var(--color-azul-cielo);
+  --bs-btn-focus-shadow-rgb: 112, 8, 114;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-azul-cielo);
+  --bs-btn-active-border-color: var(--color-azul-cielo);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-azul-cielo);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-azul-cielo);
+  --bs-gradient: none;
+}
+
+.btn-outline-verde {
+  --bs-btn-color: var(--color-verde);
+  --bs-btn-border-color: var(--color-verde) !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-verde);
+  --bs-btn-hover-border-color: var(--color-verde);
+  --bs-btn-focus-shadow-rgb: 25,135,84;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-verde);
+  --bs-btn-active-border-color: var(--color-verde);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--color-verde);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--color-verde);
+  --bs-gradient: none;
+}
+
+/* === Navbar === */
+.bg-navbar {
+  background-size: cover; /* Ajusta al ancho y alto del contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que se repita */
+  background-color: rgba(60, 153, 186, 0.75); 
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Color del texto de la nav bar */
+.navbar .nav-link {
+  color: white;
+}
+
+/* Color del texto cuando pasa el mouse sobre los links */
+.navbar .nav-link:hover {
+  color: var(--color-azul-marino);
+}
+
+/* === Footer === */
+.bg-footer {
+  background-color: var(--color-cyan);
+}
+
+.footer a:hover {
+  color: var(--color-rosa-mexicano);
+}
+
+/* === Carrusel === */
+.carousel-item img {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.img-carrus {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* === Tarjetas con efecto hover === */
+.tile-card {
+  transition: all 0.3s ease-in-out;
+}
+
+.tile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* === Secciones generales === */
+.seccion-info {
+  padding: 4rem 0;
+}
+
+/* === Texto de secciones === */
+.contenido-texto {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .contenido-texto {
+    text-align: left;
   }
+}
+
+.titulo-seccion {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.parrafo-seccion {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === Imagenes de secciones === */
+.imagen-seccion {
+  text-align: center;
+}
+
+.img-ajustada {
+  max-width: 75%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* === Sombra para imagenes === */
+.shadow-lg {
+  transition: transform 0.3s ease-in-out;
+}
+
+.shadow-lg:hover {
+  transform: scale(1.02);
+}
+
+/* === Texto para album === */
+.titulo-album {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.subtitulo-album {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+/* === Círculo de porcentaje (gráfico SVG) === */
+/*
+.circulo-porcentaje {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.circular-chart {
+  width: 100px;
+  height: 100px;
+  transform: rotate(-90deg); /* solo gira el SVG, no el texto 
+}
+
+.circular-chart .circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circular-chart .circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  animation: none;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: var(--dash-offset);
+  }
+}
+
+.circular-chart .percentage {
+  fill: #333;
+  font-size: 6px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: 600;
+}
+
+/* Colores para los círculos porcentuales 
+.circular-chart.naranja .circle { stroke: var(--color-naranja); }
+.circular-chart.azul-marino .circle { stroke: var(--color-azul-marino); }
+.circular-chart.morado .circle { stroke: var(--color-morado); }
+.circular-chart.cyan .circle { stroke: var(--color-cyan); }
+.circular-chart.rosa-mexicano .circle { stroke: var(--color-rosa-mexicano); }
+.circular-chart.rosa .circle { stroke: var(--color-rosa); }
+.circular-chart.azul-cielo .circle { stroke: var(--color-azul-cielo); }
+.circular-chart.verde .circle { stroke: var(--color-verde); }
+
+.porcentaje-texto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+*/
+
+/* === Fondos personalizados para secciones === */
+.bg-light {
+  background-color: #f5fafd;
+}
+
+/* === Sombra para logo === */
+.sombra-logo {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.logo-img {
+  max-width: 60px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* === Hero banner === */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: var(--font-primary);
+  color: white;
+  text-align: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-text-container {
+  position: relative;
+  z-index: 2;
+  padding: 0 2rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+/* === Carta de red social === */
+.card-red-social {
+  background-color: #fff;
+  padding: 1rem;
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Fijar la altura y estructura de la navbar */
+.navbar {
+  /* height: 64px; */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Fijar el logo de la imagen */
+.logo-img {
+  max-height: 50px;      /* Máximo 50px */
+  width: auto;           /* Mantiene proporción */
+  object-fit: contain;   /* No se deforma */
+  margin-bottom: 4px;
+}
+
+.navbar-brand span {
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+
+/* Boton de donaciones */
+.btn-donaciones {
+  background-color: var(--color-morado) !important;
+  color: white !important;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-donaciones:hover {
+  background-color: var(--color-azul-marino) !important; /* tono más oscuro */
+  color: white;
+}
+
+/* Ajustes al contenedor colapsado */
+.navbar-collapse {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 0 12px 12px;
+  max-width: 95%;
+  margin: 0 auto;
+  margin-top: 0.5rem;
+}
+
+/* Para que la navbar se quela navbar oculte contenido al bajar */
+body.with-navbar  {
+  padding-top: 50px; /* Ajusta según la altura de tu navbar (ej. 64px o 70px) */
+}
+
+.navbar-nav .nav-link {
+  padding: 0.4rem 0;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Mejor en pantallas pequeñas */
+@media (min-width: 992px) {
+  .btn-donaciones {
+    width: auto;
+    margin: 0;
+  }
+}
+
+/* Centrado en versión móvil */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0;
+    text-align: center;
+    gap: 0.2rem;
+  }
+
+  .btn-donaciones {
+    width: 100%;
+    max-width: 250px;
+    margin: 0.5rem auto;
+    display: block;
+  }
+}
+
+/* Responsibilidad de la navbar */
+/* Para computadoras */
+@media (min-width: 992px) {
+  .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .navbar-nav .nav-link {
+    display: block;
+    text-align: center;
+    font-size: 1rem;
+  }
+}
+/* Para tabletas */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .navbar-collapse {
+    text-align: center;
+  }
+
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .navbar-nav .nav-item {
+    width: 100%;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0;
+    font-size: 1.05rem;
+  }
+}
+
+/* Para celulares */
+@media (max-width: 767.98px) {
+  .navbar-collapse {
+    background-color: rgba(60, 153, 186, 0.75); 
+    backdrop-filter: blur(5px);
+    border-radius: 0 0 12px 12px;
+    padding: 1rem;
+    margin-top: 0.3rem;
+
+    /* 👇 Nuevo comportamiento tipo tarjeta flotante */
+    position: absolute;
+    right: 1rem;
+    top: 91%; /* justo debajo de la navbar */
+    width: auto;
+    max-width: 280px;
+    min-width: 200px;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .navbar-nav .nav-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: 0.4rem 0;
+    text-align: center;
+  }
+
+  .navbar-toggler {
+    border: none;
+    box-shadow: none;
+  }
+}
+/*formulario*/
+.card-formulario {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Estilo de la sidebar */
+.sidebar-admin {
+  background-color: var(--color-azul-marino);
+  color: white;
+  padding: 1rem;
+  width: 240px;
+  min-height: 100vh;
+}
+
+.sidebar-admin h4 {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-admin .nav-link {
+  color: white;
+  padding: 0.5rem 0;
+  transition: background 0.2s ease-in-out;
+}
+
+.sidebar-admin .nav-link:hover {
+  background-color: var(--color-cyan);
+  border-radius: 5px;
+}
+
+.sidebar-admin .btn-logout {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.sidebar-admin .btn-logout:hover {
+  background-color: var(--color-rosa-mexicano);
+  border-color: var(--color-rosa-mexicano);
 }
