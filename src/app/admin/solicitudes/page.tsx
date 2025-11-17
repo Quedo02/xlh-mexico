@@ -76,7 +76,7 @@ export default function SolicitudesPage() {
               <div className="card h-100 shadow-sm">
                 {sol.foto && (
                   <img
-                    src={getFotoUrl(sol.foto)} // <- cambio aquí
+                    src={sol.foto.startsWith("/img/especialistas/") ? sol.foto : `/img/especialistas/${sol.foto}`}
                     alt={sol.nombre}
                     className="card-img-top"
                     style={{ maxHeight: "250px", objectFit: "cover" }}

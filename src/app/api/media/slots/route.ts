@@ -2,22 +2,55 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { verifyJWTServer } from "@/lib/auth";
+import fs from "fs";
+import path from "path";
+
 export const runtime = "nodejs";
 
-// Obtener todos los slots con sus imágenes
-export async function GET() {
+// Ruta absoluta a la carpeta uploads
+const uploadDir = path.join(process.cwd(), "uploads");
+
+// Verificar si existe la carpeta "uploads" y crearla si no
+function ensureUploadDir() {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+}
+
+// 🔹 Obtener todos los slots o filtrar por ?slot=nombre
+export async function GET(req: Request) {
+  ensureUploadDir();
+
+  const { searchParams } = new URL(req.url);
+  const slotName = searchParams.get("slot");
+
+  // Si se pide un slot específico
+  if (slotName) {
+    const slot = await prisma.mediaSlot.findMany({
+      where: { slot: slotName },
+      include: { slotMedias: { include: { media: true } } },
+      orderBy: { slot: "asc" },
+    });
+
+    return NextResponse.json({ data: slot });
+  }
+
+  // Si no hay filtro, devolvemos todos
   const slots = await prisma.mediaSlot.findMany({
     include: { slotMedias: { include: { media: true } } },
     orderBy: { slot: "asc" },
   });
+
   return NextResponse.json({ data: slots });
 }
 
-// Crear un nuevo slot
+// 🔹 Crear un nuevo slot
 export async function POST(req: Request) {
   const token = (await cookies()).get("token")?.value;
   const ok = token && (await verifyJWTServer(token));
   if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
+  ensureUploadDir();
 
   const { slot, alt, caption } = await req.json();
   if (!slot) return NextResponse.json({ error: "slot requerido" }, { status: 400 });
@@ -29,7 +62,7 @@ export async function POST(req: Request) {
   return NextResponse.json({ data: created });
 }
 
-// Eliminar un slot
+// 🔹 Eliminar un slot
 export async function DELETE(req: Request) {
   const token = (await cookies()).get("token")?.value;
   const ok = token && (await verifyJWTServer(token));

@@ -3,20 +3,23 @@ import { prisma } from "@/lib/prisma";
 export async function getMediaBySlot(slot: string) {
   const s = await prisma.mediaSlot.findUnique({
     where: { slot },
-    include: { 
+    include: {
       slotMedias: {
-        include: { media: true },
-        orderBy: { orden: "asc" }, // opcional, si quieres el primero por orden
+        include: {
+          media: true, 
+        },
       },
     },
   });
 
-  if (!s?.slotMedias?.length) return null;
+  if (!s || !s.slotMedias.length) return null;
 
-  const media = s.slotMedias[0].media; // toma el primer media
+  // Toma el primer media (puedes ajustar si quieres varios)
+  const m = s.slotMedias[0].media;
+
   return {
-    url: media.url,
-    alt: s.alt || media.alt || "",
-    caption: s.caption || media.caption || "",
+    url: m.url,
+    alt: s.alt || m.alt || "",
+    caption: s.caption || m.caption || "",
   };
 }

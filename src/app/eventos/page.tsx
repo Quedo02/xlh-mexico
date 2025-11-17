@@ -22,7 +22,7 @@ export default async function EventosPage() {
         <HeroSection
           title="Eventos"
           subtitle="Participa en nuestras actividades y encuentros"
-          backgroundImage="/img/receta.jpg"
+          sectionName="eventos"
           overlayColor="rgba(0, 38, 102, 0.6)"
         />
         <section className="container my-5">
@@ -43,7 +43,7 @@ export default async function EventosPage() {
         <HeroSection
           title="Eventos"
           subtitle="Participa en nuestras actividades y encuentros"
-          backgroundImage="/img/receta.jpg"
+          sectionName="eventos"
           overlayColor="rgba(0, 38, 102, 0.6)"
         />
         <section className="container my-5">
@@ -58,7 +58,7 @@ export default async function EventosPage() {
       <HeroSection
         title="Eventos"
         subtitle="Participa en nuestras actividades y encuentros"
-        backgroundImage="/img/receta.jpg"
+        sectionName="eventos"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 

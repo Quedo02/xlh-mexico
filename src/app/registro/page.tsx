@@ -172,7 +172,7 @@ export default function Registro() {
       <HeroSection
         title="Registro de Pacientes XLH"
         subtitle="Formulario oficial de XLH y Otros Raquitismos México"
-        backgroundImage="/img/receta.jpg"
+        sectionName="registro"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
       <main className="bg-formulario">
