@@ -23,23 +23,34 @@ type FormState = {
 
 export default function EspecialistasForm() {
   const [step, setStep] = useState(1);
-
-  const [formData, setFormData] = useState<FormState>({
-    nombre: "", especialidad: "", ubicacion: "", telefono: "",
-    correo: "", hospital: "", comoConocieron: "", perfilUrl: ""
+  const [formData, setFormData] = useState({
+    nombre: "",
+    especialidad: "",
+    ubicacion: "",
+    telefono: "",
+    correo: "",
+    hospital: "",
+    comoConocieron: "",
+    foto: "", // Será base64 o URL
+    perfilUrl: ""
   });
 
-  // Guardamos el archivo real aquí
-  const [fotoFile, setFotoFile] = useState<File | null>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    setFotoFile(file);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({ ...formData, foto: reader.result as string });
+    };
+    reader.readAsDataURL(file); // Convierte el archivo a base64
   };
 
   const handleNext = (e: React.FormEvent) => {
@@ -66,15 +77,23 @@ export default function EspecialistasForm() {
 
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",
-        body: fd, // ← IMPORTANTE: sin headers Content-Type
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error("Error al enviar solicitud");
 
       toast.success("Solicitud enviada correctamente");
       setFormData({
-        nombre: "", especialidad: "", ubicacion: "", telefono: "",
-        correo: "", hospital: "", comoConocieron: "", perfilUrl: ""
+        nombre: "",
+        especialidad: "",
+        ubicacion: "",
+        telefono: "",
+        correo: "",
+        hospital: "",
+        comoConocieron: "",
+        foto: "",
+        perfilUrl: ""
       });
       setFotoFile(null);
       setStep(1);
