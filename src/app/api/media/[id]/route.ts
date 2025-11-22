@@ -6,39 +6,33 @@ import { cookies } from "next/headers";
 import { verifyJWTServer } from "@/lib/auth";
 
 export async function DELETE(
-  _req: Request,
-  { params }: { params: { id: string } }
+  req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
   const token = (await cookies()).get("token")?.value;
   const ok = token && (await verifyJWTServer(token));
   if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  const id = parseInt(params.id);
-  if (isNaN(id)) {
-    return NextResponse.json({ error: "ID inválido" }, { status: 400 });
-  }
+  const { id } = await context.params;
+  const numId = Number(id);
 
-  const media = await prisma.media.findUnique({ where: { id } });
-  if (!media) {
+  const media = await prisma.media.findUnique({ where: { id: numId } });
+  if (!media)
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
-  }
 
-  const usageCount = await prisma.slotMedia.count({ where: { mediaId: id } });
-  if (usageCount > 0) {
+  const usageCount = await prisma.slotMedia.count({ where: { mediaId: numId } });
+  if (usageCount > 0)
     return NextResponse.json(
-      { error: "No se puede eliminar. La imagen está asignada a uno o más slots." },
+      { error: "No se puede eliminar: la imagen está asignada a un slot." },
       { status: 400 }
     );
-  }
 
-  // Eliminar archivo físico
   const filePath = path.join(process.cwd(), "public", media.url.replace(/^\/+/, ""));
   try {
     await unlink(filePath);
-  } catch {
-    console.warn("No se pudo eliminar el archivo físico");
-  }
+  } catch {}
 
-  await prisma.media.delete({ where: { id } });
+  await prisma.media.delete({ where: { id: numId } });
+
   return NextResponse.json({ success: true });
 }

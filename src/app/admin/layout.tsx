@@ -2,25 +2,109 @@
 import Link from "next/link";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <div className="d-flex" style={{ minHeight: "100vh" }}>
-      <aside className="sidebar-admin">
-        <h4>XLH México</h4>
-        <ul className="nav flex-column">
-          <li className="nav-item"><Link href="/admin/dashboard" className="nav-link">Dashboard</Link></li>
-          <li className="nav-item"><Link href="/admin/eventos" className="nav-link">Eventos</Link></li>
-          <li className="nav-item"><Link href="/admin/directorio" className="nav-link">Directorio</Link></li>
-          <li className="nav-item"><Link href="/admin/galeria" className="nav-link">Galeria</Link></li>
-          <li className="nav-item"><Link href="/admin/solicitudes" className="nav-link">Solicitudes</Link></li>
-          <li className="nav-item"><Link href="/admin/documentos" className="nav-link">Documentos</Link></li>
+    <div className="layout-wrapper">
+      {/* Menu Toggle Button */}
+      <button 
+        className="menu-toggle"
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Toggle menu"
+      >
+        <div className={`menu-toggle-icon ${menuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+
+      {/* Overlay */}
+      <div 
+        className={`layout-overlay ${menuOpen ? 'active' : ''}`}
+        onClick={() => setMenuOpen(false)}
+      />
+
+      {/* Sidebar */}
+      <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <h4 className="sidebar-title">XLH México</h4>
+          <div className="sidebar-divider"></div>
+        </div>
+        
+        <ul className="nav-list">
           <li className="nav-item">
+            <Link 
+              href="/admin/dashboard" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+              href="/admin/pacientes" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Pacientes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+              href="/admin/eventos" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Eventos
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+              href="/admin/directorio" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Directorio
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+              href="/admin/galeria" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Galeria
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+              href="/admin/solicitudes" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Solicitudes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+              href="/admin/documentos" 
+              className="nav-link-custom"
+              onClick={() => setMenuOpen(false)}
+            >
+              Documentos
+            </Link>
+          </li>
+          <li className="nav-item logout-wrapper">
             <button
-              className="btn-logout"
+              className="logout-button"
               onClick={async () => {
                 await fetch("/api/logout", { method: "POST" });
-                window.location.href = "/login";
+                window.location.href = "/";
               }}
             >
               Cerrar sesión
@@ -28,7 +112,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </li>
         </ul>
       </aside>
-      <main className="flex-grow-1 p-4 bg-light">
+      
+      {/* Main Content */}
+      <main className="main-content">
         {children}
         <ToastContainer />
       </main>

@@ -114,109 +114,200 @@ export default function Directorio() {
   const Th = ({ label, k }: { label: string; k: SortKey }) => {
     const active = sortKey === k;
     return (
-      <th className="text-center" onClick={() => onSort(k)} style={{ cursor: "pointer" }}>
-        {label}{" "}
-        {active ? (
-          sortDir === "asc" ? <FaSortUp /> : <FaSortDown />
-        ) : (
-          <span style={{ opacity: 0.4 }}>
-            <FaSortUp />
-          </span>
-        )}
+      <th className={`table-th table-th-sortable`} onClick={() => onSort(k)}>
+        <div className="table-th-sort">
+          {label}
+          {active ? (
+            sortDir === "asc" ? (
+              <FaSortUp style={{ color: "#3c99ba" }} />
+            ) : (
+              <FaSortDown style={{ color: "#3c99ba" }} />
+            )
+          ) : (
+            <FaSortUp style={{ opacity: 0.2, fontSize: "0.75rem" }} />
+          )}
+        </div>
       </th>
     );
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Directorio de Especialistas</h2>
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover text-center align-middle">
-          <thead className="table-primary">
-            <tr>
-              <Th label="Nombre" k="nombre" />
-              <Th label="Especialidad" k="especialidad" />
-              <Th label="Ubicación" k="ubicacion" />
-              <Th label="Teléfono" k="telefono" />
-              <Th label="Correo" k="correo" />
-              <th>Foto</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {especialistas.length === 0 && (
-              <tr>
-                <td colSpan={7}>No hay especialistas registrados.</td>
-              </tr>
-            )}
+    <div className="dashboard-container">
+      {/* Header */}
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Directorio de Especialistas</h1>
+        <p className="dashboard-subtitle">
+          Gestiona la información de los especialistas registrados
+        </p>
+      </div>
 
-            {especialistas.map((e, i) => {
-              const isEditing = editIndex === i;
-              return (
-                <tr key={e.id}>
-                  <td>
-                    {isEditing ? (
-                      <input name="nombre" value={editData.nombre || ""} onChange={onChange} className="form-control" />
-                    ) : (
-                      e.nombre
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input name="especialidad" value={editData.especialidad || ""} onChange={onChange} className="form-control" />
-                    ) : (
-                      e.especialidad
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input name="ubicacion" value={editData.ubicacion || ""} onChange={onChange} className="form-control" />
-                    ) : (
-                      e.ubicacion
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input name="telefono" value={editData.telefono || ""} onChange={onChange} className="form-control" />
-                    ) : (
-                      e.telefono
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input type="email" name="correo" value={editData.correo || ""} onChange={onChange} className="form-control" />
-                    ) : (
-                      e.correo
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input type="file" name="foto" accept="image/*" onChange={onChange} className="form-control" />
-                    ) : e.foto ? (
-                      <img src={e.foto} alt={e.nombre} width={50} height={50} style={{ objectFit: "cover" }} />
-                    ) : (
-                      "Sin foto"
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <>
-                        <button className="btn btn-success btn-sm me-2" onClick={onSave}><FaSave /></button>
-                        <button className="btn btn-secondary btn-sm" onClick={onCancelEdit}><FaTimes /></button>
-                      </>
-                    ) : (
-                      <>
-                        <button className="btn btn-primary btn-sm me-2" onClick={() => onEditClick(i)}><FaEdit /></button>
-                        <button className="btn btn-danger btn-sm" onClick={() => onDelete(e.id)}><FaTrash /></button>
-                      </>
-                    )}
+      {/* Table Card */}
+      <div className="table-card">
+        <div className="table-wrapper">
+          <table className="table-responsive">
+            <thead className="table-header">
+              <tr>
+                <Th label="Nombre" k="nombre" />
+                <Th label="Especialidad" k="especialidad" />
+                <Th label="Ubicación" k="ubicacion" />
+                <Th label="Teléfono" k="telefono" />
+                <Th label="Correo" k="correo" />
+                <th className="table-th">Foto</th>
+                <th className="table-th table-th-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {especialistas.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="table-empty">
+                    No hay especialistas registrados
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              )}
+
+              {especialistas.map((e, i) => {
+                const isEditing = editIndex === i;
+                return (
+                  <tr key={e.id} className="table-row">
+                    <td className="table-td">
+                      {isEditing ? (
+                        <input 
+                          name="nombre" 
+                          value={editData.nombre || ""} 
+                          onChange={onChange} 
+                          className="input-minimal"
+                          placeholder="Nombre completo"
+                        />
+                      ) : (
+                        <span className="table-cell-name">{e.nombre}</span>
+                      )}
+                    </td>
+                    <td className="table-td">
+                      {isEditing ? (
+                        <input 
+                          name="especialidad" 
+                          value={editData.especialidad || ""} 
+                          onChange={onChange} 
+                          className="input-minimal"
+                          placeholder="Especialidad"
+                        />
+                      ) : (
+                        <span className="table-cell-text">{e.especialidad}</span>
+                      )}
+                    </td>
+                    <td className="table-td">
+                      {isEditing ? (
+                        <input 
+                          name="ubicacion" 
+                          value={editData.ubicacion || ""} 
+                          onChange={onChange} 
+                          className="input-minimal"
+                          placeholder="Ciudad, Estado"
+                        />
+                      ) : (
+                        <span className="table-cell-text">{e.ubicacion}</span>
+                      )}
+                    </td>
+                    <td className="table-td">
+                      {isEditing ? (
+                        <input 
+                          name="telefono" 
+                          value={editData.telefono || ""} 
+                          onChange={onChange} 
+                          className="input-minimal"
+                          placeholder="Teléfono"
+                        />
+                      ) : (
+                        <span className="table-cell-text">{e.telefono}</span>
+                      )}
+                    </td>
+                    <td className="table-td">
+                      {isEditing ? (
+                        <input 
+                          type="email" 
+                          name="correo" 
+                          value={editData.correo || ""} 
+                          onChange={onChange} 
+                          className="input-minimal"
+                          placeholder="correo@ejemplo.com"
+                        />
+                      ) : (
+                        <span className="table-cell-email">{e.correo}</span>
+                      )}
+                    </td>
+                    <td className="table-td">
+                      {isEditing ? (
+                        <input 
+                          type="file" 
+                          name="foto" 
+                          accept="image/*" 
+                          onChange={onChange} 
+                          className="input-minimal"
+                          style={{ fontSize: "0.8rem" }}
+                        />
+                      ) : e.foto ? (
+                        <img 
+                          src={e.foto} 
+                          alt={e.nombre} 
+                          className="table-avatar"
+                        />
+                      ) : (
+                        <span className="table-cell-empty">Sin foto</span>
+                      )}
+                    </td>
+                    <td className="table-td">
+                      <div className="table-actions">
+                        {isEditing ? (
+                          <>
+                            <button 
+                              className="btn-icon btn-save" 
+                              onClick={onSave}
+                              title="Guardar"
+                            >
+                              <FaSave />
+                            </button>
+                            <button 
+                              className="btn-icon btn-cancel" 
+                              onClick={onCancelEdit}
+                              title="Cancelar"
+                            >
+                              <FaTimes />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button 
+                              className="btn-icon btn-edit" 
+                              onClick={() => onEditClick(i)}
+                              title="Editar"
+                            >
+                              <FaEdit />
+                            </button>
+                            <button 
+                              className="btn-icon btn-delete" 
+                              onClick={() => onDelete(e.id)}
+                              title="Eliminar"
+                            >
+                              <FaTrash />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Footer info */}
+      {especialistas.length > 0 && (
+        <div className="table-footer">
+          Mostrando {especialistas.length} especialista{especialistas.length !== 1 ? "s" : ""}
+        </div>
+      )}
     </div>
   );
 }
