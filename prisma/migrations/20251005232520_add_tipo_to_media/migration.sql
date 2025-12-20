@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `media` ADD COLUMN `tipo` VARCHAR(191) NULL;
+ALTER TABLE `Media` ADD COLUMN `tipo` VARCHAR(191) NULL;
