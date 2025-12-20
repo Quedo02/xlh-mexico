@@ -1,17 +1,17 @@
 /*
   Warnings:
 
-  - You are about to drop the column `mediaId` on the `mediaslot` table. All the data in the column will be lost.
+  - You are about to drop the column `mediaId` on the `MediaSlot` table. All the data in the column will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE `mediaslot` DROP FOREIGN KEY `MediaSlot_mediaId_fkey`;
+ALTER TABLE `MediaSlot` DROP FOREIGN KEY `MediaSlot_mediaId_fkey`;
 
 -- DropIndex
-DROP INDEX `MediaSlot_mediaId_fkey` ON `mediaslot`;
+DROP INDEX `MediaSlot_mediaId_fkey` ON `MediaSlot`;
 
 -- AlterTable
-ALTER TABLE `mediaslot` DROP COLUMN `mediaId`;
+ALTER TABLE `MediaSlot` DROP COLUMN `mediaId`;
 
 -- CreateTable
 CREATE TABLE `SlotMedia` (

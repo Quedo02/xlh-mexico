@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `paciente` MODIFY `edad` VARCHAR(191) NOT NULL;
+ALTER TABLE `Paciente` MODIFY `edad` VARCHAR(191) NOT NULL;
 
 -- CreateIndex
 CREATE UNIQUE INDEX `Paciente_email_key` ON `Paciente`(`email`);

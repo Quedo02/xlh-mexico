@@ -8,9 +8,9 @@ export async function GET() {
     const eventos = await prisma.evento.findMany({
       orderBy: { fecha: "desc" },
     });
+
     return NextResponse.json(eventos, { status: 200 });
   } catch (error) {
-    console.error("Error obteniendo eventos:", error);
     return NextResponse.json({ error: "Error al obtener eventos" }, { status: 500 });
   }
 }
@@ -33,11 +33,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // Guardar archivo en /public/uploads
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // Guardar imagen
+    const buffer = Buffer.from(await file.arrayBuffer());
     const filename = `${Date.now()}-${file.name}`;
     const filepath = path.join(process.cwd(), "public", "uploads", filename);
+
     await writeFile(filepath, buffer);
 
     const nuevoEvento = await prisma.evento.create({
@@ -53,7 +53,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(nuevoEvento, { status: 201 });
   } catch (error) {
-    console.error("Error creando evento:", error);
     return NextResponse.json({ error: "Error al crear evento" }, { status: 500 });
   }
 }

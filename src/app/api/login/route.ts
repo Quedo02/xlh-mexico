@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     secure: process.env.NODE_ENV === "production",
     maxAge: 48 * 60 * 60, // 48h
     path: "/",
-    sameSite: "strict"
+    sameSite: "lax"
   });
 
   return res;

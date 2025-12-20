@@ -108,185 +108,186 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="container py-5">
-      <style jsx global>{`
-        .snap-row {
-          display: grid;
-          grid-auto-flow: column;
-          grid-auto-columns: minmax(260px, 320px);
-          gap: 16px;
-          overflow-x: auto;
-          padding-bottom: 8px;
-          scroll-snap-type: x mandatory;
-        }
-        .snap-row::-webkit-scrollbar { height: 8px; }
-        .snap-row::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 8px; }
-        .snap-card { scroll-snap-align: start; }
-        .card-min-h { min-height: 160px; }
-        .img-thumb {
-          width: 100%; height: 120px; object-fit: cover; border-radius: .5rem; background: #f2f2f2;
-        }
-      `}</style>
+    <div className="dashboard-container">
+      {/* Header */}
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Panel de Administración</h1>
+        <p className="dashboard-subtitle">
+          Gestiona solicitudes y eventos desde un solo lugar
+        </p>
+      </div>
 
-      <h1 className="mb-2">Panel de Administración</h1>
-      <p className="text-muted mb-4">
-        Resumen rápido de <strong>solicitudes pendientes</strong> y <strong>eventos próximos</strong>.
-      </p>
-
-      <div className="row gy-4">
-        {/* Solicitudes pendientes (todas las devueltas por la API) */}
-        <div className="col-12 col-xl-6">
-          <div className="card shadow-sm h-100">
-            <div className="card-header d-flex align-items-center justify-content-between">
+      {/* Grid principal */}
+      <div className="grid-responsive mb-2">
+        
+        {/* Solicitudes pendientes */}
+        <div className="card-minimal card-padding-none">
+          <div className="section-header">
+            <div className="header-actions">
               <div>
-                <h5 className="mb-0">Solicitudes pendientes</h5>
-                <small className="text-muted">
-                  {loadingSol ? "Cargando…" : `${pendientes.length} pendiente(s)`}
-                </small>
+                <h2 className="section-title">Solicitudes pendientes</h2>
+                <p className="section-count">
+                  {loadingSol ? "Cargando…" : `${pendientes.length} pendientes`}
+                </p>
               </div>
-              <div className="d-flex align-items-center gap-2">
+              <div className="flex-center-gap">
                 <button
-                  className="btn btn-sm btn-outline-secondary"
+                  className="btn-icon"
                   onClick={() => scrollByCard(solRef.current, "left")}
                   aria-label="Anterior"
                 >
                   ‹
                 </button>
                 <button
-                  className="btn btn-sm btn-outline-secondary"
+                  className="btn-icon"
                   onClick={() => scrollByCard(solRef.current, "right")}
                   aria-label="Siguiente"
                 >
                   ›
                 </button>
-                <Link href="/admin/solicitudes" className="btn btn-sm btn-primary">
+                <Link href="/admin/solicitudes" className="btn-primary-minimal">
                   Ver todas
                 </Link>
               </div>
             </div>
+          </div>
 
-            <div className="card-body">
-              {errorSol && <div className="alert alert-danger">{errorSol}</div>}
-              {loadingSol ? (
-                <p className="text-muted">Cargando…</p>
-              ) : pendientes.length === 0 ? (
-                <p className="text-muted">No hay solicitudes pendientes.</p>
-              ) : (
-                <div className="snap-row" ref={solRef}>
-                  {pendientes.map((s) => (
-                    <div className="snap-card card card-min-h p-3" key={String(s.id)}>
-                      <div className="d-flex flex-column h-100">
-                        <div className="d-flex justify-content-between align-items-start">
-                          <span className="badge text-bg-warning">Pendiente</span>
-                          <small className="text-muted">{formatFechaES(s.createdAt)}</small>
-                        </div>
-                        <div className="mt-2">
-                          <strong>Solicitante:</strong> {s.nombre || "—"}
-                        </div>
-                        <div className="mt-auto pt-2">
-                          <Link
-                            href={`/admin/solicitudes?id=${encodeURIComponent(String(s.id))}`}
-                            className="btn btn-sm btn-outline-primary w-100"
-                          >
-                            Revisar
-                          </Link>
-                        </div>
+          <div className="section-content">
+            {errorSol && (
+              <div className="error-message">{errorSol}</div>
+            )}
+            {loadingSol ? (
+              <p className="empty-state">Cargando…</p>
+            ) : pendientes.length === 0 ? (
+              <p className="empty-state">No hay solicitudes pendientes</p>
+            ) : (
+              <div className="snap-row" ref={solRef}>
+                {pendientes.map((s) => (
+                  <div className="snap-card" key={String(s.id)}>
+                    <div className="card-minimal solicitud-card-inner">
+                      <div className="card-header-row">
+                        <span className="badge-minimal">Pendiente</span>
+                        <span className="fecha-badge">
+                          {formatFechaES(s.createdAt)}
+                        </span>
                       </div>
+                      <div className="card-body">
+                        <p className="label-small">Solicitante</p>
+                        <p className="value-text">{s.nombre || "—"}</p>
+                      </div>
+                      <Link
+                        href={`/admin/solicitudes?id=${encodeURIComponent(String(s.id))}`}
+                        className="btn-outline-minimal w-full text-center"
+                      >
+                        Revisar solicitud
+                      </Link>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Eventos próximos */}
-        <div className="col-12 col-xl-6">
-          <div className="card shadow-sm h-100">
-            <div className="card-header d-flex align-items-center justify-content-between">
+        <div className="card-minimal card-padding-none">
+          <div className="section-header">
+            <div className="header-actions">
               <div>
-                <h5 className="mb-0">Eventos próximos</h5>
-                <small className="text-muted">
-                  {loadingEvt ? "Cargando…" : `${proximos.length} evento(s)`}
-                </small>
+                <h2 className="section-title">Eventos próximos</h2>
+                <p className="section-count">
+                  {loadingEvt ? "Cargando…" : `${proximos.length} próximos`}
+                </p>
               </div>
-              <div className="d-flex align-items-center gap-2">
+              <div className="flex-center-gap">
                 <button
-                  className="btn btn-sm btn-outline-secondary"
+                  className="btn-icon"
                   onClick={() => scrollByCard(evtRef.current, "left")}
                   aria-label="Anterior"
                 >
                   ‹
                 </button>
                 <button
-                  className="btn btn-sm btn-outline-secondary"
+                  className="btn-icon"
                   onClick={() => scrollByCard(evtRef.current, "right")}
                   aria-label="Siguiente"
                 >
                   ›
                 </button>
-                <Link href="/admin/eventos" className="btn btn-sm btn-primary">
+                <Link href="/admin/eventos" className="btn-primary-minimal">
                   Ver todos
                 </Link>
               </div>
             </div>
+          </div>
 
-            <div className="card-body">
-              {errorEvt && <div className="alert alert-danger">{errorEvt}</div>}
-              {loadingEvt ? (
-                <p className="text-muted">Cargando…</p>
-              ) : proximos.length === 0 ? (
-                <p className="text-muted">No hay eventos próximos.</p>
-              ) : (
-                <div className="snap-row" ref={evtRef}>
-                  {proximos.map((e) => (
-                    <div className="snap-card card p-0" key={String(e.id)}>
-                      {/* Evito next/image para no depender de dominios configurados */}
+          <div className="section-content">
+            {errorEvt && (
+              <div className="error-message">{errorEvt}</div>
+            )}
+            {loadingEvt ? (
+              <p className="empty-state">Cargando…</p>
+            ) : proximos.length === 0 ? (
+              <p className="empty-state">No hay eventos próximos</p>
+            ) : (
+              <div className="snap-row" ref={evtRef}>
+                {proximos.map((e) => (
+                  <div className="snap-card" key={String(e.id)}>
+                    <div className="card-minimal card-padding-none">
                       <img
-                        className="img-thumb"
+                        className="img-event"
                         src={e.imagen || "/img/placeholder-evento.jpg"}
                         alt={e.titulo}
                       />
-                      <div className="p-3 d-flex flex-column">
-                        <h6 className="mb-1">{e.titulo}</h6>
-                        <small className="text-muted">
-                          📅 {formatFechaES(e.fecha)} — {e.lugar}
-                        </small>
-                        <div className="mt-auto pt-2 d-flex gap-2">
+                      <div className="evento-card-content">
+                        <h3 className="evento-title">{e.titulo}</h3>
+                        <div className="evento-info">
+                          <div className="evento-info-item">
+                            📅 {formatFechaES(e.fecha)}
+                          </div>
+                          <div>📍 {e.lugar}</div>
+                        </div>
+                        <div className="button-group">
                           {e.link && (
                             <a
                               href={e.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="btn btn-sm btn-outline-secondary flex-grow-1"
+                              className="btn-outline-secondary button-full"
                             >
-                              Detalles
+                              Ver detalles
                             </a>
                           )}
                           <Link
                             href={`/admin/eventos?focus=${encodeURIComponent(String(e.id))}`}
-                            className="btn btn-sm btn-outline-primary"
+                            className="btn-outline-minimal text-center"
                           >
                             Editar
                           </Link>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Accesos rápidos */}
-      <div className="mt-4 d-flex flex-wrap gap-2">
-        <Link href="/admin/eventos" className="btn btn-outline-success">
-          ➕ Agregar evento
+      <div className="quick-actions">
+        <Link href="/admin/eventos" className="btn-outline-secondary">
+          + Agregar evento
         </Link>
-        <Link href="/admin/solicitudes" className="btn btn-outline-dark">
+        <Link href="/admin/solicitudes" className="btn-outline-minimal">
           Gestionar solicitudes
+        </Link>
+        <Link href="/admin/directorio" className="btn-outline-minimal">
+          Ver directorio
+        </Link>
+        <Link href="/admin/galeria" className="btn-outline-secondary">
+          Administrar galería
         </Link>
       </div>
     </div>

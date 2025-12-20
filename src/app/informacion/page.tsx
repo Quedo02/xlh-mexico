@@ -54,7 +54,7 @@ export default function Informacion() {
       <HeroSection
         title="Información"
         subtitle="Sumérgete en Nuestro Material Educativo"
-        backgroundImage="/img/receta.jpg"
+        sectionName="informacion"
         overlayColor="rgba(0, 38, 102, 0.6)"
       />
 
