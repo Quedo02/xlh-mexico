@@ -1,41 +1,73 @@
+// src/app/api/especialistas/route.ts
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
 import path from "path";
+import fs from "fs/promises";
 
+export const runtime = "nodejs";
+
+const PUBLIC_DIR = path.join(process.cwd(), "public");
+const SPECIALISTS_DIR = path.join(PUBLIC_DIR, "img", "especialistas");
+
+function isValidText(value: any) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+// ---------- GET: LISTAR ----------
+export async function GET() {
+  try {
+    const especialistas = await prisma.especialista.findMany();
+    return NextResponse.json(especialistas); // SI NO HAY, REGRESA []
+  } catch (error) {
+    console.error("GET error:", error);
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+  }
+}
+
+// ---------- POST: CREAR ----------
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
 
-    const nombre = formData.get("nombre")?.toString();
-    const especialidad = formData.get("especialidad")?.toString();
-    const ubicacion = formData.get("ubicacion")?.toString();
-    const telefono = formData.get("telefono")?.toString();
-    const correo = formData.get("correo")?.toString();
-    const hospital = formData.get("hospital")?.toString();
-    const comoConocieron = formData.get("comoConocieron")?.toString();
-    const perfilUrl = formData.get("perfilUrl")?.toString() || null;
-    const file = formData.get("foto") as File | null;
+    // Lee todos los campos necesarios (todos obligatorios según tu modelo)
+    const nombre = formData.get("nombre")?.toString() ?? "";
+    const especialidad = formData.get("especialidad")?.toString() ?? "";
+    const ubicacion = formData.get("ubicacion")?.toString() ?? "";
+    const telefono = formData.get("telefono")?.toString() ?? "";
+    const correo = formData.get("correo")?.toString() ?? "";
+    const hospital = formData.get("hospital")?.toString() ?? "";
+    const comoConocieron = formData.get("comoConocieron")?.toString() ?? "";
+    const perfilUrl = formData.get("perfilUrl")?.toString() ?? null;
+    const imagen = formData.get("imagen") as File | null;
 
-    if (!nombre || !especialidad || !ubicacion || !telefono || !correo || !hospital || !comoConocieron) {
-      return NextResponse.json(
-        { error: "Todos los campos son obligatorios" },
-        { status: 400 }
-      );
+    // Validación: asegúrate de que los campos obligatorios existan y no estén vacíos
+    if (
+      !isValidText(nombre) ||
+      !isValidText(especialidad) ||
+      !isValidText(ubicacion) ||
+      !isValidText(telefono) ||
+      !isValidText(correo) ||
+      !isValidText(hospital) ||
+      !isValidText(comoConocieron)
+    ) {
+      return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 });
     }
 
-    let fotoPath: string | null = null;
+    // Manejo de imagen (opcional)
+    let imageUrl: string | null = null;
+    if (imagen && imagen.size > 0) {
+      const buffer = Buffer.from(await imagen.arrayBuffer());
+      const imgName = `${Date.now()}-${imagen.name.replace(/\s+/g, "_")}`;
+      const filePath = path.join(SPECIALISTS_DIR, imgName);
 
-    if (file) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const filename = `${Date.now()}-${file.name}`;
-      const filepath = path.join(process.cwd(), "public", "uploads", filename);
-      await writeFile(filepath, buffer);
-      fotoPath = `/img/especialistas/${filename}`;
+      await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
+      await fs.writeFile(filePath, buffer);
+
+      imageUrl = `/img/especialistas/${imgName}`;
     }
 
-    const nuevoDoctor = await prisma.especialista.create({
+    // Ahora pasamos TODOS los campos obligatorios a Prisma
+    const newEspecialista = await prisma.especialista.create({
       data: {
         nombre,
         especialidad,
@@ -44,26 +76,14 @@ export async function POST(req: Request) {
         correo,
         hospital,
         comoConocieron,
-        foto: fotoPath,
-        perfilUrl,
+        foto: imageUrl,      // puede ser null
+        perfilUrl,          // puede ser null
       },
     });
 
-    return NextResponse.json(nuevoDoctor, { status: 201 });
+    return NextResponse.json(newEspecialista, { status: 201 });
   } catch (error) {
-    console.error("Error creando especialista:", error);
-    return NextResponse.json({ error: "Error al crear especialista" }, { status: 500 });
-  }
-}
-
-export async function GET() {
-  try {
-    const especialistas = await prisma.especialista.findMany({
-      orderBy: { nombre: "asc" },
-    });
-    return NextResponse.json(especialistas);
-  } catch (error) {
-    console.error("Error obteniendo especialistas:", error);
-    return NextResponse.json({ error: "Error al obtener especialistas" }, { status: 500 });
+    console.error("POST error:", error);
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
   }
 }
