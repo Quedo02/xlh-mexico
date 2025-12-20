@@ -26,4 +26,5 @@ jobs:
             -o StrictHostKeyChecking=yes \
             -p ${{ secrets.VPS_PORT }} \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "bash /var/www/xlh-mexico/deploy.sh"
+            "set -euxo pipefail; whoami; pwd; ls -la /var/www; ls -la /var/www/xlh-mexico; bash -x /var/www/xlh-mexico/deploy.sh"
+
