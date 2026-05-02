@@ -66,17 +66,7 @@ export default function Contacto() {
               {/* Botones */}
               <div className="d-flex flex-wrap gap-3 mt-3">
                 
-                {/* WhatsApp */}
-                <a
-                  href="https://wa.me/529512241795"
-                  target="_blank"
-                  className="btn btn-success"
-                >
-                  <i className="bi bi-whatsapp me-2"></i>
-                  Enviar WhatsApp
-                </a>
-
-                {/* Correo (opcional) */}
+                {/* Correo */}
                 <a
                   href="mailto:xlhmexico@gmail.com"
                   className="btn btn-outline-primary"
