@@ -21,31 +21,6 @@ export default function Contacto() {
       />
 
       <main className="container my-5">
-        {/* Sección Pacientes */}
-        <section className="container my-5" id="pacientes">
-          <div className="row align-items-center shadow rounded p-4 bg-white flex-md-row-reverse">
-            <div className="col-md-6">
-              <h2 className="fw-bold mb-4">Personas con XLH</h2>
-              <p>
-                Si eres paciente y deseas registrarte en nuestro directorio,
-                llena el siguiente formulario oficial.
-              </p>
-              <button
-                className="btn btn-outline-primary"
-                onClick={() => setShowPacientes(true)}
-              >
-                Abrir formulario
-              </button>
-            </div>
-            <div className="col-md-6 text-center">
-              <img
-                src="/img/unete_comunidad.png"
-                className="img-fluid rounded shadow-sm"
-                alt="Pacientes XLH"
-              />
-            </div>
-          </div>
-        </section>
 
         {/* Sección Especialistas */}
         <section className="container my-5" id="especialistas">
@@ -73,37 +48,78 @@ export default function Contacto() {
           </div>
         </section>
 
-        {/* Modal Pacientes */}
-        {showPacientes && (
-          <>
-            <div
-              className="modal fade show d-block"
-              tabIndex={-1}
-              style={{ zIndex: 1050 }}
-            >
-              <div className="modal-dialog modal-xl modal-dialog-centered">
-                <div className="modal-content p-3">
-                  <div className="modal-header">
-                    <h5 className="modal-title">Registro de Pacientes</h5>
-                    <button
-                      type="button"
-                      className="btn-close"
-                      onClick={() => setShowPacientes(false)}
-                    />
-                  </div>
-                  <div className="modal-body">
-                    <Registro />
-                  </div>
+        {/* Sección Contacto */}
+        <section className="container my-5" id="contacto-info">
+          <div className="row align-items-center shadow rounded p-4 bg-white flex-md-row-reverse">
+            
+            {/* Texto */}
+            <div className="col-md-6">
+              <h2 className="fw-bold mb-4">¿Tienes dudas sobre XLH?</h2>
+              <p>
+                Sabemos que pueden surgir muchas preguntas sobre el diagnóstico,
+                tratamiento o cómo encontrar apoyo. Nuestro equipo está aquí para orientarte.
+              </p>
+              <p>
+                Escríbenos directamente o síguenos en nuestras redes para mantenerte informado.
+              </p>
+
+              {/* Botones */}
+              <div className="d-flex flex-wrap gap-3 mt-3">
+                
+                {/* WhatsApp */}
+                <a
+                  href="https://wa.me/529512241795"
+                  target="_blank"
+                  className="btn btn-success"
+                >
+                  <i className="bi bi-whatsapp me-2"></i>
+                  Enviar WhatsApp
+                </a>
+
+                {/* Correo (opcional) */}
+                <a
+                  href="mailto:xlhmexico@gmail.com"
+                  className="btn btn-outline-primary"
+                >
+                  <i className="bi bi-envelope me-2"></i>
+                  Enviar correo
+                </a>
+              </div>
+
+              {/* Redes sociales */}
+              <div className="mt-4">
+                <p className="mb-2 fw-semibold">También puedes seguirnos:</p>
+                <div className="d-flex gap-3 fs-5">
+                  <a href="https://www.facebook.com/XLHMexico" target="_blank" className="text-primary">
+                    <i className="bi bi-facebook"></i>
+                  </a>
+                  <a href="https://instagram.com/xlhmexico" target="_blank" className="text-danger">
+                    <i className="bi bi-instagram"></i>
+                  </a>
+                  <a href="https://www.youtube.com/channel/UCptD44u67BRvNuU-q8dtslg" target="_blank" className="text-danger">
+                    <i className="bi bi-youtube"></i>
+                  </a>
+                  <a href="https://twitter.com/xlhmexico" target="_blank" className="text-dark">
+                    <i className="bi bi-twitter-x"></i>
+                  </a>
+                  <a href="https://www.linkedin.com/in/xlh-mexico" target="_blank" className="text-primary">
+                    <i className="bi bi-linkedin"></i>
+                  </a>
                 </div>
               </div>
             </div>
-            <div
-              className="modal-backdrop fade show"
-              style={{ zIndex: 1040 }}
-              onClick={() => setShowPacientes(false)}
-            />
-          </>
-        )}
+
+            {/* Imagen */}
+            <div className="col-md-6 text-center">
+              <img
+                src="/img/unete_comunidad.png"
+                className="img-fluid rounded shadow-sm"
+                alt="Contacto XLH"
+              />
+            </div>
+
+          </div>
+        </section>
 
         {/* Modal Especialistas */}
         {showEspecialistas && (

@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
         }}
       >
         <img
-          src="/Img/logo_sin_fondo.png"
+          src="/img/logo_sin_fondo.png"
           alt="Logo XLH"
           className="sombra-logo"
           style={{
