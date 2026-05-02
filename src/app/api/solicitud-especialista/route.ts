@@ -1,4 +1,3 @@
-// api/solicitud-especialista/route.ts
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import path from "path";
@@ -29,7 +28,8 @@ export async function POST(req: Request) {
 
     const foto = form.get("foto");
 
-    if (!nombre || !especialidad || !ubicacion || !telefono || !correo || !hospital || !comoConocieron) {
+    // ✅ SOLO los obligatorios reales
+    if (!nombre || !especialidad || !telefono || !comoConocieron) {
       return NextResponse.json(
         { success: false, error: "Faltan campos obligatorios" },
         { status: 400 }
@@ -38,76 +38,70 @@ export async function POST(req: Request) {
 
     let fotoPath: string | null = null;
 
-    // Foto enviada como STRING (base64 / url / ruta)
-    
-    if (typeof foto === "string") {
-      // Si viene una URL externa o ya válida en public
-      if (foto.startsWith("http") || foto.startsWith("/img/") || foto.startsWith("/uploads/")) {
-        fotoPath = foto;
-      }
+    // =========================
+    // FOTO OPCIONAL
+    // =========================
 
-      // Base64 viene como string
-      else if (foto.startsWith("data:image/")) {
-        await fs.mkdir(UPLOADS_DIR, { recursive: true });
+    if (foto) {
 
-        const matches = foto.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+      // STRING
+      if (typeof foto === "string") {
 
-        if (!matches) {
-          return NextResponse.json(
-            { success: false, error: "Formato de imagen base64 inválido" },
-            { status: 400 }
-          );
+        if (foto.startsWith("http") || foto.startsWith("/img/") || foto.startsWith("/uploads/")) {
+          fotoPath = foto;
         }
 
-        const ext = matches[1];
-        const base64Data = matches[2];
-        const filename = `${Date.now()}.${ext}`;
-        const filePath = path.join(UPLOADS_DIR, filename);
+        else if (foto.startsWith("data:image/")) {
+          await fs.mkdir(UPLOADS_DIR, { recursive: true });
 
-        await fs.writeFile(filePath, Buffer.from(base64Data, "base64"));
+          const matches = foto.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
 
-        fotoPath = `/uploads/${filename}`;
+          if (!matches) {
+            return NextResponse.json(
+              { success: false, error: "Formato de imagen base64 inválido" },
+              { status: 400 }
+            );
+          }
+
+          const ext = matches[1];
+          const base64Data = matches[2];
+          const filename = `${Date.now()}.${ext}`;
+          const filePath = path.join(UPLOADS_DIR, filename);
+
+          await fs.writeFile(filePath, Buffer.from(base64Data, "base64"));
+
+          fotoPath = `/uploads/${filename}`;
+        }
       }
 
-      // Si es string pero no base64 → nombre de archivo viejo
-      else {
-        await fs.mkdir(UPLOADS_DIR, { recursive: true });
+      // FILE REAL
+      else if (foto instanceof File) {
 
-        const filename = `${Date.now()}_${foto}`;
-        fotoPath = `/uploads/${filename}`;
+        if (foto.size > 0) {
+
+          if (!isValidImageType(foto)) {
+            return NextResponse.json(
+              { success: false, error: "Tipo de imagen no permitido" },
+              { status: 400 }
+            );
+          }
+
+          await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
+
+          const safeName = `${Date.now()}-${foto.name.replace(/\s+/g, "_")}`;
+          const absPath = path.join(SPECIALISTS_DIR, safeName);
+
+          const buffer = Buffer.from(await foto.arrayBuffer());
+          await fs.writeFile(absPath, buffer);
+
+          fotoPath = `/img/especialistas/${safeName}`;
+        }
       }
     }
 
-    // Foto es un archivo File real
-
-    else if (foto instanceof File) {
-      if (foto.size === 0) {
-        return NextResponse.json({ success: false, error: "La foto está vacía" }, { status: 400 });
-      }
-
-      if (!isValidImageType(foto)) {
-        return NextResponse.json({ success: false, error: "Tipo de imagen no permitido" }, { status: 400 });
-      }
-
-      await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
-
-      const safeName = `${Date.now()}-${foto.name.replace(/\s+/g, "_")}`;
-      const absPath = path.join(SPECIALISTS_DIR, safeName);
-
-      const buffer = Buffer.from(await foto.arrayBuffer());
-      await fs.writeFile(absPath, buffer);
-
-      fotoPath = `/img/especialistas/${safeName}`;
-    }
-
-    else {
-      return NextResponse.json(
-        { success: false, error: "Falta la foto o formato inválido" },
-        { status: 400 }
-      );
-    }
-
-    //Guardar en BD
+    // =========================
+    // GUARDAR EN BD
+    // =========================
 
     const nuevaSolicitud = await prisma.solicitudEspecialista.create({
       data: {
@@ -118,12 +112,15 @@ export async function POST(req: Request) {
         correo,
         hospital,
         comoConocieron,
-        foto: fotoPath,
+        foto: fotoPath, // 👈 puede ser null
         perfilUrl: perfilUrl || null,
       },
     });
 
-    return NextResponse.json({ success: true, data: nuevaSolicitud }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: nuevaSolicitud },
+      { status: 201 }
+    );
 
   } catch (error) {
     console.error("Error creando solicitud:", error);

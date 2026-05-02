@@ -15,12 +15,14 @@ export async function GET(
 ) {
   try {
     const { id } = await context.params;
+
     const especialista = await prisma.especialista.findUnique({
       where: { id: Number(id) },
     });
 
-    if (!especialista)
+    if (!especialista) {
       return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+    }
 
     return NextResponse.json(especialista);
   } catch (error) {
@@ -39,15 +41,18 @@ export async function PUT(
     const numId = Number(id);
 
     const formData = await req.formData();
+
     const nombre = formData.get("nombre");
     const especialidad = formData.get("especialidad");
-    const imagen = formData.get("imagen") as File | null;
+
+    // ✅ CAMBIO AQUÍ TAMBIÉN
+    const foto = formData.get("foto") as File | null;
 
     let imageUrl: string | undefined;
 
-    if (imagen && imagen.size > 0) {
-      const buffer = Buffer.from(await imagen.arrayBuffer());
-      const imgName = `${Date.now()}-${imagen.name}`;
+    if (foto && foto.size > 0) {
+      const buffer = Buffer.from(await foto.arrayBuffer());
+      const imgName = `${Date.now()}-${foto.name}`;
       const filePath = path.join(SPECIALISTS_DIR, imgName);
 
       await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
@@ -85,15 +90,18 @@ export async function DELETE(
       where: { id: numId },
     });
 
-    if (!especialista)
+    if (!especialista) {
       return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+    }
 
     if (especialista.foto) {
       const filePath = path.join(PUBLIC_DIR, especialista.foto);
       await fs.rm(filePath, { force: true });
     }
 
-    await prisma.especialista.delete({ where: { id: numId } });
+    await prisma.especialista.delete({
+      where: { id: numId },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
