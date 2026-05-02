@@ -27,7 +27,7 @@ export default function Contacto() {
           <div className="row align-items-center shadow rounded p-4 bg-white">
             <div className="col-md-6 text-center">
               <img
-                src="/img/unete_comunidad.png"
+                src="/img/especialistas.png"
                 className="img-fluid rounded shadow-sm"
                 alt="Especialistas"
               />
