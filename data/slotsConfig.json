@@ -1,12 +1,12 @@
 {
-  "homeCarrusel": "Carrusel Inicio",
-  "homeBanner": "Banner Inicio",
+  "homeCarrusel": "Carrusel",
+  "homeBanner": "Banner registro",
   "sobreXLH": "Banner Sobre el XLH",
-  "directorio": "Banner Directorio",
-  "informacion": "Banner Información",
+  "directorio": "Banner directorio",
+  "informacion": "Banner Informacion",
   "nosotros": "Banner Nosotros",
-  "registro": "Banner Registro",
-  "eventos": "Banner Eventos",
-  "contacto": "",
+  "registro": "Banner registro",
+  "eventos": "Banner eventos",
+  "contacto": "Carrusel",
   "servicios": "Banner servicios"
 }

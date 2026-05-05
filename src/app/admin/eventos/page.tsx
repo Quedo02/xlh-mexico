@@ -14,8 +14,6 @@ export default function AdminEventos() {
   const [imagen, setImagen] = useState<File | null>(null);
   const [cargando, setCargando] = useState(false);
   const [loadingEventos, setLoadingEventos] = useState(true);
-  
-  const [editandoId, setEditandoId] = useState<number | null>(null);
 
   async function fetchEventos() {
     try {
@@ -37,13 +35,8 @@ export default function AdminEventos() {
 
   async function handleCrearEvento(e: React.FormEvent) {
     e.preventDefault();
-    if (!titulo || !descripcion || !fecha || !lugar || !link) {
+    if (!titulo || !descripcion || !fecha || !lugar || !link || !imagen) {
       toast.error("Por favor llena todos los campos");
-      return;
-    }
-
-    if (!editandoId && !imagen) {
-      toast.error("Por favor selecciona una imagen");
       return;
     }
 
@@ -55,242 +48,149 @@ export default function AdminEventos() {
       formData.append("fecha", fecha);
       formData.append("lugar", lugar);
       formData.append("link", link);
-      if (imagen) formData.append("imagen", imagen);
+      formData.append("imagen", imagen);
 
-      const url = editandoId ? `/api/eventos/${editandoId}` : "/api/eventos";
-      const method = editandoId ? "PUT" : "POST";
-
-      const res = await fetch(url, {
-        method,
+      const res = await fetch("/api/eventos", {
+        method: "POST",
         body: formData,
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `Error al ${editandoId ? "actualizar" : "crear"} evento`);
+        throw new Error(data.error || "Error al crear evento");
       }
 
-      toast.success(editandoId ? "Evento actualizado" : "Evento creado");
+      toast.success("Evento creado");
       setTitulo("");
       setDescripcion("");
       setFecha("");
       setLugar("");
       setLink("");
       setImagen(null);
-      setEditandoId(null);
       setMostrarFormulario(false);
       fetchEventos();
     } catch (error: any) {
-      toast.error(error.message || `Error al ${editandoId ? "actualizar" : "crear"} evento`);
+      toast.error(error.message || "Error al crear evento");
     } finally {
       setCargando(false);
     }
   }
 
-  async function handleEliminarEvento(id: number) {
-    if (!confirm("¿Seguro que deseas eliminar este evento?")) return;
-
-    try {
-      const res = await fetch(`/api/eventos/${id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        toast.success("Evento eliminado correctamente");
-        fetchEventos();
-      } else {
-        toast.error("No se pudo eliminar el evento");
-      }
-    } catch (error) {
-      toast.error("Error en la red");
-    }
-  }
-
-  function handleEditarEvento(evento: Evento) {
-    setTitulo(evento.titulo);
-    setDescripcion(evento.descripcion);
-    setFecha(evento.fecha.split('T')[0]); // Formato YYYY-MM-DD para input date
-    setLugar(evento.lugar);
-    setLink(evento.link);
-    setEditandoId(evento.id);
-    setImagen(null);
-    setMostrarFormulario(true);
-  }
-
-  function cancelarFormulario() {
-    setTitulo("");
-    setDescripcion("");
-    setFecha("");
-    setLugar("");
-    setLink("");
-    setImagen(null);
-    setEditandoId(null);
-    setMostrarFormulario(false);
-  }
-
   return (
-    <div className="dashboard-container" style={{ maxWidth: "1400px" }}>
-      {/* Header */}
-      <div className="header-eventos">
-        <div>
-          <h1 className="dashboard-title">Gestión de Eventos</h1>
-          <p className="dashboard-subtitle">
-            Crea y administra los eventos de la comunidad
-          </p>
-        </div>
+    <div>
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
+        <h2 className="mb-0">Gestión de Eventos</h2>
         <button
-          className={mostrarFormulario ? "btn-cancel-evento" : "btn-add-evento"}
-          onClick={() => {
-            if (mostrarFormulario) {
-              cancelarFormulario();
-            } else {
-              setMostrarFormulario(true);
-            }
-          }}
+          className="btn btn-outline-primary mt-3 mt-md-0"
+          onClick={() => setMostrarFormulario(!mostrarFormulario)}
         >
-          {mostrarFormulario ? "Cancelar" : "+ Agregar Evento"}
+          {mostrarFormulario ? "Cancelar" : "➕ Agregar Evento"}
         </button>
       </div>
 
-      {/* Formulario */}
       {mostrarFormulario && (
-        <div className="form-card">
-          <h2 className="section-subtitle">
-            {editandoId ? "Editar Evento" : "Nuevo Evento"}
-          </h2>
+        <form
+          onSubmit={handleCrearEvento}
+          className="mb-5 border rounded p-3 bg-light"
+          encType="multipart/form-data"
+        >
+          <div className="mb-3">
+            <label htmlFor="titulo" className="form-label">Título</label>
+            <input
+              type="text"
+              id="titulo"
+              className="form-control"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+              required
+            />
+          </div>
 
-          <form onSubmit={handleCrearEvento}>
-            <div className="form-grid-2col">
-              <div className="form-group">
-                <label className="form-label">Título *</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={titulo}
-                  onChange={(e) => setTitulo(e.target.value)}
-                  placeholder="Nombre del evento"
-                  required
-                />
-              </div>
+          <div className="mb-3">
+            <label htmlFor="descripcion" className="form-label">Descripción</label>
+            <textarea
+              id="descripcion"
+              className="form-control"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label className="form-label">Fecha *</label>
-                <input
-                  type="date"
-                  className="form-input"
-                  value={fecha}
-                  onChange={(e) => setFecha(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="fecha" className="form-label">Fecha</label>
+            <input
+              type="date"
+              id="fecha"
+              className="form-control"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+              required
+            />
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Descripción *</label>
-              <textarea
-                className="form-textarea"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                placeholder="Describe el evento..."
-                required
-              />
-            </div>
+          <div className="mb-3">
+            <label htmlFor="lugar" className="form-label">Lugar</label>
+            <input
+              type="text"
+              id="lugar"
+              className="form-control"
+              value={lugar}
+              onChange={(e) => setLugar(e.target.value)}
+              required
+            />
+          </div>
 
-            <div className="form-grid-2col">
-              <div className="form-group">
-                <label className="form-label">Lugar *</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={lugar}
-                  onChange={(e) => setLugar(e.target.value)}
-                  placeholder="Ubicación del evento"
-                  required
-                />
-              </div>
+          <div className="mb-3">
+            <label htmlFor="link" className="form-label">Link</label>
+            <input
+              type="url"
+              id="link"
+              className="form-control"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label className="form-label">Link *</label>
-                <input
-                  type="url"
-                  className="form-input"
-                  value={link}
-                  onChange={(e) => setLink(e.target.value)}
-                  placeholder="https://..."
-                  required
-                />
-              </div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="imagen" className="form-label">Imagen del evento</label>
+            <input
+              type="file"
+              id="imagen"
+              className="form-control"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) setImagen(file);
+              }}
+              required
+            />
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Imagen del evento *</label>
-              <input
-                type="file"
-                className="form-file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) setImagen(file);
-                }}
-                required={!editandoId}
-              />
-              {imagen && (
-                <div className="file-preview">
-                  <p className="file-preview-text">
-                    📷 <span className="file-preview-name">{imagen.name}</span>
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <div className="form-actions">
-              <button 
-                type="submit"
-                className="btn-save-evento" 
-                disabled={cargando}
-              >
-                {cargando ? "Guardando..." : (editandoId ? "Actualizar Evento" : "Guardar Evento")}
-              </button>
-            </div>
-          </form>
-        </div>
+          <button type="submit" className="btn btn-success" disabled={cargando}>
+            {cargando ? "Creando..." : "Guardar Evento"}
+          </button>
+        </form>
       )}
 
-      {/* Lista de eventos */}
-      <div className="dashboard-header">
-        <h2 className="section-subtitle">Eventos existentes</h2>
-        <p className="section-description">
-          {loadingEventos ? "Cargando..." : `${eventos.length} evento${eventos.length !== 1 ? "s" : ""} registrado${eventos.length !== 1 ? "s" : ""}`}
-        </p>
-      </div>
+      <h3 className="mb-3">Eventos existentes</h3>
 
       {loadingEventos ? (
-        <div className="loading-state">
-          Cargando eventos...
-        </div>
+        <p>Cargando eventos…</p>
       ) : eventos.length === 0 ? (
-        <div className="empty-state-card">
-          <p className="empty-state-text">
-            No hay eventos registrados aún
-          </p>
-        </div>
+        <p>No hay eventos aún.</p>
       ) : (
-        <div className="eventos-grid">
+        <div className="row">
           {eventos.map((evento) => (
-            <div key={evento.id}>
+            <div className="col-md-6 col-lg-4 mb-4" key={evento.id}>
               <EventosCard
                 evento={evento}
                 footerSlot={
-                  <div className="evento-actions">
+                  <div className="ms-auto d-flex gap-2">
                     <button
-                      className="btn-edit-evento"
-                      onClick={() => handleEditarEvento(evento)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="btn-delete-evento"
-                      onClick={() => handleEliminarEvento(evento.id)}
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => toast.info("Función eliminar pendiente")}
                     >
                       Eliminar
                     </button>

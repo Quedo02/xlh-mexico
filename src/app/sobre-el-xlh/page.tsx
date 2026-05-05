@@ -205,7 +205,7 @@ export default function SobreElXLH() {
           <div className="row text-center mt-5">
             <div className="col">
               <h3 className="titulo-seccion morado">¿Tienes dudas?</h3>
-              <a href="/contacto" className="btn btn-outline-morado mt-3">
+              <a href="mailto:xlhmexico@gmail.com" className="btn btn-outline-morado mt-3">
                 Contáctanos
               </a>
             </div>
