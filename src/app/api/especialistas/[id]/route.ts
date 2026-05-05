@@ -29,39 +29,51 @@ function publicUrlToAbsPath(publicUrl: string) {
 /** ===================== PUT ===================== **/
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   try {
-    const id = Number(params.id);
-    if (Number.isNaN(id)) {
-      return NextResponse.json({ error: "ID inválido" }, { status: 400 });
-    }
+    const { id } = await context.params;
 
-    // Trae el existente para saber si hay que borrar foto anterior, etc.
-    const existente = await prisma.especialista.findUnique({ where: { id } });
-    if (!existente) {
+    const especialista = await prisma.especialista.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!especialista) {
       return NextResponse.json({ error: "No encontrado" }, { status: 404 });
     }
 
+    return NextResponse.json(especialista);
+  } catch (error) {
+    console.error("GET single error:", error);
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+  }
+}
+
+// ---------- PUT ----------
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await context.params;
+    const numId = Number(id);
+
     const formData = await req.formData();
 
-    // Campos (todos opcionales; mandas solo lo que cambie)
-    const nombre = formData.get("nombre")?.toString();
-    const especialidad = formData.get("especialidad")?.toString();
-    const ubicacion = formData.get("ubicacion")?.toString();
-    const telefono = formData.get("telefono")?.toString();
-    const correo = formData.get("correo")?.toString();
-    const hospital = formData.get("hospital")?.toString();
-    const comoConocieron = formData.get("comoConocieron")?.toString();
-    const perfilUrl = formData.get("perfilUrl")?.toString();
+    const nombre = formData.get("nombre");
+    const especialidad = formData.get("especialidad");
 
-    // Foto nueva (opcional)
-    let nuevaFotoUrl: string | undefined;
-    const foto = formData.get("foto");
-    if (foto && foto instanceof File && foto.size > 0) {
-      await fs.mkdir(UPLOADS_DIR, { recursive: true });
-      const filename = `${Date.now()}-${foto.name.replace(/\s+/g, "_")}`;
-      const absPath = path.join(UPLOADS_DIR, filename);
-      const buf = Buffer.from(await foto.arrayBuffer());
-      await fs.writeFile(absPath, buf);
-      nuevaFotoUrl = `/img/especialistas/${filename}`;
+    // ✅ CAMBIO AQUÍ TAMBIÉN
+    const foto = formData.get("foto") as File | null;
+
+    let imageUrl: string | undefined;
+
+    if (foto && foto.size > 0) {
+      const buffer = Buffer.from(await foto.arrayBuffer());
+      const imgName = `${Date.now()}-${foto.name}`;
+      const filePath = path.join(SPECIALISTS_DIR, imgName);
+
+      await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
+      await fs.writeFile(filePath, buffer);
+
+      imageUrl = `/img/especialistas/${imgName}`;
     }
 
     // Construye el "data" dinámico
@@ -97,37 +109,29 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 /** ===================== DELETE ===================== **/
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
-    const id = Number(params.id);
-    if (Number.isNaN(id)) {
-      return NextResponse.json({ error: "ID inválido" }, { status: 400 });
-    }
+    const { id } = await context.params;
+    const numId = Number(id);
 
-    // Obtén datos para poder borrar archivos luego
-    const existente = await prisma.especialista.findUnique({ where: { id } });
-    if (!existente) {
+    const especialista = await prisma.especialista.findUnique({
+      where: { id: numId },
+    });
+
+    if (!especialista) {
       return NextResponse.json({ error: "No encontrado" }, { status: 404 });
     }
 
-    // Borra el registro
-    await prisma.especialista.delete({ where: { id } });
-
-    // 1) Borra la foto si estaba en /public
-    if (existente.foto) {
-      const fotoAbs = publicUrlToAbsPath(existente.foto);
-      if (fotoAbs) await safeUnlink(fotoAbs);
+    if (especialista.foto) {
+      const filePath = path.join(PUBLIC_DIR, especialista.foto);
+      await fs.rm(filePath, { force: true });
     }
 
-    // 2) "Elimina mi página": si perfilUrl apunta a archivo dentro de /public, bórralo
-    //    (por ejemplo algo como "/perfiles/123.html" o "/perfil/juan.html")
-    if (existente.perfilUrl) {
-      const pageAbs = publicUrlToAbsPath(existente.perfilUrl);
-      if (pageAbs) await safeUnlink(pageAbs);
-    }
+    await prisma.especialista.delete({
+      where: { id: numId },
+    });
 
-    // Respuesta sin contenido
-    return new NextResponse(null, { status: 204 });
-  } catch (err) {
-    console.error("DELETE /especialistas/[id] error:", err);
-    return NextResponse.json({ error: "Error al eliminar especialista" }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE error:", error);
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
   }
 }

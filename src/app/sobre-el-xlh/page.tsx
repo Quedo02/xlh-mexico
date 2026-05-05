@@ -23,7 +23,7 @@ export default function SobreElXLH() {
             <h2 className="titulo-seccion morado">¿Qué es el XLH?</h2>
             <p className="parrafo-seccion">
               El raquitismo hipofosfatémico ligado al cromosoma X o XLH, es una enfermedad
-              catalogada como rara, poco frecuente o de baja prevalencia, dado que afecta
+              catalogada como rara, poco frecuenta o de baja prevalencia, dado que afecta
               a 1 de cada 20,000 personas aproximadamente.
             </p>
             <p className="parrafo-seccion">
@@ -43,7 +43,7 @@ export default function SobreElXLH() {
           <div className="row align-items-center mb-5">
             <div className="col-md-6">
               <Image
-                src="/img/provoca_xlh.png"
+                src="/img/provoca-xlh.png"
                 alt="¿Qué provoca el XLH?"
                 width={600}
                 height={400}
@@ -69,7 +69,7 @@ export default function SobreElXLH() {
           <div className="row justify-content-center">
             <div className="col-12 col-md-6 text-center">
               <Image
-                src="/img/sintomas.png"
+                src="/img/sintomas-xlh.png"
                 alt="Síntomas de XLH"
                 width={600}
                 height={400}
@@ -83,7 +83,7 @@ export default function SobreElXLH() {
           <div className="row align-items-center my-5">
             <div className="col-md-6">
               <Image
-                src="/img/presentar_XLH.png"
+                src="/img/presentar-xlh.png"
                 alt="¿Quién puede presentar XLH?"
                 width={600}
                 height={400}
@@ -107,7 +107,7 @@ export default function SobreElXLH() {
           <div className="row align-items-center my-5 flex-md-row-reverse">
             <div className="col-md-6">
               <Image
-                src="/img/diagnostico_xlh.png"
+                src="/img/diagnostico-xlh.png"
                 alt="¿Cómo se diagnostica el XLH?"
                 width={600}
                 height={400}
@@ -127,7 +127,7 @@ export default function SobreElXLH() {
                 
               </p>
             </div>
-            <p><br /><strong>Cuanto antes se diagnostique y se inicie el tratamiento es mejor para la calidad de vida de lxs pacientes.</strong> 
+            <p><br /><strong>Cuanto antes se diagnostique y se inicie el tratamiento es mejor para la calidad de vida de lxs pacientes. </strong> 
                 Por lo tanto, es muy importante que todx niñx recién nacidx relacionadx con alguna persona con XLH se someta 
                 a una consulta lo más pronto posible. Aunque  también <strong>existen casos espontáneos</strong>, es decir, que no existe 
                 antecedente alguno de la enfermedad en la familia, y en muchas ocasiones estos no son diagnosticados hasta 
@@ -139,7 +139,6 @@ export default function SobreElXLH() {
           </div>
         </div>
 
-        {/* === ParallaxSection fuera del container para ancho completo === */}
         <ParallaxSection
           backgroundImage="/img/banner.jpg"
           overlayColor="rgba(0, 0, 0, 0.5)"
@@ -148,7 +147,6 @@ export default function SobreElXLH() {
           title="Conoce los tratamientos disponibles"
         />
 
-        {/* Seguimos con el container para el resto */}
         <div className="container">
           {/* Tratamiento */}
           <div className="row g-4 my-5">
@@ -156,7 +154,19 @@ export default function SobreElXLH() {
               <h2 className="titulo-seccion rosa-mexicano text-center">
                 Tratamiento del XLH
               </h2>
-              <p className="parrafo-seccion text-center">
+              <div className="row justify-content-center my-5">
+                <div className="col-12 col-md-8 text-center">
+                  <Image
+                    src="/img/tratamientos-xlh.png"
+                    alt="Tratamientos para XLH"
+                    width={700}
+                    height={450}
+                    className="img-fluid sombra-logo"
+                    style={{ height: "auto", maxWidth: "100%" }}
+                  />
+                </div>
+              </div>
+              <p className="parrafo-seccion text-align">
                 Al ser una enfermedad crónica y de por vida, es importante tener en cuenta que el tratamiento del raquitismo 
                 hipofosfatémico ligado al cromosoma X no está enfocado en atacar la enfermedad como tal, sino que 
                 <strong>se centra en ayudar a manejar los distintos síntomas y mejorar la calidad de vida de lxs pacientes</strong>; 

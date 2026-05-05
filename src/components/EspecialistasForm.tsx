@@ -23,6 +23,8 @@ type FormState = {
 
 export default function EspecialistasForm() {
   const [step, setStep] = useState(1);
+  const [fotoFile, setFotoFile] = useState<File | null>(null);
+
   const [formData, setFormData] = useState({
     nombre: "",
     especialidad: "",
@@ -63,22 +65,22 @@ export default function EspecialistasForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fotoFile) {
-      toast.error("Falta la foto");
-      return;
-    }
-
     try {
       const fd = new FormData();
-      // Campos de texto
-      Object.entries(formData).forEach(([key, value]) => fd.append(key, value));
-      // Archivo
-      fd.append("foto", fotoFile);
+
+      // Campos normales
+      Object.entries(formData).forEach(([key, value]) =>
+        fd.append(key, value)
+      );
+
+      // ✅ Solo agregar foto si existe
+      if (fotoFile) {
+        fd.append("foto", fotoFile);
+      }
 
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: fd,
       });
 
       if (!res.ok) throw new Error("Error al enviar solicitud");
@@ -108,22 +110,43 @@ export default function EspecialistasForm() {
       {step === 1 && (
         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
           <h3>Datos básicos</h3>
+
           <div className="mb-3">
             <label>Nombre completo *</label>
-            <input className="form-control" name="nombre" value={formData.nombre} onChange={handleChange} required />
+            <input
+              className="form-control"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              required
+            />
           </div>
+
           <div className="mb-3">
             <label>Especialidad *</label>
-            <select className="form-select" name="especialidad" value={formData.especialidad} onChange={handleChange} required>
+            <select
+              className="form-select"
+              name="especialidad"
+              value={formData.especialidad}
+              onChange={handleChange}
+              required
+            >
               <option value="">Seleccionar</option>
               {especialidadesList.map((esp) => (
                 <option key={esp} value={esp}>{esp}</option>
               ))}
             </select>
           </div>
+
           <div className="mb-3">
-            <label>Ubicación *</label>
-            <input type="text" className="form-control" name="ubicacion" value={formData.ubicacion} onChange={handleChange} required />
+            <label>Ubicación</label>
+            <input
+              type="text"
+              className="form-control"
+              name="ubicacion"
+              value={formData.ubicacion}
+              onChange={handleChange}
+            />
           </div>
         </motion.div>
       )}
@@ -131,6 +154,7 @@ export default function EspecialistasForm() {
       {step === 2 && (
         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
           <h3>Contacto y hospital</h3>
+
           <div className="mb-3">
             <label>Teléfono *</label>
             <input
@@ -143,13 +167,26 @@ export default function EspecialistasForm() {
               required
             />
           </div>
+
           <div className="mb-3">
-            <label>Correo electrónico *</label>
-            <input type="email" className="form-control" name="correo" value={formData.correo} onChange={handleChange} required />
+            <label>Correo electrónico</label>
+            <input
+              type="email"
+              className="form-control"
+              name="correo"
+              value={formData.correo}
+              onChange={handleChange}
+            />
           </div>
+
           <div className="mb-3">
-            <label>Hospital *</label>
-            <input className="form-control" name="hospital" value={formData.hospital} onChange={handleChange} required />
+            <label>Hospital</label>
+            <input
+              className="form-control"
+              name="hospital"
+              value={formData.hospital}
+              onChange={handleChange}
+            />
           </div>
         </motion.div>
       )}
@@ -159,24 +196,42 @@ export default function EspecialistasForm() {
           <h3>Detalles adicionales</h3>
           <div className="mb-3">
             <label>¿Cómo nos conociste? *</label>
-            <input className="form-control" name="comoConocieron" value={formData.comoConocieron} onChange={handleChange} required />
+            <input
+              className="form-control"
+              name="comoConocieron"
+              value={formData.comoConocieron}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="mb-3">
-            <label>Foto *</label>
-            <input type="file" className="form-control" name="foto" accept="image/*" onChange={handleFileChange} required />
-            {/* Si quieres ver el nombre seleccionado:
-            {fotoFile && <small className="text-muted">Archivo: {fotoFile.name}</small>} */}
+            <label>Foto (opcional)</label>
+            <input
+              type="file"
+              className="form-control"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
           </div>
           <div className="mb-3">
             <label>Perfil (URL opcional)</label>
-            <input className="form-control" name="perfilUrl" value={formData.perfilUrl} onChange={handleChange} />
+            <input
+              className="form-control"
+              name="perfilUrl"
+              value={formData.perfilUrl}
+              onChange={handleChange}
+            />
           </div>
         </motion.div>
       )}
 
       <div className="d-flex justify-content-between mt-4">
         {step > 1 && (
-          <button type="button" className="btn btn-outline-secondary" onClick={handleBack}>
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={handleBack}
+          >
             Atrás
           </button>
         )}

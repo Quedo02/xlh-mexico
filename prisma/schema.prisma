@@ -11,10 +11,10 @@ model Especialista {
   id             Int     @id @default(autoincrement())
   nombre         String
   especialidad   String
-  ubicacion      String
-  telefono       String
-  correo         String
-  hospital       String
+  ubicacion      String?
+  telefono       String?
+  correo         String?
+  hospital       String?
   comoConocieron String
   foto           String?
   perfilUrl      String?
@@ -24,10 +24,10 @@ model SolicitudEspecialista {
   id             Int      @id @default(autoincrement())
   nombre         String
   especialidad   String
-  ubicacion      String
-  telefono       String
-  correo         String
-  hospital       String
+  ubicacion      String?
+  telefono       String?
+  correo         String?
+  hospital       String?
   comoConocieron String
   foto           String?
   perfilUrl      String?

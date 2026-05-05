@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
+import Image from "next/image";
 
 type MediaInfo = { url: string; alt?: string; caption?: string } | null;
 
@@ -23,20 +24,35 @@ export default function NosotrosClient({
 
       <main>
         {/* Sección de introducción */}
-        <section className="py-5">
-          <div className="container">
-            <motion.h2 className="text-center mb-4 display-5" initial="hidden" whileInView="visible" variants={fadeIn} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              XLH México
-            </motion.h2>
-            <motion.p className="lead text-center mb-3" initial="hidden" whileInView="visible" variants={fadeIn} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-              Somos una asociación mexicana sin fines de lucro fundada en 2019, que brinda apoyo a personas diagnosticadas 
-              con <strong>Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH)</strong> y otros raquitismos hereditarios, 
-              y sus familias.
-            </motion.p>
-            <motion.p className="text-center" initial="hidden" whileInView="visible" variants={fadeIn} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
-              Nuestra comunidad está conformada por familias mexicanas que conviven con <strong>XLH</strong>, que buscan informarse, 
-              encontrar mejores tratamientos y difundir el conocimiento de la enfermedad.
-            </motion.p>
+        <section className="container my-5">
+          <div className="text-center mb-4">
+            <h2 className="fw-bold">XLH México</h2>
+          </div>
+
+          <div className="row align-items-center shadow rounded p-4 bg-white">
+            {/* Imagen izquierda */}
+            <div className="col-md-6 text-center">
+              <Image
+                src="/img/nostros-xlh.png"
+                className="img-fluid rounded shadow-sm"
+                alt="XLH México"
+                width={500}
+                height={350}
+              />
+            </div>
+          
+            {/* Texto derecha */}
+            <div className="col-md-6">
+              <p>
+                Somos una asociación mexicana sin fines de lucro fundada en 2019, que brinda
+                apoyo a personas diagnosticadas con <strong>Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH)</strong> y otros raquitismos hereditarios, y sus familias.
+              </p>
+              <p>
+                Nuestra comunidad está conformada por familias mexicanas que conviven con <strong>XLH</strong>, que buscan informarse,
+                encontrar mejores tratamientos y difundir el conocimiento de la enfermedad.
+              </p>
+            </div>
+          
           </div>
         </section>
 
@@ -49,7 +65,7 @@ export default function NosotrosClient({
             <div className="row align-items-center gy-4">
               <div className="col-md-6">
                 <motion.img
-                  src={historia?.url || "/img/doctor.jpg"}
+                  src={historia?.url || "/img/historia-xlh.png"}
                   alt={historia?.alt || "Nuestra Historia"}
                   className="img-fluid rounded shadow"
                   initial="hidden"
@@ -64,15 +80,24 @@ export default function NosotrosClient({
               </div>
               <div className="col-md-6">
                 <motion.div initial="hidden" whileInView="visible" variants={fadeIn} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
-                  {/* ... (tu texto tal cual) ... */}
+
                   <p className="lead">
                     XLH México nació con el compromiso de acompañar a las personas que enfrentan raquitismos hereditarios, creando un espacio de apoyo, información y comunidad.
                   </p>
-                  <p>La asociación <strong>XLH y Otros Raquitismos México</strong> fue fundada en 2019 ...</p>
-                  <p>Al momento hemos logrado realizar y participar en diferentes simposios ...</p>
-                  <p>De igual forma, hemos asistido ante tomadores de decisiones del gobierno ...</p>
-                  <p>En 2021 solicitamos a COFEPRIS la aprobación de un tratamiento ...</p>
-                  <p>Actualmente seguimos gestionando con IMSS, ISSSTE, INSABI, etc. ...</p>
+                  <p>La asociación <strong>XLH y Otros Raquitismos México</strong> fue fundada en 2019 por iniciativa de la Sra. Adriana Caro Ocampo, 
+                  madre de una paciente de <strong>raquitismo hipofosfatémico ligado al cromosoma X (XLH)</strong> quien, al darse cuenta de la falta 
+                  de conocimiento, información y apoyo sobre la enfermedad en el país, decidió empezar a buscar y contactar a más pacientes con la finalidad 
+                  de levantar un censo y conectarnos.</p>
+                  <p>Al momento hemos logrado realizar y participar en diferentes simposios y congresos a nivel nacional, así como platicar con diversos medios de comunicación, 
+                    con la finalidad de dar visibilidad al XLH y concientizar a la comunidad médica y sociedad mexicana sobre la importancia del diagnóstico temprano y el 
+                    tratamiento adecuado, ya que estos pueden cambiar por completo la calidad de vida de las(os) pacientes.</p>
+                  <p>De igual forma, hemos asistido ante los tomadores de decisiones del gobierno, presentando pliego petitorio para que el XLH sea incluido en el catálogo 
+                    de enfermedades raras o de baja prevalencia en el país, y así las(os) pacientes puedan tener acceso a una mejor atención médica dentro de las instituciones 
+                    de seguridad social.</p>
+                  <p>Así mismo, en 2021 solicitamos a COFEPRIS la aceptación de un tratamiento innovador especial para el XLH, mismo que ya está aprobado en EE.UU. y otros países 
+                    con increíbles resultados en pacientes, afortunadamente este fue aprobado y en julio del mismo año se sometió a votación para que las instituciones de seguridad 
+                    social lo proporcionen a sus pacientes, y con gran éxito fue aceptado de forma unánime.</p>
+                  <p>Actualmente estamos trabajando para que el IMSS, ISSTE, IMSS Bienestar, etc. empiecen a suministrar el tratamiento a las(os) pacientes, tanto infantes como adultos.</p>
                 </motion.div>
               </div>
             </div>
@@ -112,9 +137,9 @@ export default function NosotrosClient({
             </motion.h2>
             <div className="row g-4 justify-content-center">
               {[
-                { name: "María González", role: "Presidenta", media: eq1, fallback: "/img/doctora.jpg" },
-                { name: "Carlos Pérez", role: "Vicepresidente", media: eq2, fallback: "/img/doctor.jpg" },
-                { name: "Enrique Ramírez", role: "Comunicación", media: eq3, fallback: "/img/doctor1.jpg" },
+                { name: "Adriana Caro Campos", role: "Presidenta", media: eq1, fallback: "/img/presidenta-xlh.png" },
+                { name: "Julissa Caro Caro", role: "vicepresidenta", media: eq2, fallback: "/img/vicepresidenta-xlh.png" },
+                { name: "Kelly Castillo", role: "Relaciones Publicas", media: eq3, fallback: "/img/redes-sociales-paciente-xlh.png" },
               ].map(({ name, role, media, fallback }) => (
                 <div key={name} className="col-6 col-md-4 text-center">
                   <motion.div initial="hidden" whileInView="visible" variants={fadeIn} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.2 }}>
