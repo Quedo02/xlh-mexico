@@ -10,10 +10,19 @@ const especialidadesList = [
   "Psicología", "Manejo del dolor", "Terapia ocupacional",
 ];
 
+type FormState = {
+  nombre: string;
+  especialidad: string;
+  ubicacion: string;
+  telefono: string;
+  correo: string;
+  hospital: string;
+  comoConocieron: string;
+  perfilUrl: string;
+};
+
 export default function EspecialistasForm() {
   const [step, setStep] = useState(1);
-  const [fotoFile, setFotoFile] = useState<File | null>(null); // ← foto REAL
-
   const [formData, setFormData] = useState({
     nombre: "",
     especialidad: "",
@@ -22,7 +31,8 @@ export default function EspecialistasForm() {
     correo: "",
     hospital: "",
     comoConocieron: "",
-    perfilUrl: "",
+    foto: "", // Será base64 o URL
+    perfilUrl: ""
   });
 
   const handleChange = (
@@ -34,7 +44,13 @@ export default function EspecialistasForm() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setFotoFile(file);
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData({ ...formData, foto: reader.result as string });
+    };
+    reader.readAsDataURL(file); // Convierte el archivo a base64
   };
 
   const handleNext = (e: React.FormEvent) => {
@@ -54,25 +70,20 @@ export default function EspecialistasForm() {
 
     try {
       const fd = new FormData();
-
-      // Campos normales
-      Object.entries(formData).forEach(([key, value]) =>
-        fd.append(key, value)
-      );
-
-      // Archivo REAL
+      // Campos de texto
+      Object.entries(formData).forEach(([key, value]) => fd.append(key, value));
+      // Archivo
       fd.append("foto", fotoFile);
 
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",
-        body: fd, // ← IMPORTANTE: NO JSON, NO HEADERS
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error("Error al enviar solicitud");
 
       toast.success("Solicitud enviada correctamente");
-
-      // RESET
       setFormData({
         nombre: "",
         especialidad: "",
@@ -81,12 +92,11 @@ export default function EspecialistasForm() {
         correo: "",
         hospital: "",
         comoConocieron: "",
-        perfilUrl: "",
+        foto: "",
+        perfilUrl: ""
       });
-
       setFotoFile(null);
       setStep(1);
-
     } catch (error) {
       console.error(error);
       toast.error("Error al enviar la solicitud");
@@ -95,8 +105,6 @@ export default function EspecialistasForm() {
 
   return (
     <form onSubmit={step === 3 ? handleSubmit : handleNext}>
-
-      {/* ===== STEP 1 ===== */}
       {step === 1 && (
         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
           <h3>Datos básicos</h3>
@@ -120,7 +128,6 @@ export default function EspecialistasForm() {
         </motion.div>
       )}
 
-      {/* ===== STEP 2 ===== */}
       {step === 2 && (
         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
           <h3>Contacto y hospital</h3>
@@ -147,21 +154,19 @@ export default function EspecialistasForm() {
         </motion.div>
       )}
 
-      {/* ===== STEP 3 ===== */}
       {step === 3 && (
         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
           <h3>Detalles adicionales</h3>
-
           <div className="mb-3">
             <label>¿Cómo nos conociste? *</label>
             <input className="form-control" name="comoConocieron" value={formData.comoConocieron} onChange={handleChange} required />
           </div>
-
           <div className="mb-3">
             <label>Foto *</label>
-            <input type="file" className="form-control" accept="image/*" onChange={handleFileChange} required />
+            <input type="file" className="form-control" name="foto" accept="image/*" onChange={handleFileChange} required />
+            {/* Si quieres ver el nombre seleccionado:
+            {fotoFile && <small className="text-muted">Archivo: {fotoFile.name}</small>} */}
           </div>
-
           <div className="mb-3">
             <label>Perfil (URL opcional)</label>
             <input className="form-control" name="perfilUrl" value={formData.perfilUrl} onChange={handleChange} />
@@ -169,20 +174,17 @@ export default function EspecialistasForm() {
         </motion.div>
       )}
 
-      {/* ===== BOTONES ===== */}
       <div className="d-flex justify-content-between mt-4">
         {step > 1 && (
           <button type="button" className="btn btn-outline-secondary" onClick={handleBack}>
             Atrás
           </button>
         )}
-
         {step < 3 && (
           <button type="submit" className="btn btn-outline-primary">
             Siguiente
           </button>
         )}
-
         {step === 3 && (
           <button type="submit" className="btn btn-outline-success">
             Enviar solicitud

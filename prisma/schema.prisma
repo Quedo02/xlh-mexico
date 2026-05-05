@@ -41,7 +41,7 @@ model Paciente {
   fechaNacimiento       DateTime
   edad                  Int
   residencia            String
-  telefono              String 
+  telefono              String // Cambiado a String para poder usar números con ceros a la izquierda si se desea
   email                 String   @unique
   origenDiagnostico     String?
   familiarDiagnostico   String?
