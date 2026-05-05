@@ -1,33 +1,26 @@
 "use client";
-
 import HeroSection from "@/components/HeroSection";
 import { useState, useEffect } from "react";
 
-//Para obtener las imagenes de los slots
 type Media = { id: number; url: string; alt?: string; caption?: string };
 type SlotMedia = { id: number; mediaId: number; orden: number; media: Media };
 type MediaSlot = { id: number; slot: string; alt?: string; caption?: string; slotMedias: SlotMedia[] };
-
 
 export default function Home() {
   const [slots, setSlots] = useState<MediaSlot[]>([]);
   const [homeSlotId, setHomeSlotId] = useState<number | null>(null);
   const [bannerSlotId, setBannerSlotId] = useState<number | null>(null);
-
   const [showObjetivos, setShowObjetivos] = useState(false);
   const [showMotivacion, setShowMotivacion] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Traer todos los slots con imágenes
       const slotsRes = await fetch("/api/media/slots").then(r => r.json());
       setSlots(slotsRes.data || []);
 
-      // Traer configuración de slots
       const configRes = await fetch("/api/config/slots").then(r => r.json());
       const config = configRes.config || {};
 
-      // Buscar los slots por nombre
       const homeSlotObj = (slotsRes.data || []).find((s: MediaSlot) => s.slot === config.homeCarrusel);
       const bannerSlotObj = (slotsRes.data || []).find((s: MediaSlot) => s.slot === config.homeBanner);
 
@@ -38,14 +31,12 @@ export default function Home() {
     fetchData();
   }, []);
 
-
   const homeImages = slots.find(s => s.id === homeSlotId)?.slotMedias || [];
   const bannerSlotObj = slots.find(s => s.id === bannerSlotId);
   const bannerImage =
     bannerSlotObj && bannerSlotObj.slotMedias.length > 0
       ? bannerSlotObj.slotMedias[0].media.url
       : "/img/banner.jpg";
-
 
   return (
     <>
@@ -61,14 +52,16 @@ export default function Home() {
       />
 
       <main className="space-y-12 px-3 px-md-6 py-10">
+
         {/* Misión y Visión */}
         <section className="container my-5">
           <div className="row g-4 justify-content-center">
+
             {/* Misión */}
             <div className="col-12 col-md-6">
               <div className="border rounded p-4 text-center h-100 shadow-sm">
                 <div className="mb-3">
-                  <i className="bi bi-bullseye display-3 cyan"></i>
+                  <img src="/img/mision.png" alt="Misión" style={{ height: "80px", objectFit: "contain" }} />
                 </div>
                 <h2 className="mb-3">Misión</h2>
                 <p>
@@ -83,7 +76,7 @@ export default function Home() {
                     </h2>
                     <div id="collapseMision" className="accordion-collapse collapse" aria-labelledby="headingMision">
                       <div className="accordion-body text-start ps-2">
-                        Nuestra misión es generar acciones orientadas al mejoramiento de la calidad de vida de las(os) pacientes de raquitismo hipofosfatémico ligado al cromosoma X (XLH). Partiendo de la formación, difusión, visibilización y concientización de la existencia de la enfermedad, la importancia del diagnóstico certero y temprano, la atención médica integral y el tratamiento adecuado. <br /><br />
+                        Nuestra misión es generar acciones orientadas al mejoramiento de la calidad de vida de las(os) pacientes de raquitismo hipofosfatémico ligado al cromosoma X (XLH). Partiendo de la formación, difusión, visibilización y concientización de la existencia de la enfermedad, la importancia del diagnóstico certero y temprano, la atención médica integral y el tratamiento adecuado.<br /><br />
                         Así como la creación de espacios seguros, de apoyo, acompañamiento y formación para pacientes y familiares.
                       </div>
                     </div>
@@ -96,7 +89,7 @@ export default function Home() {
             <div className="col-12 col-md-6">
               <div className="border rounded p-4 text-center h-100 shadow-sm">
                 <div className="mb-3">
-                  <i className="bi bi-eye-fill display-3 verde"></i>
+                  <img src="/img/vision.png" alt="Visión" style={{ height: "80px", objectFit: "contain" }} />
                 </div>
                 <h2 className="mb-3">Visión</h2>
                 <p>Ser una asociación líder que inspire cambios positivos en el diagnóstico, tratamiento y divulgación del XLH en México.</p>
@@ -117,16 +110,17 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
           </div>
         </section>
 
         {/* Objetivos */}
         <section className="container my-5" id="objetivos">
-          <div className="row align-items-center shadow rounded p-4 bg-white">
-            <div className="col-md-6">
+          <div className="row align-items-start shadow rounded p-4 bg-white">
+            <div className="col-md-8">
               <h2 className="fw-bold mb-4">Objetivos</h2>
               <p>
-                A través de nuestra Asociación buscamos propiciar la difusión sobre XLH entre autoridades, profesionales de la salud, pacientes y familias.
+                Nuestro objetivo principal como asociación es ayudar, apoyar y representar a las(os) pacientes de XLH en México, formándolos, acompañándolos, informándolos y orientándolos en vivencia personal con una enfermedad poco frecuente.
               </p>
               {!showObjetivos && (
                 <button className="btn btn-outline-primary" onClick={() => setShowObjetivos(true)}>
@@ -137,26 +131,26 @@ export default function Home() {
                 <>
                   <div className="row mt-3">
                     <ul className="col-12 col-md-6 list-unstyled ps-3">
-                      <li className="mb-2">✅ Formar pacientes empoderados que defiendan sus derechos.</li>
-                      <li className="mb-2">✅ Acompañar a pacientes y familias en un espacio seguro.</li>
-                      <li className="mb-2">✅ Facilitar acceso a atención médica adecuada.</li>
-                      <li className="mb-2">✅ Difundir información práctica y comprensible.</li>
-                      <li className="mb-2">✅ Visibilizar XLH y otros raquitismos hereditarios.</li>
+                      <li className="mb-3">✅ <strong>Formar</strong> pacientes empoderados que defiendan y exijan sus derechos con firmeza y conocimiento.</li>
+                      <li className="mb-3">✅ <strong>Acompañar</strong> a las(os) pacientes y sus familias, a través de un espacio seguro en el que puedan compartir, preguntar, consultar, informarse y dialogar.</li>
+                      <li className="mb-3">✅ <strong>Apoyar</strong> a las(os) pacientes como enlace con las instituciones de salud pública para facilitarles el acceso a una atención médica adecuada y completa.</li>
+                      <li className="mb-3">✅ <strong>Informar</strong> con contenidos y materiales prácticos y comprensibles, diseñados especialmente para pacientes, padres de familia, familiares, cuidadores y allegados, acerca de las necesidades especiales, cuidados, limitantes y tratamientos para las(os) pacientes.</li>
+                      <li className="mb-3">✅ <strong>Visibilizar</strong> y difundir la existencia del Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH) y otros raquitismos heredados que, aunque sean enfermedades de baja prevalencia, afectan a niñas(os) y adultas(os) mexicanas(os).</li>
                     </ul>
                     <ul className="col-12 col-md-6 list-unstyled ps-3">
-                      <li className="mb-2">✅ Concientizar sobre tratamientos multidisciplinarios.</li>
-                      <li className="mb-2">✅ Promover enseñanza en escuelas de medicina.</li>
-                      <li className="mb-2">✅ Realizar un censo nacional de pacientes.</li>
-                      <li className="mb-2">✅ Representar a pacientes ante autoridades.</li>
-                      <li className="mb-2">✅ Facilitar acceso a tratamientos innovadores.</li>
+                      <li className="mb-3">✅ <strong>Concientizar</strong> sobre la importancia de llevar un tratamiento médico completo, integral y multidisciplinario: ortopédico, traumatológico, endocrinológico/nefrológico, dental, nutricional y psicológico.</li>
+                      <li className="mb-3">✅ <strong>Promover</strong> la instrucción y enseñanza sobre enfermedades poco frecuentes, como el Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH), en las escuelas de medicina que forman a las(os) futuros médicos del país.</li>
+                      <li className="mb-3">✅ <strong>Realizar</strong> un censo nacional de pacientes con Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH).</li>
+                      <li className="mb-3">✅ <strong>Representar</strong> a las(os) pacientes de Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH) ante las autoridades mexicanas y asociaciones nacionales e internacionales.</li>
+                      <li className="mb-3">✅ <strong>Presentar</strong> nuestro caso ante las autoridades del sector salud, para hacerlos conscientes de la existencia de la comunidad de XLH en México, y exhortarlos a facilitar el acceso de los tratamientos innovadores a las(os) pacientes de Raquitismo Hipofosfatémico ligado al Cromosoma X.</li>
                     </ul>
                   </div>
                   <button className="btn btn-outline-secondary btn-sm mt-3" onClick={() => setShowObjetivos(false)}>Ver menos</button>
                 </>
               )}
             </div>
-            <div className="col-md-6 text-center">
-              <img src="/img/objetivos.png" className="img-fluid rounded shadow-sm" alt="Objetivos" />
+            <div className="col-md-4 text-center pt-2">
+              <img src="/img/objetivos.png" className="img-fluid sombra-logo" alt="Objetivos" style={{ maxWidth: "200px" }} />
             </div>
           </div>
         </section>
@@ -167,7 +161,7 @@ export default function Home() {
             <div className="col-md-6">
               <h2 className="fw-bold mb-4">Motivación</h2>
               <p>
-                La motivación de este proyecto nace de la necesidad de crear conciencia y apoyo para quienes viven con XLH.
+                El raquitismo hipofosfatémico ligado al cromosoma X (XLH), sí es una enfermedad de baja prevalencia, pero no por eso es invisible ni debe vivirse en soledad. Al contrario, la generación de comunidad y el acompañamiento que esta provee es de vital importancia en el abordaje de la misma, en todos los aspectos.
               </p>
               {!showMotivacion && (
                 <button className="btn btn-outline-primary" onClick={() => setShowMotivacion(true)}>
@@ -177,10 +171,13 @@ export default function Home() {
               {showMotivacion && (
                 <>
                   <p className="mt-3">
-                    El Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH) es una enfermedad poco frecuente que suele ser mal diagnosticada debido a la falta de información.
+                    El Raquitismo Hipofosfatémico ligado al Cromosoma X (XLH), es una enfermedad poco frecuente que no tiene mucha investigación, en consecuencia, su diagnóstico, tratamiento y acompañamiento médico es usualmente complejo, principalmente por la falta de conocimiento al respecto.
                   </p>
                   <p>
-                    Es una condición genética, progresiva y de por vida, por lo que es esencial contar con atención médica oportuna y apoyo emocional para mejorar la calidad de vida de quienes la padecen.
+                    Sin embargo, se trata de una enfermedad genética, hereditaria, crónica, progresiva y de por vida; por lo que resulta de suma importancia que las(os) pacientes reciban la atención médica y el tratamiento adecuado que les permita tener la mejor calidad de vida posible, y a la que tienen derecho.
+                  </p>
+                  <p>
+                    De igual manera, al ser una enfermedad rara suele ser bastante solitaria, es por ello que el apoyo moral y el acompañamiento es también primordial para las(os) pacientes, así como para sus familias.
                   </p>
                   <button className="btn btn-outline-secondary btn-sm mt-3" onClick={() => setShowMotivacion(false)}>Ver menos</button>
                 </>
@@ -192,8 +189,7 @@ export default function Home() {
           </div>
         </section>
 
-      {/* Presencia del XLH México */}
-
+        {/* Presencia del XLH México */}
         <section className="container my-5" id="presencia">
           <div className="row align-items-center shadow rounded p-4 bg-white">
             <div className="col-12 col-md-6">
@@ -216,49 +212,49 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Galería dinámica */}
+        <section className="container my-5">
+          <h2 className="titulo-album text-center mb-2">Galería</h2>
+          <p className="subtitulo-album text-center mb-4">Acompáñanos con nuestros mejores momentos</p>
 
-      {/* Galería dinámica */}
-      <section className="container my-5">
-        <h2 className="titulo-album text-center mb-2">Galería</h2>
-        <p className="subtitulo-album text-center mb-4">Acompáñanos con nuestros mejores momentos</p>
-
-        {homeImages.length > 0 ? (
-          <div className="d-flex justify-content-center">
-            <div
-              id="carouselXLH"
-              className="carousel slide w-100"
-              data-bs-ride="carousel"
-              style={{ maxWidth: 600 }}
-            >
-              <div className="carousel-inner rounded shadow-lg">
-                {homeImages.map((sm, idx) => (
-                  <div
-                    key={sm.id}
-                    className={`carousel-item ${idx === 0 ? "active" : ""}`}
-                  >
-                    <img
-                      src={sm.media.url}
-                      alt={sm.media.alt || ""}
-                      className="d-block w-100 img-carrus"
-                    />
-                  </div>
-                ))}
+          {homeImages.length > 0 ? (
+            <div className="d-flex justify-content-center">
+              <div
+                id="carouselXLH"
+                className="carousel slide w-100"
+                data-bs-ride="carousel"
+                style={{ maxWidth: 600 }}
+              >
+                <div className="carousel-inner rounded shadow-lg">
+                  {homeImages.map((sm, idx) => (
+                    <div
+                      key={sm.id}
+                      className={`carousel-item ${idx === 0 ? "active" : ""}`}
+                    >
+                      <img
+                        src={sm.media.url}
+                        alt={sm.media.alt || ""}
+                        className="d-block w-100 img-carrus"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#carouselXLH" data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Anterior</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#carouselXLH" data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Siguiente</span>
+                </button>
               </div>
-              <button className="carousel-control-prev" type="button" data-bs-target="#carouselXLH" data-bs-slide="prev">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Anterior</span>
-              </button>
-              <button className="carousel-control-next" type="button" data-bs-target="#carouselXLH" data-bs-slide="next">
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Siguiente</span>
-              </button>
             </div>
-          </div>
-        ) : (
-          <p className="text-center text-muted">No hay imágenes en este slot todavía.</p>
-        )}
-      </section>
-    </main>
+          ) : (
+            <p className="text-center text-muted">No hay imágenes en este slot todavía.</p>
+          )}
+        </section>
+
+      </main>
     </>
   );
 }
