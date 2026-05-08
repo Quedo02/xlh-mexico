@@ -1,31 +1,29 @@
-"use client";
-// app/layout.tsx
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import BootstrapClient from '@/components/BootstrapClient';
-import { usePathname } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
+import BootstrapClient from '@/components/BootstrapClient';
+import NavbarClient, { FooterClient } from '@/components/NavbarClient';
 import { ToastContainer } from 'react-toastify';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'XLH México',
+  description: 'Asociación de pacientes con Hipofosfatemia Ligada al Cromosoma X en México',
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
-  const hideNavbarFooter = ["/marcas_y_licencias","/aviso_de_privacidad", "/contacto", "/material", "/nosotros", "/registro", "/servicios", "/informacion", "/eventos", "/directorio", "contacto","/sobre-el-xlh", "/"].includes(pathname);
-
   return (
-    <html>
+    <html lang="es">
       <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
       </head>
-      <body className={hideNavbarFooter ? "with-navbar" : ""}>
+      <body>
         <BootstrapClient />
-        {hideNavbarFooter && <Navbar />}
+        <NavbarClient />
         {children}
+        <FooterClient />
         <ToastContainer />
-        {hideNavbarFooter && <Footer />}
       </body>
     </html>
   );

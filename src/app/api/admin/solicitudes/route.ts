@@ -11,7 +11,7 @@ export async function GET() {
     const token = tokenCookie?.value;
 
     // Verificar token JWT
-    if (!token || !verifyJWTServer(token)) {
+    if (!token || !(await verifyJWTServer(token))) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 

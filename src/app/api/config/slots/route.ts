@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWTServer } from "@/lib/auth";
 import fs from "fs";
 import path from "path";
 
@@ -26,9 +28,9 @@ export async function GET() {
     const data = fs.readFileSync(filePath, "utf-8");
     const json = JSON.parse(data);
     return NextResponse.json({ config: json });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
-      { error: "No se pudo leer configuración", config: {} }, 
+      { error: "No se pudo leer configuración", config: {} },
       { status: 500 }
     );
   }
@@ -36,6 +38,12 @@ export async function GET() {
 
 // POST - guardar configuración
 export async function POST(req: Request) {
+  const store = await cookies();
+  const token = store.get("token")?.value;
+  if (!token || !(await verifyJWTServer(token))) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     if (!body) {
@@ -50,7 +58,7 @@ export async function POST(req: Request) {
     fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "No se pudo guardar" }, { status: 500 });
   }
 }

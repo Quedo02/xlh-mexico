@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
       } else {
         toast.error(data.error || "Error al iniciar sesión");
       }
-    } catch (error) {
+    } catch {
       toast.error("Error en la red");
     } finally {
       setCargando(false);

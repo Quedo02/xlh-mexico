@@ -120,10 +120,6 @@ export default function Registro() {
     }
   };
 
-  const handleBack = () => {
-    setStep(step - 1);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep()) {

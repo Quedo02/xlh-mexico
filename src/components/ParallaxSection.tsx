@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from 'react';
 
 interface ParallaxSectionProps {
@@ -29,7 +30,6 @@ export default function ParallaxSection({
     if (useFixed) return;
     const handleScroll = () => {
       if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
         const offset = window.scrollY - (sectionRef.current.offsetTop || 0);
         sectionRef.current.style.backgroundPosition =
           `center calc(50% + ${offset * speed}px)`;

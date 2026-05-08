@@ -9,7 +9,7 @@ type MediaSlot = { id: number; slot: string; alt?: string; caption?: string; slo
 export default function Home() {
   const [slots, setSlots] = useState<MediaSlot[]>([]);
   const [homeSlotId, setHomeSlotId] = useState<number | null>(null);
-  const [bannerSlotId, setBannerSlotId] = useState<number | null>(null);
+
   const [showObjetivos, setShowObjetivos] = useState(false);
   const [showMotivacion, setShowMotivacion] = useState(false);
 
@@ -22,21 +22,14 @@ export default function Home() {
       const config = configRes.config || {};
 
       const homeSlotObj = (slotsRes.data || []).find((s: MediaSlot) => s.slot === config.homeCarrusel);
-      const bannerSlotObj = (slotsRes.data || []).find((s: MediaSlot) => s.slot === config.homeBanner);
 
       setHomeSlotId(homeSlotObj?.id || null);
-      setBannerSlotId(bannerSlotObj?.id || null);
     };
 
     fetchData();
   }, []);
 
   const homeImages = slots.find(s => s.id === homeSlotId)?.slotMedias || [];
-  const bannerSlotObj = slots.find(s => s.id === bannerSlotId);
-  const bannerImage =
-    bannerSlotObj && bannerSlotObj.slotMedias.length > 0
-      ? bannerSlotObj.slotMedias[0].media.url
-      : "/img/banner.jpg";
 
   return (
     <>

@@ -46,3 +46,12 @@ next-env.d.ts
 /src/generated/prisma
 
 /src/generated/prisma
+
+claude*
+CLAUDE*
+
+# Uploaded files — persisted outside git on VPS
+/public/uploads/*
+!/public/uploads/.gitkeep
+/public/img/especialistas/*
+!/public/img/especialistas/.gitkeep

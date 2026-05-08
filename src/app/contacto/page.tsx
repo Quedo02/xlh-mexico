@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Registro from "../registro/page"; // Formulario Pacientes (multistep)
-import EspecialistasForm from "@/components/EspecialistasForm"; // Formulario Especialistas
+import EspecialistasForm from "@/components/EspecialistasForm";
 
 export default function Contacto() {
-  const [showPacientes, setShowPacientes] = useState(false);
   const [showEspecialistas, setShowEspecialistas] = useState(false);
 
   return (

@@ -7,10 +7,22 @@ export async function POST(req: Request) {
 
     const nuevoPaciente = await prisma.paciente.create({
       data: {
-        ...data,
+        nombre: data.nombre,
+        sexo: data.sexo,
         fechaNacimiento: new Date(data.fechaNacimiento),
         edad: parseInt(data.edad),
+        residencia: data.residencia,
+        telefono: data.telefono,
+        email: data.email,
+        origenDiagnostico: data.origenDiagnostico ?? null,
+        familiarDiagnostico: data.familiarDiagnostico ?? null,
+        seguridadSocial: data.seguridadSocial,
+        institucion: data.institucion ?? null,
+        medico: data.medico,
+        especialidadMedico: data.especialidadMedico,
+        telefonoMedico: data.telefonoMedico,
         diagnosticoConfirmado: data.diagnosticoConfirmado === true || data.diagnosticoConfirmado === "Sí",
+        tratamiento: data.tratamiento ?? null,
         especialidades: Array.isArray(data.especialidades)
           ? data.especialidades.join(", ")
           : data.especialidades || null,
@@ -20,6 +32,6 @@ export async function POST(req: Request) {
     return NextResponse.json(nuevoPaciente, { status: 201 });
   } catch (error) {
     console.error("Error al registrar paciente:", error);
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return NextResponse.json({ error: "Error al registrar paciente" }, { status: 500 });
   }
 }

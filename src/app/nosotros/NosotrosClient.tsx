@@ -8,7 +8,7 @@ import Image from "next/image";
 type MediaInfo = { url: string; alt?: string; caption?: string } | null;
 
 export default function NosotrosClient({
-  hero, historia, eq1, eq2, eq3,
+  historia, eq1, eq2, eq3,
 }: { hero: MediaInfo; historia: MediaInfo; eq1: MediaInfo; eq2: MediaInfo; eq3: MediaInfo }) {
 
   const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };

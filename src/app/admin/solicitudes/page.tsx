@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getFotoUrl } from "@/lib/utils"; // <- importar helper
 
 interface Solicitud {
   id: number;

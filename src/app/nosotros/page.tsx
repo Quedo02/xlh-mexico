@@ -1,6 +1,8 @@
 import { getMediaBySlot } from "@/lib/media";
 import NosotrosClient from "./NosotrosClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function Nosotros() {
   const hero     = await getMediaBySlot("nosotros.hero");
   const historia = await getMediaBySlot("nosotros.historia");

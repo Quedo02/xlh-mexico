@@ -45,7 +45,6 @@ const signosData = {
 export default function SignosSintomas() {
   const [grupo, setGrupo] = useState<"ninxs" | "adultxs" | null>(null);
   const [categoria, setCategoria] = useState<"huesos" | "musculos" | "dientes" | null>(null);
-
   const etiquetasGrupos = [
     { key: "ninxs", label: "Niñxs", clase: "btn-outline-azul-marino" },
     { key: "adultxs", label: "Adultxs", clase: "btn-outline-azul-marino" },
@@ -76,7 +75,7 @@ export default function SignosSintomas() {
             key={g.key}
             className={`btn ${g.clase} ${grupo === g.key ? "active" : ""}`}
             onClick={() => {
-              setGrupo(g.key as any);
+              setGrupo(g.key as "ninxs" | "adultxs");
               setCategoria(null);
             }}
           >
@@ -95,7 +94,7 @@ export default function SignosSintomas() {
             <button
               key={c.key}
               className={`btn ${c.clase} ${categoria === c.key ? "active" : ""}`}
-              onClick={() => setCategoria(c.key as any)}
+              onClick={() => setCategoria(c.key as "huesos" | "musculos" | "dientes")}
             >
               + {c.label}
             </button>

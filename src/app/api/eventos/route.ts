@@ -1,7 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
+import { cookies } from "next/headers";
+import { verifyJWTServer } from "@/lib/auth";
 import path from "path";
+
+const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MAX_BYTES = 5 * 1024 * 1024;
 
 export async function GET() {
   try {
@@ -16,6 +21,12 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const store = await cookies();
+  const token = store.get("token")?.value;
+  if (!token || !(await verifyJWTServer(token))) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
   try {
     const formData = await req.formData();
 
@@ -27,17 +38,23 @@ export async function POST(req: Request) {
     const file = formData.get("imagen") as File | null;
 
     if (!titulo || !descripcion || !fecha || !lugar || !link || !file) {
-      return NextResponse.json(
-        { error: "Todos los campos son obligatorios" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Todos los campos son obligatorios" }, { status: 400 });
     }
 
-    // Guardar archivo en /public/uploads
+    if (!ALLOWED_MIME.includes(file.type)) {
+      return NextResponse.json({ error: "Tipo de archivo no permitido" }, { status: 400 });
+    }
+    if (file.size > MAX_BYTES) {
+      return NextResponse.json({ error: "Archivo demasiado grande (máx 5MB)" }, { status: 413 });
+    }
+
+    const uploadsDir = path.join(process.cwd(), "public", "uploads");
+    await mkdir(uploadsDir, { recursive: true });
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const filename = `${Date.now()}-${file.name}`;
-    const filepath = path.join(process.cwd(), "public", "uploads", filename);
+    const filename = `${Date.now()}-${path.basename(file.name).replace(/\s+/g, "_")}`;
+    const filepath = path.join(uploadsDir, filename);
     await writeFile(filepath, buffer);
 
     const nuevoEvento = await prisma.evento.create({

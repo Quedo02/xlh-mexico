@@ -81,7 +81,7 @@ export default function Directorio() {
     const formData = new FormData();
     Object.entries(editData).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        formData.append(key, value as any);
+        formData.append(key, value as string | Blob);
       }
     });
 

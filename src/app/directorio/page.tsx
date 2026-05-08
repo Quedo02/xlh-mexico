@@ -4,6 +4,8 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Especialista } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 // Función para sanear la ruta de la foto
 const getFoto = (foto: string | null) => {
   if (!foto || foto.trim() === "") return "/img/default-doctor.png";

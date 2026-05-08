@@ -1,22 +1,19 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
+import { cookies } from "next/headers";
+import { verifyJWTServer } from "@/lib/auth";
 import path from "path";
-import fs from "fs/promises";
 
 export const runtime = "nodejs";
 
-const PUBLIC_DIR = path.join(process.cwd(), "public");
-const SPECIALISTS_DIR = path.join(PUBLIC_DIR, "img", "especialistas");
+const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MAX_BYTES = 5 * 1024 * 1024;
+const SPECIALISTS_DIR = path.join(process.cwd(), "public", "img", "especialistas");
 
-function isValidText(value: any) {
-  return typeof value === "string" && value.trim().length > 0;
-}
-
-// ---------- GET: LISTAR ----------
 export async function GET() {
   try {
-    const especialistas = await prisma.especialista.findMany();
+    const especialistas = await prisma.especialista.findMany({ orderBy: { nombre: "asc" } });
     return NextResponse.json(especialistas);
   } catch (error) {
     console.error("GET error:", error);
@@ -24,8 +21,13 @@ export async function GET() {
   }
 }
 
-// ---------- POST: CREAR ----------
 export async function POST(req: Request) {
+  const store = await cookies();
+  const token = store.get("token")?.value;
+  if (!token || !(await verifyJWTServer(token))) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
   try {
     const formData = await req.formData();
 
@@ -38,63 +40,34 @@ export async function POST(req: Request) {
     const comoConocieron = formData.get("comoConocieron")?.toString() ?? "";
     const perfilUrl = formData.get("perfilUrl")?.toString() ?? null;
 
-    const foto = formData.get("foto") as File | null;
-
-    if (
-      !isValidText(nombre) ||
-      !isValidText(especialidad) ||
-      !isValidText(telefono) ||
-      !isValidText(comoConocieron)
-    ) {
-      return NextResponse.json(
-        { error: "Faltan campos obligatorios" },
-        { status: 400 }
-      );
+    if (!nombre || !especialidad || !ubicacion || !telefono || !correo || !hospital || !comoConocieron) {
+      return NextResponse.json({ error: "Todos los campos son obligatorios" }, { status: 400 });
     }
 
-    // Manejo de imagen (opcional)
-    let imageUrl: string | null = null;
+    const file = formData.get("foto");
+    let fotoPath: string | null = null;
 
-    if (foto && foto.size > 0) {
-      const buffer = Buffer.from(await foto.arrayBuffer());
-      const imgName = `${Date.now()}-${foto.name.replace(/\s+/g, "_")}`;
-      const filePath = path.join(SPECIALISTS_DIR, imgName);
-
-      await fs.mkdir(SPECIALISTS_DIR, { recursive: true });
-      await fs.writeFile(filePath, buffer);
-
-      imageUrl = `/img/especialistas/${imgName}`;
+    if (file && file instanceof File && file.size > 0) {
+      if (!ALLOWED_MIME.includes(file.type)) {
+        return NextResponse.json({ error: "Tipo de archivo no permitido" }, { status: 400 });
+      }
+      if (file.size > MAX_BYTES) {
+        return NextResponse.json({ error: "Archivo demasiado grande (máx 5MB)" }, { status: 413 });
+      }
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const safeName = `${Date.now()}-${path.basename(file.name).replace(/\s+/g, "_")}`;
+      await mkdir(SPECIALISTS_DIR, { recursive: true });
+      await writeFile(path.join(SPECIALISTS_DIR, safeName), buffer);
+      fotoPath = `/img/especialistas/${safeName}`;
     }
 
-    const newEspecialista = await prisma.especialista.create({
-      data: {
-        nombre,
-        especialidad,
-        ubicacion,
-        telefono,
-        correo,
-        hospital,
-        comoConocieron,
-        foto: imageUrl,   
-        perfilUrl,        
-      },
+    const nuevo = await prisma.especialista.create({
+      data: { nombre, especialidad, ubicacion, telefono, correo, hospital, comoConocieron, foto: fotoPath, perfilUrl },
     });
 
-    return NextResponse.json(nuevoDoctor, { status: 201 });
+    return NextResponse.json(nuevo, { status: 201 });
   } catch (error) {
     console.error("Error creando especialista:", error);
     return NextResponse.json({ error: "Error al crear especialista" }, { status: 500 });
-  }
-}
-
-export async function GET() {
-  try {
-    const especialistas = await prisma.especialista.findMany({
-      orderBy: { nombre: "asc" },
-    });
-    return NextResponse.json(especialistas);
-  } catch (error) {
-    console.error("Error obteniendo especialistas:", error);
-    return NextResponse.json({ error: "Error al obtener especialistas" }, { status: 500 });
   }
 }

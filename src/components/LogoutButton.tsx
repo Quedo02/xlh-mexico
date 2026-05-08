@@ -1,9 +1,9 @@
 "use client";
 
 export default function LogoutButton() {
-  const handleLogout = () => {
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    window.location.href = "/admin/login";
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" });
+    window.location.href = "/login";
   };
 
   return (

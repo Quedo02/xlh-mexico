@@ -7,13 +7,14 @@ import { verifyJWTServer } from "@/lib/auth";
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const token = (await cookies()).get("token")?.value;
   const ok = token && (await verifyJWTServer(token));
   if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
-  const id = parseInt(params.id);
+  const { id: rawId } = await params;
+  const id = parseInt(rawId);
   if (isNaN(id)) {
     return NextResponse.json({ error: "ID inválido" }, { status: 400 });
   }

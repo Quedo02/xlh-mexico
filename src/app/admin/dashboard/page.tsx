@@ -53,8 +53,8 @@ export default function AdminDashboard() {
         if (!res.ok) throw new Error("No se pudieron cargar las solicitudes");
         const json = await res.json();
         setSolicitudes(Array.isArray(json?.data) ? json.data : []);
-      } catch (e: any) {
-        setErrorSol(e?.message || "Error cargando solicitudes");
+      } catch (e: unknown) {
+        setErrorSol(e instanceof Error ? e.message : "Error cargando solicitudes");
       } finally {
         setLoadingSol(false);
       }
@@ -68,8 +68,8 @@ export default function AdminDashboard() {
         if (!res.ok) throw new Error("No se pudieron cargar los eventos");
         const json = await res.json();
         setEventos(Array.isArray(json) ? json : []);
-      } catch (e: any) {
-        setErrorEvt(e?.message || "Error cargando eventos");
+      } catch (e: unknown) {
+        setErrorEvt(e instanceof Error ? e.message : "Error cargando eventos");
       } finally {
         setLoadingEvt(false);
       }

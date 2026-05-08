@@ -27,7 +27,6 @@ export default function HeroSection({
   secondaryButtonText,
   secondaryButtonLink,
 }: HeroSectionProps) {
-  const [image, setImage] = useState<Media | null>(null);
   const [bgUrl, setBgUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +42,6 @@ export default function HeroSection({
         const slotName = config[sectionName];
 
         if (!slotName) {
-          setImage(null);
           setBgUrl(null);
           setLoading(false);
           return;
@@ -54,7 +52,6 @@ export default function HeroSection({
         const slot: MediaSlot | undefined = slotData.data?.[0];
 
         const img = slot?.slotMedias?.[0]?.media || null;
-        setImage(img);
 
         const candidate = img?.url ? img.url.replace(/ /g, "%20") : null;
 
@@ -73,9 +70,8 @@ export default function HeroSection({
           setBgUrl(null);
           setLoading(false);
         }
-      } catch (err) {
+      } catch {
         setBgUrl(null);
-        setImage(null);
         setLoading(false);
       }
     };

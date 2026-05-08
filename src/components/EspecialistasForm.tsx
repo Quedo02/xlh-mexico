@@ -10,21 +10,9 @@ const especialidadesList = [
   "Psicología", "Manejo del dolor", "Terapia ocupacional",
 ];
 
-type FormState = {
-  nombre: string;
-  especialidad: string;
-  ubicacion: string;
-  telefono: string;
-  correo: string;
-  hospital: string;
-  comoConocieron: string;
-  perfilUrl: string;
-};
-
 export default function EspecialistasForm() {
   const [step, setStep] = useState(1);
   const [fotoFile, setFotoFile] = useState<File | null>(null);
-
   const [formData, setFormData] = useState({
     nombre: "",
     especialidad: "",
@@ -33,7 +21,7 @@ export default function EspecialistasForm() {
     correo: "",
     hospital: "",
     comoConocieron: "",
-    foto: "", // Será base64 o URL
+    foto: "",
     perfilUrl: ""
   });
 
@@ -46,13 +34,7 @@ export default function EspecialistasForm() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData({ ...formData, foto: reader.result as string });
-    };
-    reader.readAsDataURL(file); // Convierte el archivo a base64
+    if (file) setFotoFile(file);
   };
 
   const handleNext = (e: React.FormEvent) => {
@@ -67,6 +49,7 @@ export default function EspecialistasForm() {
 
     try {
       const fd = new FormData();
+<<<<<<< HEAD
 
       // Campos normales
       Object.entries(formData).forEach(([key, value]) =>
@@ -77,6 +60,10 @@ export default function EspecialistasForm() {
       if (fotoFile) {
         fd.append("foto", fotoFile);
       }
+=======
+      Object.entries(formData).filter(([k]) => k !== "foto").forEach(([key, value]) => fd.append(key, value));
+      fd.append("foto", fotoFile);
+>>>>>>> e56d215 (fix: production readiness — crashes, security, TypeScript, deploy)
 
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function NuevoDocumento() {
@@ -11,7 +11,7 @@ export default function NuevoDocumento() {
   const [categoria, setCategoria] = useState("informativo");
   const [archivo, setArchivo] = useState<File | null>(null);
 
-  const enviar = async (e: any) => {
+  const enviar = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData();

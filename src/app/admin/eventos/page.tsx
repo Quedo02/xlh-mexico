@@ -69,8 +69,8 @@ export default function AdminEventos() {
       setImagen(null);
       setMostrarFormulario(false);
       fetchEventos();
-    } catch (error: any) {
-      toast.error(error.message || "Error al crear evento");
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Error al crear evento");
     } finally {
       setCargando(false);
     }

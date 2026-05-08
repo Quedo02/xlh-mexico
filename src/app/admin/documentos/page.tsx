@@ -3,8 +3,15 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+interface Documento {
+  id: number;
+  titulo: string;
+  categoria: string;
+  archivoUrl: string;
+}
+
 export default function DocumentosAdmin() {
-  const [docs, setDocs] = useState([]);
+  const [docs, setDocs] = useState<Documento[]>([]);
 
   const cargarDocs = async () => {
     const res = await fetch("/api/documentos");
@@ -43,7 +50,7 @@ export default function DocumentosAdmin() {
         </thead>
 
         <tbody>
-          {docs.map((d: any) => (
+          {docs.map((d) => (
             <tr key={d.id}>
               <td>{d.titulo}</td>
               <td>{d.categoria}</td>

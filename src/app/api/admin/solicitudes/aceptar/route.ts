@@ -1,7 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWTServer } from "@/lib/auth";
 
 export async function POST(req: Request) {
+  const store = await cookies();
+  const token = store.get("token")?.value;
+  if (!token || !(await verifyJWTServer(token))) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
   try {
     const data = await req.json();
     const { id, nombre, especialidad, ubicacion, telefono, correo, hospital, comoConocieron, foto, perfilUrl } = data;
@@ -21,7 +29,7 @@ export async function POST(req: Request) {
 
     // Crear en tabla Especialista
     await prisma.especialista.create({
-      data: { 
+      data: {
         nombre,
         especialidad,
         ubicacion,
