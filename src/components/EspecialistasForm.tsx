@@ -49,21 +49,8 @@ export default function EspecialistasForm() {
 
     try {
       const fd = new FormData();
-<<<<<<< HEAD
-
-      // Campos normales
-      Object.entries(formData).forEach(([key, value]) =>
-        fd.append(key, value)
-      );
-
-      // ✅ Solo agregar foto si existe
-      if (fotoFile) {
-        fd.append("foto", fotoFile);
-      }
-=======
       Object.entries(formData).filter(([k]) => k !== "foto").forEach(([key, value]) => fd.append(key, value));
-      fd.append("foto", fotoFile);
->>>>>>> e56d215 (fix: production readiness — crashes, security, TypeScript, deploy)
+      if (fotoFile) fd.append("foto", fotoFile);
 
       const res = await fetch("/api/solicitud-especialista", {
         method: "POST",
